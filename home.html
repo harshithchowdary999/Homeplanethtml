@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5D Home Planet - Smart Living Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#2563eb',
+                        dark: {
+                            bg: '#181818',
+                            card: '#262626',
+                            text: '#e5e7eb'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fadeIn': 'fadeIn 1s ease-in',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(90deg, #5D5CDE 0%, #2563eb 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #5D5CDE 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        
+        .hero-video-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .service-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+            color: #5D5CDE;
+        }
+        
+        .news-card-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .news-card-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .news-card:hover .news-card-img::before {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .gradient-text {
+            background: linear-gradient(90deg, #8382ff 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Dynamic background animation */
+        .dynamic-bg {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #000428, #004e92);
+        }
+        
+        .animated-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="antialiased bg-white dark:bg-dark-bg text-gray-800 dark:text-dark-text">
+    <!-- Navbar -->
+    <nav class="fixed w-full top-0 z-50 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-sm shadow-sm">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold gradient-text">5D Home Planet</a>
+                </div>
+                
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="#home" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">Home</a>
+                    <a href="#services" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">Services</a>
+                    <a href="#about" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">About</a>
+                    <a href="#news" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">News</a>
+                    <a href="#contact" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">Contact</a>
+                    <button class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-full transition duration-300 shadow-md"><a href="next.html">Get Started</a></button>
+                </div>
+                
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 dark:text-gray-200 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-3 pb-2">
+                <a href="#home" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">Home</a>
+                <a href="#services" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">Services</a>
+                <a href="#about" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">About</a>
+                <a href="#news" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">News</a>
+                <a href="#contact" class="block py-2 text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition duration-300">Contact</a>
+                <button class="mt-2 bg-primary hover:bg-secondary text-white px-6 py-2 rounded-full transition duration-300 shadow-md w-full">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section-->
+    <section id="home" class="relative min-h-screen flex items-center pt-16 dynamic-bg">
+        <div class="hero-overlay"></div>
+        <div class="container mx-auto px-4 py-20 hero-content">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 animate-fadeIn">Welcome to the Future of Living</h1>
+                <p class="text-xl md:text-2xl text-white/90 mb-10">Discover smart home technology and sustainable living solutions designed for the modern world.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="furniture.html">><button class="bg-white text-primary hover:bg-gray-100 px-8 py-3 rounded-full font-medium transition duration-300 shadow-lg">Explore Solutions</button></a>
+
+
+
+
+
+                    <button class="bg-transparent text-white border-2 border-white hover:bg-white/10 px-8 py-3 rounded-full font-medium transition duration-300">Watch Demo</button>
+                </div>
+                <div class="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce">
+                    <a href="#services" class="text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-50 dark:bg-dark-bg">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 animate-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Smart Solutions</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Cutting-edge technology for modern homes, designed with sustainability and comfort in mind.</p>
+            </div>
+            <a href="furniture.html">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+            <div class="bg-white dark:bg-dark-card rounded-xl shadow-md p-8 service-card card-hover animate-on-scroll">
+                    <div class="flex justify-center mb-6">
+                        <i class="fas fa-home text-5xl text-primary service-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-center">Smart Home Automation</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Control your entire home with a single touch. Our automation systems adapt to your lifestyle.</p>
+                </div>
+            </a>
+                <!-- Service 2 -->
+                <a href="energy.html"> 
+                <div class="bg-white dark:bg-dark-card rounded-xl shadow-md p-8 service-card card-hover animate-on-scroll">
+                    <div class="flex justify-center mb-6">
+                        <i class="fas fa-solar-panel text-5xl text-primary service-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-center">Renewable Energy Solutions</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Harness the power of nature with our integrated solar and wind energy systems.</p>
+                </div>
+                </a>
+                <!-- Service 3 -->
+                 <a href="security.html">
+                <div class="bg-white dark:bg-dark-card rounded-xl shadow-md p-8 service-card card-hover animate-on-scroll">
+                    <div class="flex justify-center mb-6">
+                        <i class="fas fa-shield-alt text-5xl text-primary service-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-center">Advanced Security Systems</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">AI-powered security that learns and adapts to provide ultimate protection for your home.</p>
+                </div>
+            </a>
+                <!-- Service 4 -->
+               <a href="water.html"> <div class="bg-white dark:bg-dark-card rounded-xl shadow-md p-8 service-card card-hover animate-on-scroll">
+                    <div class="flex justify-center mb-6">
+                        <i class="fas fa-water text-5xl text-primary service-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-center">Water Management</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Smart water systems that reduce waste and ensure clean, filtered water throughout your home.</p>
+                </div>
+            </a>
+                <a href="air.html"><!-- Service 5 -->
+             <div class="bg-white dark:bg-dark-card rounded-xl shadow-md p-8 service-card card-hover animate-on-scroll">
+                    <div class="flex justify-center mb-6">
+                        <i class="fas fa-leaf text-5xl text-primary service-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-center">Indoor Air Purification</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Breathe easier with our advanced air filtration and purification technology.</p>
+                </div>
+            </a>
+                <!-- Service 6 -->
+                 <a href="comunity.html">
+                <div class="bg-white dark:bg-dark-card rounded-xl shadow-md p-8 service-card card-hover animate-on-scroll">
+                    <div class="flex justify-center mb-6">
+                        <i class="fas fa-users text-5xl text-primary service-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-center">Community Integration</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Connect with like-minded neighbors and build sustainable communities together.</p>
+                </div>
+            </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2 animate-on-scroll">
+                    <video 
+                        class="w-full aspect-video rounded-2xl shadow-lg" 
+                        controls autoplay muted loop>
+                        <source src="5d-home-planet-sustainable-living.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="lg:w-1/2 animate-on-scroll">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">About 5D Home Planet</h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">At 5D Home Planet, we're reimagining how people live by creating homes that are smarter, more sustainable, and connected to the community.</p>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">Our holistic approach integrates cutting-edge technology with eco-friendly design principles, creating living spaces that adapt to your needs while reducing environmental impact.</p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                                <i class="fas fa-check text-primary"></i>
+                            </div>
+                            <span class="font-medium">Energy Efficient</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                                <i class="fas fa-check text-primary"></i>
+                            </div>
+                            <span class="font-medium">AI-Powered</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                                <i class="fas fa-check text-primary"></i>
+                            </div>
+                            <span class="font-medium">Sustainable Materials</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                                <i class="fas fa-check text-primary"></i>
+                            </div>
+                            <span class="font-medium">Community Focused</span>
+                        </div>
+                    </div>
+                    
+                    <button class="bg-primary hover:bg-secondary text-white px-8 py-3 rounded-full transition duration-300 shadow-md">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-primary text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div class="animate-on-scroll">
+                    <div class="text-4xl font-bold mb-2">5000+</div>
+                    <div class="text-lg">Homes Transformed</div>
+                </div>
+                <div class="animate-on-scroll">
+                    <div class="text-4xl font-bold mb-2">85%</div>
+                    <div class="text-lg">Energy Reduction</div>
+                </div>
+                <div class="animate-on-scroll">
+                    <div class="text-4xl font-bold mb-2">50+</div>
+                    <div class="text-lg">Smart Systems</div>
+                </div>
+                <div class="animate-on-scroll">
+                    <div class="text-4xl font-bold mb-2">24/7</div>
+                    <div class="text-lg">Support Available</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest News Section -->
+    <section id="news" class="py-20 bg-gray-50 dark:bg-dark-bg">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 animate-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Latest News</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Stay updated with the latest innovations in smart home technology and sustainable living.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- News 1 -->
+                <div class="bg-white dark:bg-dark-card rounded-xl overflow-hidden shadow-md news-card animate-on-scroll">
+                    <div class="news-card-img bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                    <div class="p-6">
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">June 15, 2023</div>
+                        <h3 class="text-xl font-semibold mb-3">New Smart Home Integration Platform Launched</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Our latest platform allows you to connect all your smart devices in one intuitive interface.</p>
+                        <a href="#" class="text-primary hover:text-secondary inline-flex items-center font-medium">
+                            Read More
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- News 2 -->
+                <div class="bg-white dark:bg-dark-card rounded-xl overflow-hidden shadow-md news-card animate-on-scroll">
+                    <div class="news-card-img bg-gradient-to-r from-green-500 to-teal-500"></div>
+                    <div class="p-6">
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">May 28, 2023</div>
+                        <h3 class="text-xl font-semibold mb-3">Sustainable Living Community Opens in Portland</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Our flagship community project showcases how technology and nature can coexist harmoniously.</p>
+                        <a href="#" class="text-primary hover:text-secondary inline-flex items-center font-medium">
+                            Read More
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- News 3 -->
+                <div class="bg-white dark:bg-dark-card rounded-xl overflow-hidden shadow-md news-card animate-on-scroll">
+                    <div class="news-card-img bg-gradient-to-r from-orange-500 to-red-500"></div>
+                    <div class="p-6">
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">April 10, 2023</div>
+                        <h3 class="text-xl font-semibold mb-3">AI-Powered Energy Management System Reduces Bills by 40%</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Our new AI system learns your usage patterns and optimizes energy consumption automatically.</p>
+                        <a href="#" class="text-primary hover:text-secondary inline-flex items-center font-medium">
+                            Read More
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="bg-white dark:bg-dark-card text-primary border border-primary hover:bg-primary hover:text-white dark:hover:bg-primary px-8 py-3 rounded-full transition duration-300 shadow-md">View All News</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-20 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center animate-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Join Our Community</h2>
+                <p class="text-lg text-white/90 mb-8">Subscribe to our newsletter to receive the latest updates, tips, and exclusive offers.</p>
+                <form class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <input type="email" placeholder="Enter your email" class="flex-grow px-6 py-3 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-white text-gray-800" required>
+                    <button type="submit" class="bg-white text-primary hover:bg-gray-100 px-8 py-3 rounded-full font-medium transition duration-300 shadow-md">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 animate-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Have questions about our smart home solutions? Our team is here to help you.</p>
+            </div>
+            
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/2 animate-on-scroll">
+                    <form>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
+                                <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-dark-card text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary text-base" required>
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Email</label>
+                                <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-dark-card text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary text-base" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+                            <input type="text" id="subject" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-dark-card text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary text-base" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-dark-card text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary text-base" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="bg-primary hover:bg-secondary text-white px-8 py-3 rounded-full transition duration-300 shadow-md">Send Message</button>
+                    </form>
+                </div>
+                
+                <div class="lg:w-1/2 animate-on-scroll">
+                    <div class="bg-gray-50 dark:bg-dark-card rounded-2xl p-8 h-full">
+                        <h3 class="text-2xl font-semibold mb-6">Contact Information</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt text-primary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">Location</h4>
+                                    <p class="text-gray-600 dark:text-gray-400">5D Tech Park, Innovator Avenue, San Francisco, CA 94103</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-phone-alt text-primary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">Phone</h4>
+                                    <p class="text-gray-600 dark:text-gray-400">+1 (555) 123-4567</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-envelope text-primary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">Email</h4>
+                                    <p class="text-gray-600 dark:text-gray-400">info@5dhomeplanet.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-clock text-primary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">Working Hours</h4>
+                                    <p class="text-gray-600 dark:text-gray-400">Monday - Friday: 9AM - 6PM<br>Saturday: 10AM - 4PM</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-medium mb-4">Follow Us</h4>
+                            <div class="flex gap-4">
+                                <a href="#" class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition duration-300">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition duration-300">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition duration-300">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition duration-300">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-6">5D Home Planet</h3>
+                    <p class="text-gray-400 mb-6">Creating the future of sustainable, smart living through innovative technology and community-focused solutions.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition duration-300">Services</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition duration-300">About Us</a></li>
+                        <li><a href="#news" class="text-gray-400 hover:text-white transition duration-300">Latest News</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Services</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Smart Home Automation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Renewable Energy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Security Systems</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Water Management</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Community Solutions</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Subscribe</h4>
+                    <p class="text-gray-400 mb-4">Stay updated with our latest news and offers.</p>
+                    <form class="mb-4">
+                        <div class="flex">
+                            <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-lg w-full bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-primary text-base">
+                            <button type="submit" class="bg-primary hover:bg-secondary px-4 py-2 rounded-r-lg transition duration-300">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="text-gray-400 text-sm">By subscribing, you agree to our <a href="#" class="text-primary hover:underline">Privacy Policy</a>.</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 text-sm mb-4 md:mb-0">&copy; 2023 5D Home Planet. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-500 hover:text-white text-sm transition duration-300">Privacy Policy</a>
+                        <a href="#" class="text-gray-500 hover:text-white text-sm transition duration-300">Terms of Service</a>
+                        <a href="#" class="text-gray-500 hover:text-white text-sm transition duration-300">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Scroll animation
+        function checkScroll() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const viewportHeight = window.innerHeight;
+                
+                if (elementPosition < viewportHeight * 0.85) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+        
+        // Create animated particles for hero background
+        function createParticles() {
+            const heroSection = document.querySelector('.dynamic-bg');
+            const numberOfParticles = 50;
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('animated-particle');
+                
+                // Random position, size and animation duration
+                const size = Math.random() * 5 + 2;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                
+                heroSection.appendChild(particle);
+            }
+        }
+        
+        createParticles();
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

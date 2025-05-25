@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Furniture Directory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A49B8',
+                        'primary-light': '#7F7EE8'
+                    },
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-in-out',
+                        'slideUp': 'slideUp 0.3s ease-out'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <style>
+        /* Custom styles */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .star-rating {
+            color: #F59E0B;
+        }
+        .filter-transition {
+            transition: all 0.3s ease;
+        }
+        .dark .card-hover:hover {
+            box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.05), 0 10px 10px -5px rgba(255, 255, 255, 0.02);
+        }
+        .portfolio-image {
+            transition: transform 0.3s ease;
+        }
+        .portfolio-image:hover {
+            transform: scale(1.05);
+        }
+        /* Loading animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(93, 92, 222, 0.3);
+            border-radius: 50%;
+            border-top-color: #5D5CDE;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .dark .loading-spinner {
+            border: 3px solid rgba(93, 92, 222, 0.15);
+            border-top-color: #7F7EE8;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+    <!-- Dark mode detection -->
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <h1 class="text-3xl font-bold text-primary dark:text-primary-light mb-4 md:mb-0">Custom Furniture Directory</h1>
+                <div class="flex space-x-4">
+                    <button id="toggleFilters" class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors md:hidden">
+                        <i class="fas fa-filter mr-2"></i>Filters
+                    </button>
+                    <button id="requestQuoteBtn" class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-md transition-colors">
+                        <i class="fas fa-pencil-alt mr-2"></i>Request a Quote
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row gap-6">
+            <!-- Filters sidebar -->
+            <aside id="filterSidebar" class="md:w-1/4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-sm hidden md:block">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Filters</h2>
+                    <button id="clearFilters" class="text-primary dark:text-primary-light text-sm hover:underline mb-4">
+                        <i class="fas fa-times-circle mr-1"></i>Clear all filters
+                    </button>
+                </div>
+
+                <!-- Material Filter -->
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">Material</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="material" value="wood" class="h-4 w-4 text-primary focus:ring-primary dark:bg-gray-700">
+                            <span class="ml-2">Wood</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="material" value="metal" class="h-4 w-4 text-primary focus:ring-primary dark:bg-gray-700">
+                            <span class="ml-2">Metal</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="material" value="glass" class="h-4 w-4 text-primary focus:ring-primary dark:bg-gray-700">
+                            <span class="ml-2">Glass</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="material" value="upholstery" class="h-4 w-4 text-primary focus:ring-primary dark:bg-gray-700">
+                            <span class="ml-2">Upholstery</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Design Style Filter -->
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">Design Style</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="style" value="modern" class="h-4 w-4 text-primary focus:ring-primary dark:bg-gray-700">
+                            <span class="ml-2">Modern</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="style" value="traditional" class="h-4 w-4 text-primary focus:ring-primary dark:bg-gray-700">
+                            <span class="ml-2">Traditional</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="style" value="industrial" class="h-4 w-4 text-primary focus:ring-primary dark:bg-gray-700">
+                            <span class="ml-2">Industrial</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="style" value="scandinavian" class="h-4 w-4 text-primary focus:ring-primary dark:bg-gray-700">
+                            <span class="ml-2">Scandinavian</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Location Filter -->
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">Location</h3>
+                    <select id="locationFilter" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                        <option value="">All Locations</option>
+                        <option value="New York">New York</option>
+                        <option value="Los Angeles">Los Angeles</option>
+                        <option value="Chicago">Chicago</option>
+                        <option value="Seattle">Seattle</option>
+                        <option value="Miami">Miami</option>
+                    </select>
+                </div>
+
+                <!-- Budget Filter -->
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">Budget Range</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Min Price</label>
+                            <select id="minPriceFilter" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                                <option value="">Any</option>
+                                <option value="500">$500</option>
+                                <option value="1000">$1,000</option>
+                                <option value="2500">$2,500</option>
+                                <option value="5000">$5,000</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Max Price</label>
+                            <select id="maxPriceFilter" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                                <option value="">Any</option>
+                                <option value="5000">$5,000</option>
+                                <option value="10000">$10,000</option>
+                                <option value="25000">$25,000</option>
+                                <option value="50000">$50,000+</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rating Filter -->
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">Minimum Rating</h3>
+                    <div class="flex items-center space-x-2">
+                        <input type="range" id="ratingFilter" min="1" max="5" value="1" step="1" class="w-full accent-primary">
+                        <span id="ratingValue" class="font-medium">1+</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Listings section -->
+            <div class="flex-1">
+                <!-- Search and sort -->
+                <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <input type="text" id="searchInput" placeholder="Search furniture makers..." class="w-full p-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                            <span class="absolute left-3 top-3 text-gray-400">
+                                <i class="fas fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <select id="sortBy" class="p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                            <option value="rating">Sort by Rating</option>
+                            <option value="experience">Sort by Experience</option>
+                            <option value="priceAsc">Price: Low to High</option>
+                            <option value="priceDesc">Price: High to Low</option>
+                            <option value="name">Sort by Name</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Results count -->
+                <div class="mb-4 text-gray-600 dark:text-gray-400" id="resultsCount">
+                    Showing all furniture makers
+                </div>
+
+                <!-- Listings grid -->
+                <div id="listings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
+                    <!-- Listings will be dynamically populated here -->
+                    <div class="col-span-full text-center py-12">
+                        <div class="loading-spinner"></div>
+                        <p class="mt-4 text-gray-600 dark:text-gray-400">Loading directory...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Request Quote Modal -->
+    <div id="quoteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 animate-fadeIn">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white">Request a Custom Quote</h3>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-6">Fill out the form below and we'll connect you with selected furniture makers for a custom quote.</p>
+                <form id="quoteForm">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" for="name">Your Name</label>
+                        <input type="text" id="name" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" for="email">Email Address</label>
+                        <input type="email" id="email" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" for="furniture-type">Furniture Type</label>
+                        <select id="furniture-type" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" required>
+                            <option value="">Select Furniture Type</option>
+                            <option value="table">Table</option>
+                            <option value="chair">Chair/Seating</option>
+                            <option value="cabinet">Cabinet/Storage</option>
+                            <option value="bed">Bed Frame</option>
+                            <option value="desk">Desk</option>
+                            <option value="bookshelf">Bookshelf</option>
+                            <option value="other">Other (specify below)</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" for="description">Project Description</label>
+                        <textarea id="description" rows="4" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" for="maker-select">Selected Maker (Optional)</label>
+                        <select id="maker-select" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                            <option value="">Any Available Maker</option>
+                            <!-- Will be populated with makers dynamically -->
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2" for="budget">Budget Range</label>
+                        <select id="budget" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base" required>
+                            <option value="">Select Budget Range</option>
+                            <option value="under-1000">Under $1,000</option>
+                            <option value="1000-2500">$1,000 - $2,500</option>
+                            <option value="2500-5000">$2,500 - $5,000</option>
+                            <option value="5000-10000">$5,000 - $10,000</option>
+                            <option value="10000-plus">$10,000+</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-md transition-colors">
+                            Submit Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Notification -->
+    <div id="successNotification" class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-md shadow-lg hidden animate-slideUp">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-3 text-xl"></i>
+            <p>Your quote request has been submitted successfully!</p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Sample furniture makers data
+        const furnitureMakers = [
+            {
+                id: 1,
+                name: "Artisan Woodcraft",
+                specialization: "Wood furniture, Custom cabinetry",
+                materials: ["wood"],
+                styles: ["traditional", "scandinavian"],
+                experience: 25,
+                location: "Seattle",
+                priceRange: { min: 2500, max: 15000 },
+                rating: 4.8,
+                contact: {
+                    phone: "(206) 555-1234",
+                    email: "info@artisanwoodcraft.com",
+                    website: "artisanwoodcraft.com"
+                },
+                portfolio: [
+                    { type: "dining-table", style: "modern" },
+                    { type: "bookshelf", style: "traditional" },
+                    { type: "cabinet", style: "scandinavian" }
+                ],
+                reviews: [
+                    { author: "James M.", rating: 5, text: "Exceptional craftsmanship and attention to detail. Our dining table is a masterpiece!" },
+                    { author: "Sarah L.", rating: 4.5, text: "Beautiful work on our custom bookshelf. Slightly delayed delivery but worth the wait." }
+                ]
+            },
+            {
+                id: 2,
+                name: "Modern Metal Works",
+                specialization: "Metal furniture, Industrial designs",
+                materials: ["metal", "wood"],
+                styles: ["modern", "industrial"],
+                experience: 12,
+                location: "Chicago",
+                priceRange: { min: 1800, max: 12000 },
+                rating: 4.5,
+                contact: {
+                    phone: "(312) 555-6789",
+                    email: "sales@modernmetalworks.com",
+                    website: "modernmetalworks.com"
+                },
+                portfolio: [
+                    { type: "coffee-table", style: "industrial" },
+                    { type: "desk", style: "modern" },
+                    { type: "shelving", style: "industrial" }
+                ],
+                reviews: [
+                    { author: "Robert K.", rating: 5, text: "Stunning industrial desk that perfectly fits my loft aesthetic." },
+                    { author: "Emily D.", rating: 4, text: "Great quality but took longer than expected to complete." }
+                ]
+            },
+            {
+                id: 3,
+                name: "Elegance Glass & Design",
+                specialization: "Glass furniture, Contemporary pieces",
+                materials: ["glass", "metal"],
+                styles: ["modern", "scandinavian"],
+                experience: 8,
+                location: "Miami",
+                priceRange: { min: 3000, max: 20000 },
+                rating: 4.7,
+                contact: {
+                    phone: "(305) 555-4321",
+                    email: "contact@eleganceglass.com",
+                    website: "eleganceglass.com"
+                },
+                portfolio: [
+                    { type: "dining-table", style: "modern" },
+                    { type: "console", style: "scandinavian" },
+                    { type: "coffee-table", style: "modern" }
+                ],
+                reviews: [
+                    { author: "Jessica T.", rating: 5, text: "The glass dining table is absolutely stunning and perfectly made." },
+                    { author: "Michael P.", rating: 4.5, text: "Beautiful craftsmanship on our custom glass console." }
+                ]
+            },
+            {
+                id: 4,
+                name: "Heritage Furniture Co.",
+                specialization: "Traditional woodworking, Heirloom pieces",
+                materials: ["wood"],
+                styles: ["traditional"],
+                experience: 35,
+                location: "New York",
+                priceRange: { min: 5000, max: 30000 },
+                rating: 4.9,
+                contact: {
+                    phone: "(212) 555-8765",
+                    email: "info@heritagefurniture.com",
+                    website: "heritagefurniture.com"
+                },
+                portfolio: [
+                    { type: "dining-set", style: "traditional" },
+                    { type: "armoire", style: "traditional" },
+                    { type: "desk", style: "traditional" }
+                ],
+                reviews: [
+                    { author: "William J.", rating: 5, text: "Impeccable craftsmanship. Our dining set will be passed down for generations." },
+                    { author: "Elizabeth R.", rating: 5, text: "Worth every penny. The attention to detail is remarkable." }
+                ]
+            },
+            {
+                id: 5,
+                name: "Urban Upholstery",
+                specialization: "Custom seating, Upholstered furniture",
+                materials: ["upholstery", "wood"],
+                styles: ["modern", "scandinavian"],
+                experience: 15,
+                location: "Los Angeles",
+                priceRange: { min: 1200, max: 8000 },
+                rating: 4.6,
+                contact: {
+                    phone: "(323) 555-9876",
+                    email: "hello@urbanupholstery.com",
+                    website: "urbanupholstery.com"
+                },
+                portfolio: [
+                    { type: "sofa", style: "modern" },
+                    { type: "armchair", style: "scandinavian" },
+                    { type: "ottoman", style: "modern" }
+                ],
+                reviews: [
+                    { author: "Daniel F.", rating: 4.5, text: "Our custom sectional is both beautiful and incredibly comfortable." },
+                    { author: "Olivia M.", rating: 4.5, text: "Great customer service and excellent quality on our custom chairs." }
+                ]
+            },
+            {
+                id: 6,
+                name: "Fusion Furnishings",
+                specialization: "Mixed materials, Contemporary designs",
+                materials: ["wood", "metal", "glass"],
+                styles: ["modern", "industrial"],
+                experience: 10,
+                location: "Seattle",
+                priceRange: { min: 2000, max: 15000 },
+                rating: 4.4,
+                contact: {
+                    phone: "(206) 555-5432",
+                    email: "info@fusionfurnishings.com",
+                    website: "fusionfurnishings.com"
+                },
+                portfolio: [
+                    { type: "dining-table", style: "industrial" },
+                    { type: "entertainment-center", style: "modern" },
+                    { type: "desk", style: "industrial" }
+                ],
+                reviews: [
+                    { author: "Kevin L.", rating: 4, text: "Unique designs and good quality. Delivery was a bit delayed." },
+                    { author: "Rachel S.", rating: 5, text: "Our mixed-material dining table is a true conversation piece." }
+                ]
+            },
+            {
+                id: 7,
+                name: "Classic Cabinet Makers",
+                specialization: "Custom cabinetry, Built-ins",
+                materials: ["wood"],
+                styles: ["traditional", "modern"],
+                experience: 22,
+                location: "Chicago",
+                priceRange: { min: 4000, max: 25000 },
+                rating: 4.8,
+                contact: {
+                    phone: "(312) 555-3456",
+                    email: "sales@classiccabinet.com",
+                    website: "classiccabinet.com"
+                },
+                portfolio: [
+                    { type: "kitchen-cabinets", style: "traditional" },
+                    { type: "built-in-bookcase", style: "modern" },
+                    { type: "media-cabinet", style: "traditional" }
+                ],
+                reviews: [
+                    { author: "Thomas H.", rating: 5, text: "The custom kitchen cabinets transformed our entire home." },
+                    { author: "Jennifer P.", rating: 4.5, text: "Excellent craftsmanship and attention to detail on our built-ins." }
+                ]
+            },
+            {
+                id: 8,
+                name: "Minimalist Design Studio",
+                specialization: "Scandinavian-inspired, Clean designs",
+                materials: ["wood", "upholstery"],
+                styles: ["scandinavian", "modern"],
+                experience: 7,
+                location: "Los Angeles",
+                priceRange: { min: 1500, max: 10000 },
+                rating: 4.6,
+                contact: {
+                    phone: "(323) 555-7890",
+                    email: "hello@minimalist-design.com",
+                    website: "minimalist-design.com"
+                },
+                portfolio: [
+                    { type: "chair", style: "scandinavian" },
+                    { type: "dining-set", style: "scandinavian" },
+                    { type: "bed-frame", style: "modern" }
+                ],
+                reviews: [
+                    { author: "Laura B.", rating: 5, text: "Beautiful minimalist dining set that perfectly matches our aesthetic." },
+                    { author: "David K.", rating: 4, text: "Good quality and design, though somewhat limited in customization options." }
+                ]
+            },
+            {
+                id: 9,
+                name: "Industrial Edge Designs",
+                specialization: "Industrial furniture, Repurposed materials",
+                materials: ["metal", "wood"],
+                styles: ["industrial"],
+                experience: 9,
+                location: "New York",
+                priceRange: { min: 1800, max: 12000 },
+                rating: 4.3,
+                contact: {
+                    phone: "(212) 555-2345",
+                    email: "contact@industrialedge.com",
+                    website: "industrialedge.com"
+                },
+                portfolio: [
+                    { type: "shelving", style: "industrial" },
+                    { type: "desk", style: "industrial" },
+                    { type: "console", style: "industrial" }
+                ],
+                reviews: [
+                    { author: "Chris M.", rating: 4, text: "Unique industrial pieces with character, though finishing could be improved." },
+                    { author: "Stephanie R.", rating: 4.5, text: "Love our reclaimed wood and steel shelving units." }
+                ]
+            },
+            {
+                id: 10,
+                name: "Luxury Living Creations",
+                specialization: "High-end furniture, Luxury materials",
+                materials: ["wood", "upholstery", "glass"],
+                styles: ["modern", "traditional"],
+                experience: 20,
+                location: "Miami",
+                priceRange: { min: 8000, max: 50000 },
+                rating: 4.9,
+                contact: {
+                    phone: "(305) 555-8901",
+                    email: "info@luxurylivingcreations.com",
+                    website: "luxurylivingcreations.com"
+                },
+                portfolio: [
+                    { type: "dining-set", style: "modern" },
+                    { type: "sectional", style: "modern" },
+                    { type: "bedroom-set", style: "traditional" }
+                ],
+                reviews: [
+                    { author: "Richard T.", rating: 5, text: "Unparalleled quality and craftsmanship. Our dining set exceeds all expectations." },
+                    { author: "Victoria S.", rating: 5, text: "The attention to detail and customer service are worth the premium price." }
+                ]
+            }
+        ];
+
+        // DOM Elements
+        const searchInput = document.getElementById('searchInput');
+        const sortBySelect = document.getElementById('sortBy');
+        const listingsContainer = document.getElementById('listings');
+        const resultsCountElem = document.getElementById('resultsCount');
+        const clearFiltersBtn = document.getElementById('clearFilters');
+        const toggleFiltersBtn = document.getElementById('toggleFilters');
+        const filterSidebar = document.getElementById('filterSidebar');
+        const ratingFilter = document.getElementById('ratingFilter');
+        const ratingValue = document.getElementById('ratingValue');
+        const locationFilter = document.getElementById('locationFilter');
+        const minPriceFilter = document.getElementById('minPriceFilter');
+        const maxPriceFilter = document.getElementById('maxPriceFilter');
+        const materialCheckboxes = document.querySelectorAll('input[name="material"]');
+        const styleCheckboxes = document.querySelectorAll('input[name="style"]');
+        const requestQuoteBtn = document.getElementById('requestQuoteBtn');
+        const quoteModal = document.getElementById('quoteModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const quoteForm = document.getElementById('quoteForm');
+        const makerSelect = document.getElementById('maker-select');
+        const successNotification = document.getElementById('successNotification');
+
+        // Current filters state
+        const filters = {
+            search: '',
+            materials: [],
+            styles: [],
+            location: '',
+            minPrice: '',
+            maxPrice: '',
+            minRating: 1,
+            sortBy: 'rating'
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulate loading delay
+            setTimeout(() => {
+                populateListings(furnitureMakers);
+                populateMakerSelect();
+            }, 1000);
+
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Search input
+            searchInput.addEventListener('input', () => {
+                filters.search = searchInput.value.toLowerCase().trim();
+                applyFilters();
+            });
+
+            // Sort selection
+            sortBySelect.addEventListener('change', () => {
+                filters.sortBy = sortBySelect.value;
+                applyFilters();
+            });
+
+            // Clear filters
+            clearFiltersBtn.addEventListener('click', clearAllFilters);
+
+            // Toggle filters on mobile
+            toggleFiltersBtn.addEventListener('click', () => {
+                filterSidebar.classList.toggle('hidden');
+            });
+
+            // Rating filter
+            ratingFilter.addEventListener('input', () => {
+                filters.minRating = parseInt(ratingFilter.value);
+                ratingValue.textContent = `${filters.minRating}+`;
+                applyFilters();
+            });
+
+            // Location filter
+            locationFilter.addEventListener('change', () => {
+                filters.location = locationFilter.value;
+                applyFilters();
+            });
+
+            // Price filters
+            minPriceFilter.addEventListener('change', () => {
+                filters.minPrice = minPriceFilter.value !== '' ? parseInt(minPriceFilter.value) : '';
+                applyFilters();
+            });
+
+            maxPriceFilter.addEventListener('change', () => {
+                filters.maxPrice = maxPriceFilter.value !== '' ? parseInt(maxPriceFilter.value) : '';
+                applyFilters();
+            });
+
+            // Material checkboxes
+            materialCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    updateCheckboxFilters(materialCheckboxes, 'materials');
+                });
+            });
+
+            // Style checkboxes
+            styleCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    updateCheckboxFilters(styleCheckboxes, 'styles');
+                });
+            });
+
+            // Quote modal
+            requestQuoteBtn.addEventListener('click', () => {
+                quoteModal.classList.remove('hidden');
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                quoteModal.classList.add('hidden');
+            });
+
+            quoteForm.addEventListener('submit', handleQuoteSubmission);
+
+            // Close modal when clicking outside
+            quoteModal.addEventListener('click', (e) => {
+                if (e.target === quoteModal) {
+                    quoteModal.classList.add('hidden');
+                }
+            });
+        }
+
+        // Update checkbox filter arrays
+        function updateCheckboxFilters(checkboxes, filterName) {
+            filters[filterName] = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+            applyFilters();
+        }
+
+        // Clear all filters
+        function clearAllFilters() {
+            // Reset search
+            searchInput.value = '';
+            filters.search = '';
+
+            // Reset checkboxes
+            materialCheckboxes.forEach(cb => { cb.checked = false; });
+            styleCheckboxes.forEach(cb => { cb.checked = false; });
+            filters.materials = [];
+            filters.styles = [];
+
+            // Reset location
+            locationFilter.value = '';
+            filters.location = '';
+
+            // Reset price filters
+            minPriceFilter.value = '';
+            maxPriceFilter.value = '';
+            filters.minPrice = '';
+            filters.maxPrice = '';
+
+            // Reset rating
+            ratingFilter.value = 1;
+            ratingValue.textContent = '1+';
+            filters.minRating = 1;
+
+            // Reset sort
+            sortBySelect.value = 'rating';
+            filters.sortBy = 'rating';
+
+            // Apply cleared filters
+            applyFilters();
+        }
+
+        // Apply all filters and sort
+        function applyFilters() {
+            let filteredMakers = furnitureMakers.filter(maker => {
+                // Search filter
+                if (filters.search && !maker.name.toLowerCase().includes(filters.search) && 
+                    !maker.specialization.toLowerCase().includes(filters.search)) {
+                    return false;
+                }
+
+                // Materials filter
+                if (filters.materials.length > 0 && 
+                    !filters.materials.some(material => maker.materials.includes(material))) {
+                    return false;
+                }
+
+                // Styles filter
+                if (filters.styles.length > 0 && 
+                    !filters.styles.some(style => maker.styles.includes(style))) {
+                    return false;
+                }
+
+                // Location filter
+                if (filters.location && maker.location !== filters.location) {
+                    return false;
+                }
+
+                // Price range filter
+                if (filters.minPrice && maker.priceRange.max < filters.minPrice) {
+                    return false;
+                }
+                if (filters.maxPrice && maker.priceRange.min > filters.maxPrice) {
+                    return false;
+                }
+
+                // Rating filter
+                if (maker.rating < filters.minRating) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            // Sort the filtered makers
+            filteredMakers = sortMakers(filteredMakers, filters.sortBy);
+
+            // Update the UI
+            populateListings(filteredMakers);
+            updateResultsCount(filteredMakers.length);
+        }
+
+        // Sort makers based on selected criteria
+        function sortMakers(makers, criteria) {
+            switch (criteria) {
+                case 'rating':
+                    return [...makers].sort((a, b) => b.rating - a.rating);
+                case 'experience':
+                    return [...makers].sort((a, b) => b.experience - a.experience);
+                case 'priceAsc':
+                    return [...makers].sort((a, b) => a.priceRange.min - b.priceRange.min);
+                case 'priceDesc':
+                    return [...makers].sort((a, b) => b.priceRange.max - a.priceRange.max);
+                case 'name':
+                    return [...makers].sort((a, b) => a.name.localeCompare(b.name));
+                default:
+                    return makers;
+            }
+        }
+
+        // Update results count text
+        function updateResultsCount(count) {
+            if (count === furnitureMakers.length) {
+                resultsCountElem.textContent = `Showing all furniture makers`;
+            } else {
+                resultsCountElem.textContent = `Showing ${count} of ${furnitureMakers.length} furniture makers`;
+            }
+        }
+
+        // Populate listings with filtered makers
+        function populateListings(makers) {
+            // Clear current listings
+            listingsContainer.innerHTML = '';
+
+            // If no results
+            if (makers.length === 0) {
+                listingsContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-search text-gray-400 text-5xl mb-4"></i>
+                        <p class="text-xl text-gray-600 dark:text-gray-400">No furniture makers match your filters</p>
+                        <button id="clearFiltersBtn" class="mt-4 text-primary dark:text-primary-light hover:underline">
+                            Clear all filters
+                        </button>
+                    </div>
+                `;
+                document.getElementById('clearFiltersBtn').addEventListener('click', clearAllFilters);
+                return;
+            }
+
+            // Create maker cards
+            makers.forEach(maker => {
+                const card = document.createElement('div');
+                card.className = 'bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden card-hover';
+                card.dataset.makerId = maker.id;
+
+                // Generate review stars
+                let starsHtml = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= Math.floor(maker.rating)) {
+                        starsHtml += '<i class="fas fa-star"></i>';
+                    } else if (i <= maker.rating) {
+                        starsHtml += '<i class="fas fa-star-half-alt"></i>';
+                    } else {
+                        starsHtml += '<i class="far fa-star"></i>';
+                    }
+                }
+
+                // Generate portfolio images
+                const portfolioImages = maker.portfolio.map((item, index) => {
+                    const color = index % 2 === 0 ? 'rgba(93, 92, 222, 0.8)' : 'rgba(93, 92, 222, 0.6)';
+                    const patternType = item.type === 'dining-table' ? 'table' : 
+                                      item.type === 'chair' || item.type === 'armchair' ? 'chair' : 
+                                      item.type === 'desk' ? 'desk' : 
+                                      item.type === 'cabinet' || item.type === 'media-cabinet' ? 'cabinet' : 
+                                      item.type === 'sofa' || item.type === 'sectional' ? 'sofa' : 'furniture';
+                    
+                    return `
+                        <div class="w-full h-24 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden portfolio-image">
+                            <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="100" height="100" fill="${color}" />
+                                <text x="50" y="50" font-family="Arial" font-size="10" fill="white" text-anchor="middle" dominant-baseline="middle">
+                                    ${patternType.toUpperCase()}
+                                </text>
+                                <text x="50" y="65" font-family="Arial" font-size="8" fill="white" text-anchor="middle" dominant-baseline="middle">
+                                    ${item.style}
+                                </text>
+                            </svg>
+                        </div>
+                    `;
+                }).join('');
+
+                // Generate review HTML
+                const reviewsHtml = maker.reviews.map(review => {
+                    let reviewStars = '';
+                    for (let i = 1; i <= 5; i++) {
+                        if (i <= Math.floor(review.rating)) {
+                            reviewStars += '<i class="fas fa-star"></i>';
+                        } else if (i <= review.rating) {
+                            reviewStars += '<i class="fas fa-star-half-alt"></i>';
+                        } else {
+                            reviewStars += '<i class="far fa-star"></i>';
+                        }
+                    }
+                    
+                    return `
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3">
+                            <div class="flex justify-between items-start">
+                                <p class="font-medium">${review.author}</p>
+                                <div class="text-sm star-rating">${reviewStars}</div>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">${review.text}</p>
+                        </div>
+                    `;
+                }).join('');
+
+                // Build the card HTML
+                card.innerHTML = `
+                    <div class="p-6">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                            <div>
+                                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">${maker.name}</h2>
+                                <p class="text-gray-600 dark:text-gray-400 mb-2">${maker.specialization}</p>
+                                <div class="flex items-center mb-3">
+                                    <div class="star-rating mr-2">${starsHtml}</div>
+                                    <span class="text-gray-700 dark:text-gray-300">${maker.rating.toFixed(1)}</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:mt-0 flex flex-col items-start sm:items-end">
+                                <div class="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1 text-primary"></i> ${maker.location}
+                                </div>
+                                <div class="text-sm">
+                                    <span class="text-gray-600 dark:text-gray-400">${maker.experience} years experience</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Portfolio</h3>
+                            <div class="grid grid-cols-3 gap-2 mb-4">
+                                ${portfolioImages}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Materials & Style</h3>
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                ${maker.materials.map(material => 
+                                    `<span class="text-xs bg-primary/10 text-primary dark:bg-primary/20 px-2 py-1 rounded">${material}</span>`
+                                ).join('')}
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                ${maker.styles.map(style => 
+                                    `<span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded">${style}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">Price Range</h3>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                $${maker.priceRange.min.toLocaleString()} - $${maker.priceRange.max.toLocaleString()}
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Contact Information</h3>
+                            <div class="space-y-1 text-sm">
+                                <p><i class="fas fa-phone mr-2 text-primary"></i>${maker.contact.phone}</p>
+                                <p><i class="fas fa-envelope mr-2 text-primary"></i>${maker.contact.email}</p>
+                                <p><i class="fas fa-globe mr-2 text-primary"></i>${maker.contact.website}</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Client Reviews</h3>
+                            ${reviewsHtml}
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <button class="get-quote-btn w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-md transition-colors" data-id="${maker.id}">
+                                <i class="fas fa-pencil-alt mr-2"></i>Request a Quote
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                listingsContainer.appendChild(card);
+            });
+
+            // Add event listeners to the quote buttons
+            document.querySelectorAll('.get-quote-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const makerId = e.currentTarget.dataset.id;
+                    openQuoteModal(makerId);
+                });
+            });
+        }
+
+        // Populate the maker select dropdown in the quote form
+        function populateMakerSelect() {
+            makerSelect.innerHTML = '<option value="">Any Available Maker</option>';
+            furnitureMakers.forEach(maker => {
+                const option = document.createElement('option');
+                option.value = maker.id;
+                option.textContent = maker.name;
+                makerSelect.appendChild(option);
+            });
+        }
+
+        // Open the quote modal and pre-select a maker if provided
+        function openQuoteModal(makerId = null) {
+            if (makerId) {
+                makerSelect.value = makerId;
+            } else {
+                makerSelect.value = '';
+            }
+            quoteModal.classList.remove('hidden');
+        }
+
+        // Handle quote form submission
+        function handleQuoteSubmission(e) {
+            e.preventDefault();
+
+            // Simulate form submission - in a real app, this would send data to a server
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                furnitureType: document.getElementById('furniture-type').value,
+                description: document.getElementById('description').value,
+                selectedMaker: document.getElementById('maker-select').value,
+                budget: document.getElementById('budget').value
+            };
+
+            console.log('Quote request submitted:', formData);
+
+            // Hide modal and show success notification
+            quoteModal.classList.add('hidden');
+            
+            // Reset form
+            quoteForm.reset();
+            
+            // Show success notification
+            successNotification.classList.remove('hidden');
+            
+            // Hide notification after 4 seconds
+            setTimeout(() => {
+                successNotification.classList.add('hidden');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

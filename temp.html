@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModernHaus - Contemporary Furniture & Interior Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#F8F7FF',
+                        accent: '#FFD166',
+                        dark: {
+                            primary: '#6F6EE8',
+                            bg: '#181818',
+                            card: '#262626',
+                            text: '#E0E0E0'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        };
+
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+        
+        .hero-image {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1556702571-3e11dd2b1a92?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .dark .hero-image {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1556702571-3e11dd2b1a92?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Card hover effects */
+        .collection-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        
+        .collection-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .service-card {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Animation for AR view */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Progress bar animation */
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        .progress-animation {
+            animation: progress 3s linear forwards;
+        }
+
+        /* Skeleton loading animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.3; }
+        }
+        
+        .skeleton {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-white text-gray-900 dark:bg-dark-bg dark:text-dark-text">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white bg-opacity-95 dark:bg-dark-bg dark:bg-opacity-95 backdrop-blur-sm shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="flex-shrink-0 flex items-center">
+                        <h1 class="text-xl sm:text-2xl font-serif font-bold text-primary dark:text-dark-primary tracking-tight">ModernHaus</h1>
+                    </a>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="flex items-center -mr-2 md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-100 dark:hover:bg-dark-card">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                
+                <!-- Desktop nav links -->
+                <div class="hidden md:flex md:items-center md:space-x-6">
+                    <a href="#collections" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-dark-primary px-3 py-2 text-sm font-medium">Collections</a>
+                    <a href="#ar-visualization" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-dark-primary px-3 py-2 text-sm font-medium">AR Preview</a>
+                    <a href="#services" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-dark-primary px-3 py-2 text-sm font-medium">Services</a>
+                    <a href="#news" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-dark-primary px-3 py-2 text-sm font-medium">News</a>
+                    <a href="#image-analyzer" class="bg-primary text-white dark:bg-dark-primary hover:bg-opacity-90 px-4 py-2 rounded-md text-sm font-medium ml-2">
+                        <i class="fas fa-camera mr-1"></i> Image Analyzer
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-dark-card shadow-md">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#collections" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Collections</a>
+                <a href="#ar-visualization" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">AR Preview</a>
+                <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Services</a>
+                <a href="#news" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">News</a>
+                <a href="#image-analyzer" class="block px-3 py-2 rounded-md text-base font-medium bg-primary text-white dark:bg-dark-primary hover:bg-opacity-90 mt-2">
+                    <i class="fas fa-camera mr-1"></i> Image Analyzer
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-image relative h-[85vh] flex items-center justify-center text-white">
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight">
+                Redefine Your Living Space
+            </h1>
+            <p class="mt-6 text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto">
+                Curated furniture collections that transform houses into homes
+            </p>
+            <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#collections" class="rounded-md bg-primary px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-opacity-90 transition duration-300 ease-in-out">
+                    Explore Collections
+                </a>
+                <a href="#services" class="rounded-md bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm px-6 py-3 text-base font-medium text-white border border-white border-opacity-30 hover:bg-opacity-30 transition duration-300 ease-in-out">
+                    Our Services
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collections Section -->
+    <section id="collections" class="py-16 sm:py-24 bg-gray-50 dark:bg-dark-bg">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold text-gray-900 dark:text-white">Our Collections</h2>
+                <p class="mt-4 text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    Discover furniture pieces that blend comfort, style, and functionality
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                <!-- Collection 1 -->
+                <div class="collection-card rounded-xl overflow-hidden bg-white dark:bg-dark-card shadow-md">
+                    <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Scandinavian Collection" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-serif font-bold text-xl text-gray-900 dark:text-white">Scandinavian Collection</h3>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">Clean lines, organic materials, and minimalist aesthetics define our Nordic-inspired collection.</p>
+                        <button class="mt-4 inline-flex items-center text-primary dark:text-dark-primary font-medium">
+                            View Collection <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Collection 2 -->
+                <div class="collection-card rounded-xl overflow-hidden bg-white dark:bg-dark-card shadow-md">
+                    <img src="https://images.unsplash.com/photo-1588854337236-6889d631faa8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Modern Industrial" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-serif font-bold text-xl text-gray-900 dark:text-white">Modern Industrial</h3>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">Raw materials, exposed elements, and utilitarian designs with a contemporary twist.</p>
+                        <button class="mt-4 inline-flex items-center text-primary dark:text-dark-primary font-medium">
+                            View Collection <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Collection 3 -->
+                <div class="collection-card rounded-xl overflow-hidden bg-white dark:bg-dark-card shadow-md">
+                    <img src="https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Mid-Century Modern" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-serif font-bold text-xl text-gray-900 dark:text-white">Mid-Century Modern</h3>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">Timeless designs from the mid-20th century with functional forms and clean aesthetics.</p>
+                        <button class="mt-4 inline-flex items-center text-primary dark:text-dark-primary font-medium">
+                            View Collection <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="rounded-md bg-primary dark:bg-dark-primary hover:bg-opacity-90 px-6 py-3 text-base font-medium text-white shadow-sm transition duration-300 ease-in-out">
+                    View All Collections
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Analyzer Section (Google Lens like feature) -->
+    <section id="image-analyzer" class="py-16 sm:py-24">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-gray-900 dark:text-white">Furniture Image Analyzer</h2>
+                    <p class="mt-4 text-xl text-gray-600 dark:text-gray-300">
+                        Upload an image of furniture you like and our AI will identify similar pieces in our collection
+                    </p>
+                </div>
+                
+                <div class="bg-white dark:bg-dark-card shadow-xl rounded-xl overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-4"></i>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Drag and drop an image here or click to browse</p>
+                            <input type="file" id="image-upload" accept="image/*" class="hidden">
+                            <button id="upload-button" class="bg-primary dark:bg-dark-primary text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition duration-300">
+                                Upload Image
+                            </button>
+                        </div>
+                        
+                        <!-- Results area (initially hidden) -->
+                        <div id="analysis-results" class="mt-8 hidden">
+                            <div id="loading-state" class="text-center py-8">
+                                <div class="flex flex-col items-center">
+                                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary dark:border-dark-primary mb-4"></div>
+                                    <p class="text-gray-600 dark:text-gray-300">Analyzing your image...</p>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full mt-4">
+                                        <div class="bg-primary dark:bg-dark-primary h-2 rounded-full progress-animation"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="results-content" class="hidden">
+                                <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Analysis Results</h3>
+                                
+                                <!-- The image preview -->
+                                <div class="flex flex-col md:flex-row gap-6 mb-6">
+                                    <div class="w-full md:w-1/3">
+                                        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+                                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Your image:</p>
+                                            <img id="preview-image" class="w-full h-auto rounded-lg" src="" alt="Uploaded image">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="w-full md:w-2/3">
+                                        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 h-full">
+                                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">We found:</p>
+                                            <h4 id="furniture-name" class="text-lg font-semibold text-gray-900 dark:text-white">Mid-Century Modern Lounge Chair</h4>
+                                            <p id="furniture-description" class="mt-2 text-gray-700 dark:text-gray-300">
+                                                A classic mid-century modern accent chair featuring tapered wooden legs and minimalist upholstery.
+                                            </p>
+                                            <div class="mt-4">
+                                                <span class="inline-block bg-primary bg-opacity-10 text-primary dark:bg-dark-primary dark:bg-opacity-20 dark:text-dark-primary text-sm px-3 py-1 rounded-full mr-2 mb-2">Mid-Century</span>
+                                                <span class="inline-block bg-primary bg-opacity-10 text-primary dark:bg-dark-primary dark:bg-opacity-20 dark:text-dark-primary text-sm px-3 py-1 rounded-full mr-2 mb-2">Lounge Chair</span>
+                                                <span class="inline-block bg-primary bg-opacity-10 text-primary dark:bg-dark-primary dark:bg-opacity-20 dark:text-dark-primary text-sm px-3 py-1 rounded-full mr-2 mb-2">Wood</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="text-xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">Similar Items in Our Collection</h3>
+                                
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    <!-- Similar Item 1 -->
+                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Similar chair" class="w-full h-48 object-cover">
+                                        <div class="p-4">
+                                            <h5 class="font-medium text-gray-900 dark:text-white">Oslo Lounge Chair</h5>
+                                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">$549.99</p>
+                                            <button class="mt-2 w-full bg-primary dark:bg-dark-primary text-white px-3 py-1 rounded-md text-sm hover:bg-opacity-90 transition">View Details</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Similar Item 2 -->
+                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                                        <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Similar chair" class="w-full h-48 object-cover">
+                                        <div class="p-4">
+                                            <h5 class="font-medium text-gray-900 dark:text-white">Nordic Accent Chair</h5>
+                                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">$499.99</p>
+                                            <button class="mt-2 w-full bg-primary dark:bg-dark-primary text-white px-3 py-1 rounded-md text-sm hover:bg-opacity-90 transition">View Details</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Similar Item 3 -->
+                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Similar chair" class="w-full h-48 object-cover">
+                                        <div class="p-4">
+                                            <h5 class="font-medium text-gray-900 dark:text-white">Retro Lounge Chair</h5>
+                                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">$599.99</p>
+                                            <button class="mt-2 w-full bg-primary dark:bg-dark-primary text-white px-3 py-1 rounded-md text-sm hover:bg-opacity-90 transition">View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AR Visualization Section -->
+    <section id="ar-visualization" class="py-16 sm:py-24 bg-gray-50 dark:bg-dark-bg">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold text-gray-900 dark:text-white">Visualize in Your Space</h2>
+                <p class="mt-4 text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    See how our furniture fits in your space before making a purchase
+                </p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                    <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4">Try Our AR Experience</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">
+                            Select a furniture piece to visualize how it would look in your living space.
+                        </p>
+                        
+                        <div class="mb-6">
+                            <label for="furniture-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Furniture</label>
+                            <select id="furniture-select" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-base">
+                                <option value="sofa">Modern Sofa - Slate Gray</option>
+                                <option value="chair">Accent Chair - Beige</option>
+                                <option value="table">Coffee Table - Oak</option>
+                                <option value="lamp">Floor Lamp - Black</option>
+                                <option value="bookshelf">Bookshelf - Walnut</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="room-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Room Background</label>
+                            <select id="room-select" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-base">
+                                <option value="living-minimal">Living Room - Minimal</option>
+                                <option value="living-modern">Living Room - Modern</option>
+                                <option value="bedroom">Bedroom - Contemporary</option>
+                                <option value="office">Home Office</option>
+                            </select>
+                        </div>
+                        
+                        <button id="visualize-btn" class="w-full rounded-md bg-primary dark:bg-dark-primary px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-opacity-90 transition duration-300 ease-in-out">
+                            Visualize Now
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <div id="ar-preview" class="relative bg-white dark:bg-dark-card p-2 rounded-xl shadow-lg aspect-[4/3] overflow-hidden">
+                        <!-- Default preview image -->
+                        <img 
+                            id="room-background" 
+                            src="https://images.unsplash.com/photo-1600210492493-0946911123ea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" 
+                            alt="Living room" 
+                            class="w-full h-full object-cover rounded-lg"
+                        >
+                        
+                        <!-- Furniture overlay (initially hidden) -->
+                        <img 
+                            id="furniture-overlay" 
+                            src="" 
+                            alt="Furniture" 
+                            class="absolute hidden fade-in"
+                        >
+                        
+                        <!-- Loading overlay (initially hidden) -->
+                        <div id="ar-loading" class="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center rounded-lg hidden">
+                            <div class="text-white text-center">
+                                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white mx-auto mb-4"></div>
+                                <p>Generating visualization...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 grid grid-cols-2 gap-4">
+                        <div>
+                            <button id="change-position" class="w-full bg-white dark:bg-dark-card rounded-md px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-opacity-90 border border-gray-300 dark:border-gray-700 transition duration-300 ease-in-out">
+                                <i class="fas fa-arrows-alt mr-2"></i> Adjust Position
+                            </button>
+                        </div>
+                        <div>
+                            <button id="change-colors" class="w-full bg-white dark:bg-dark-card rounded-md px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-opacity-90 border border-gray-300 dark:border-gray-700 transition duration-300 ease-in-out">
+                                <i class="fas fa-palette mr-2"></i> Change Colors
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 sm:py-24">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold text-gray-900 dark:text-white">Our Services</h2>
+                <p class="mt-4 text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    Comprehensive interior design solutions tailored to your lifestyle
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                <!-- Service 1 -->
+                <div class="service-card bg-white dark:bg-dark-card rounded-xl shadow-md overflow-hidden">
+                    <div class="p-8">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary bg-opacity-10 text-primary dark:bg-opacity-20 dark:text-dark-primary mb-6">
+                            <i class="fas fa-pencil-ruler text-xl"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-gray-900 dark:text-white mb-4">Interior Design</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Our professional designers create personalized spaces that reflect your style and meet your functional needs.
+                        </p>
+                        <button class="mt-6 inline-flex items-center text-primary dark:text-dark-primary font-medium">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-card bg-white dark:bg-dark-card rounded-xl shadow-md overflow-hidden">
+                    <div class="p-8">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary bg-opacity-10 text-primary dark:bg-opacity-20 dark:text-dark-primary mb-6">
+                            <i class="fas fa-tools text-xl"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-gray-900 dark:text-white mb-4">Custom Furniture</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Bespoke furniture crafted to your specifications, ensuring perfect fit and harmony with your interior.
+                        </p>
+                        <button class="mt-6 inline-flex items-center text-primary dark:text-dark-primary font-medium">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="service-card bg-white dark:bg-dark-card rounded-xl shadow-md overflow-hidden">
+                    <div class="p-8">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary bg-opacity-10 text-primary dark:bg-opacity-20 dark:text-dark-primary mb-6">
+                            <i class="fas fa-hammer text-xl"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-gray-900 dark:text-white mb-4">Furniture Repair</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Expert restoration and repair services to extend the life of your cherished furniture pieces.
+                        </p>
+                        <button class="mt-6 inline-flex items-center text-primary dark:text-dark-primary font-medium">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 bg-primary dark:bg-dark-primary bg-opacity-5 dark:bg-opacity-10 rounded-xl overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
+                    <div class="p-8 lg:p-12">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4">Need Personalized Advice?</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">
+                            Get a free consultation with our interior design experts to discuss your project needs and vision.
+                        </p>
+                        
+                        <form class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+                                <input type="text" id="name" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 bg-white dark:bg-gray-800 text-base" placeholder="Your name">
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                                <input type="email" id="email" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 bg-white dark:bg-gray-800 text-base" placeholder="Your email">
+                            </div>
+                            
+                            <div>
+                                <label for="service" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Service Interested In</label>
+                                <select id="service" class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 bg-white dark:bg-gray-800 text-base">
+                                    <option>Interior Design</option>
+                                    <option>Custom Furniture</option>
+                                    <option>Furniture Repair</option>
+                                    <option>Space Planning</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="w-full rounded-md bg-primary dark:bg-dark-primary px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-opacity-90 transition duration-300 ease-in-out">
+                                Request Consultation
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="relative hidden lg:block">
+                        <img 
+                            src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                            alt="Interior design" 
+                            class="absolute inset-0 w-full h-full object-cover"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news" class="py-16 sm:py-24 bg-gray-50 dark:bg-dark-bg">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold text-gray-900 dark:text-white">Latest News & Trends</h2>
+                <p class="mt-4 text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    Stay updated with the latest in furniture design and interior styling
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                <!-- News Item 1 -->
+                <div class="bg-white dark:bg-dark-card rounded-xl shadow-md overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Furniture Trend" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center text-gray-500 dark:text-gray-400 text-sm mb-2">
+                            <i class="far fa-calendar-alt mr-2"></i>
+                            <span>June 15, 2023</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-gray-900 dark:text-white">Biophilic Design: Bringing Nature Indoors</h3>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">
+                            Learn how incorporating natural elements and materials can transform your living space into a calming sanctuary.
+                        </p>
+                        <button class="mt-4 inline-flex items-center text-primary dark:text-dark-primary font-medium">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- News Item 2 -->
+                <div class="bg-white dark:bg-dark-card rounded-xl shadow-md overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Sustainable Design" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center text-gray-500 dark:text-gray-400 text-sm mb-2">
+                            <i class="far fa-calendar-alt mr-2"></i>
+                            <span>May 28, 2023</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-gray-900 dark:text-white">Sustainable Furniture: Eco-Friendly Choices</h3>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">
+                            Discover how to furnish your home responsibly with sustainable materials and environmentally conscious designs.
+                        </p>
+                        <button class="mt-4 inline-flex items-center text-primary dark:text-dark-primary font-medium">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- News Item 3 -->
+                <div class="bg-white dark:bg-dark-card rounded-xl shadow-md overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Color Trends" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center text-gray-500 dark:text-gray-400 text-sm mb-2">
+                            <i class="far fa-calendar-alt mr-2"></i>
+                            <span>May 10, 2023</span>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-gray-900 dark:text-white">Color Trends for 2023: Bold Choices</h3>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">
+                            Explore this year's trending color palettes and how to incorporate them into your interior design scheme.
+                        </p>
+                        <button class="mt-4 inline-flex items-center text-primary dark:text-dark-primary font-medium">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="rounded-md bg-primary dark:bg-dark-primary hover:bg-opacity-90 px-6 py-3 text-base font-medium text-white shadow-sm transition duration-300 ease-in-out">
+                    View All Articles
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Column 1 -->
+                <div>
+                    <h3 class="text-xl font-serif font-bold text-white mb-4">ModernHaus</h3>
+                    <p class="mb-4">
+                        Creating beautiful, functional spaces that inspire and comfort since 2010.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-pinterest-p"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#collections" class="hover:text-white transition-colors">Collections</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#ar-visualization" class="hover:text-white transition-colors">AR Preview</a></li>
+                        <li><a href="#news" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Customer Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Shipping & Delivery</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Returns & Refunds</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Newsletter</h4>
+                    <p class="mb-4">Subscribe to receive updates on new collections and design tips.</p>
+                    <form>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="email" placeholder="Your email" class="px-4 py-2 rounded-md text-gray-900 text-base flex-grow">
+                            <button type="submit" class="bg-primary hover:bg-opacity-90 text-white px-4 py-2 rounded-md transition duration-300 ease-in-out">
+                                Subscribe
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-sm text-center">
+                <p>&copy; 2023 ModernHaus. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Image Analyzer Functionality
+        const uploadButton = document.getElementById('upload-button');
+        const imageUpload = document.getElementById('image-upload');
+        const analysisResults = document.getElementById('analysis-results');
+        const loadingState = document.getElementById('loading-state');
+        const resultsContent = document.getElementById('results-content');
+        const previewImage = document.getElementById('preview-image');
+        
+        uploadButton.addEventListener('click', () => {
+            imageUpload.click();
+        });
+        
+        imageUpload.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    previewImage.src = event.target.result;
+                    
+                    // Show analysis section and loading state
+                    analysisResults.classList.remove('hidden');
+                    loadingState.classList.remove('hidden');
+                    resultsContent.classList.add('hidden');
+                    
+                    // Simulate analysis (would be actual API call in production)
+                    setTimeout(() => {
+                        loadingState.classList.add('hidden');
+                        resultsContent.classList.remove('hidden');
+                    }, 3000);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // AR Visualization Functionality
+        const visualizeBtn = document.getElementById('visualize-btn');
+        const furnitureSelect = document.getElementById('furniture-select');
+        const roomSelect = document.getElementById('room-select');
+        const roomBackground = document.getElementById('room-background');
+        const furnitureOverlay = document.getElementById('furniture-overlay');
+        const arLoading = document.getElementById('ar-loading');
+        
+        // Room background images
+        const roomBackgrounds = {
+            'living-minimal': 'https://images.unsplash.com/photo-1600210492493-0946911123ea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+            'living-modern': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+            'bedroom': 'https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+            'office': 'https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80'
+        };
+        
+        // Furniture overlay positions (these would be more sophisticated in a real implementation)
+        const furniturePositions = {
+            'sofa': {
+                'living-minimal': 'bottom: 20%; left: 30%; width: 45%; height: auto; transform: perspective(500px) rotateY(10deg);',
+                'living-modern': 'bottom: 25%; left: 25%; width: 50%; height: auto;',
+                'bedroom': 'bottom: 15%; left: 20%; width: 60%; height: auto;',
+                'office': 'bottom: 10%; left: 15%; width: 40%; height: auto; transform: perspective(500px) rotateY(-5deg);'
+            },
+            'chair': {
+                'living-minimal': 'bottom: 20%; right: 20%; width: 20%; height: auto;',
+                'living-modern': 'bottom: 15%; right: 15%; width: 25%; height: auto;',
+                'bedroom': 'bottom: 15%; right: 10%; width: 20%; height: auto;',
+                'office': 'bottom: 10%; right: 20%; width: 25%; height: auto;'
+            },
+            'table': {
+                'living-minimal': 'bottom: 15%; left: 40%; width: 25%; height: auto;',
+                'living-modern': 'bottom: 10%; left: 35%; width: 30%; height: auto;',
+                'bedroom': 'bottom: 10%; left: 40%; width: 20%; height: auto;',
+                'office': 'bottom: 15%; left: 35%; width: 25%; height: auto;'
+            },
+            'lamp': {
+                'living-minimal': 'bottom: 15%; right: 15%; width: 15%; height: auto;',
+                'living-modern': 'bottom: 10%; right: 10%; width: 18%; height: auto;',
+                'bedroom': 'bottom: 12%; right: 12%; width: 16%; height: auto;',
+                'office': 'bottom: 10%; right: 15%; width: 15%; height: auto;'
+            },
+            'bookshelf': {
+                'living-minimal': 'bottom: 15%; left: 15%; width: 20%; height: auto;',
+                'living-modern': 'bottom: 10%; left: 10%; width: 25%; height: auto;',
+                'bedroom': 'bottom: 10%; left: 15%; width: 15%; height: auto;',
+                'office': 'bottom: 12%; left: 12%; width: 20%; height: auto;'
+            }
+        };
+        
+        // Simulated furniture images (in a real app these would be transparent PNGs)
+        const furnitureImages = {
+            'sofa': 'https://i.imgur.com/HUaAyXI.png', // This would be a transparent PNG of a sofa
+            'chair': 'https://i.imgur.com/8wNmTAq.png', // This would be a transparent PNG of a chair
+            'table': 'https://i.imgur.com/YZ4CdZb.png', // This would be a transparent PNG of a table
+            'lamp': 'https://i.imgur.com/pQ5nZJY.png', // This would be a transparent PNG of a lamp
+            'bookshelf': 'https://i.imgur.com/KBDT5vI.png' // This would be a transparent PNG of a bookshelf
+        };
+        
+        roomSelect.addEventListener('change', () => {
+            const selectedRoom = roomSelect.value;
+            roomBackground.src = roomBackgrounds[selectedRoom];
+            
+            // If furniture is already displayed, update its position
+            if (!furnitureOverlay.classList.contains('hidden')) {
+                updateFurniturePosition();
+            }
+        });
+        
+        visualizeBtn.addEventListener('click', () => {
+            const selectedFurniture = furnitureSelect.value;
+            const selectedRoom = roomSelect.value;
+            
+            // Show loading
+            arLoading.classList.remove('hidden');
+            furnitureOverlay.classList.add('hidden');
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                // Update room if needed
+                roomBackground.src = roomBackgrounds[selectedRoom];
+                
+                // Set furniture image
+                furnitureOverlay.src = furnitureImages[selectedFurniture];
+                
+                // Set position based on furniture and room
+                updateFurniturePosition();
+                
+                // Hide loading and show furniture
+                arLoading.classList.add('hidden');
+                furnitureOverlay.classList.remove('hidden');
+            }, 1500);
+        });
+        
+        function updateFurniturePosition() {
+            const selectedFurniture = furnitureSelect.value;
+            const selectedRoom = roomSelect.value;
+            const positionStyle = furniturePositions[selectedFurniture][selectedRoom];
+            
+            // Apply position styles
+            furnitureOverlay.style = positionStyle;
+        }
+        
+        // Change position button (simulated functionality)
+        const changePositionBtn = document.getElementById('change-position');
+        changePositionBtn.addEventListener('click', () => {
+            if (furnitureOverlay.classList.contains('hidden')) return;
+            
+            // Simple position adjustment simulation
+            const currentBottom = parseInt(furnitureOverlay.style.bottom) || 15;
+            const currentLeft = parseInt(furnitureOverlay.style.left) || 30;
+            
+            const newBottom = (currentBottom + 5) % 30;
+            const newLeft = (currentLeft + 5) % 50;
+            
+            furnitureOverlay.style.bottom = `${newBottom}%`;
+            furnitureOverlay.style.left = `${newLeft}%`;
+        });
+        
+        // Change colors button (simulated functionality)
+        const changeColorsBtn = document.getElementById('change-colors');
+        let colorIndex = 0;
+        const colorFilters = [
+            'none',
+            'sepia(0.3)',
+            'hue-rotate(30deg)',
+            'hue-rotate(60deg)',
+            'hue-rotate(90deg)',
+            'brightness(1.2)'
+        ];
+        
+        changeColorsBtn.addEventListener('click', () => {
+            if (furnitureOverlay.classList.contains('hidden')) return;
+            
+            colorIndex = (colorIndex + 1) % colorFilters.length;
+            furnitureOverlay.style.filter = colorFilters[colorIndex];
+        });
+        
+        // Scroll to sections smoothly
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if it's open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

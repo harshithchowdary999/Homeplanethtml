@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PureAir Pro | Advanced Indoor Air Purification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#5D5CDE',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        };
+
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <style>
+        #particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .device-animation-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.4; }
+        }
+        
+        .purifier-device {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .pulse-circle {
+            animation: pulse 3s infinite;
+        }
+        
+        .testimonial-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-900 shadow-sm fixed w-full top-0 z-50 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-primary-500 font-bold text-2xl">PureAir Pro</div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Features</a>
+                    <a href="#how-it-works" class="text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">How It Works</a>
+                    <a href="#comparison" class="text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Comparison</a>
+                    <a href="#testimonials" class="text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Testimonials</a>
+                    <a href="#blog" class="text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Blog</a>
+                    <button class="bg-primary-500 hover:bg-primary-600 text-white px-5 py-2 rounded-md transition-colors">Shop Now</button>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 shadow-md transition-all duration-300">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800">Features</a>
+                <a href="#how-it-works" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800">How It Works</a>
+                <a href="#comparison" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800">Comparison</a>
+                <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800">Testimonials</a>
+                <a href="#blog" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800">Blog</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium bg-primary-500 text-white hover:bg-primary-600">Shop Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Particles -->
+    <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+        <canvas id="particles-canvas"></canvas>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+                <span class="inline-block">Breathe Cleaner,</span>
+                <span class="inline-block text-primary-500">Live Healthier</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-10">
+                Experience the next generation of air purification technology that removes 99.97% of airborne particles as small as 0.1 microns.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="px-8 py-4 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium text-lg">
+                    Explore Products
+                </button>
+                <button class="px-8 py-4 bg-white dark:bg-gray-800 text-primary-500 rounded-lg border-2 border-primary-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-lg">
+                    Watch Demo
+                </button>
+            </div>
+            
+            <div class="mt-16 flex flex-wrap justify-center gap-8">
+                <div class="flex items-center">
+                    <div class="bg-primary-100 dark:bg-primary-900/30 rounded-full p-3">
+                        <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4 text-left">
+                        <p class="font-semibold">HEPA-13 Filtration</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Captures 99.97% of particles</p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="bg-primary-100 dark:bg-primary-900/30 rounded-full p-3">
+                        <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4 text-left">
+                        <p class="font-semibold">Energy Efficient</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Low power consumption</p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="bg-primary-100 dark:bg-primary-900/30 rounded-full p-3">
+                        <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4 text-left">
+                        <p class="font-semibold">Smart Controls</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">App & voice control compatibility</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-0 right-0 flex justify-center">
+            <a href="#features" class="animate-bounce bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg">
+                <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Revolutionary Features</h2>
+                <p class="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300">Our cutting-edge technology ensures you breathe the cleanest air possible in your home or office.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature Card 1 -->
+                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Advanced 5-Stage Filtration</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Pre-filter, HEPA-13, Activated Carbon, UV-C light, and Ionizer work together to eliminate 99.97% of pollutants.</p>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 2 -->
+                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Smart Air Quality Sensing</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Real-time monitoring of PM2.5, VOCs, temperature, and humidity with automatic fan speed adjustment.</p>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 3 -->
+                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Mobile App Control</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Control your device remotely, monitor air quality history, and receive filter replacement notifications.</p>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 4 -->
+                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Ultra-Quiet Operation</h3>
+                        <p class="text-gray-600 dark:text-gray-400">As low as
+                            24dB in sleep mode, quieter than a whisper, ensuring undisturbed sleep and work.</p>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 5 -->
+                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Energy Efficient Design</h3>
+                        <p class="text-gray-600 dark:text-gray-400">ENERGY STAR certified with smart ECO mode that optimizes power usage based on air quality.</p>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 6 -->
+                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-8">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Child & Pet Safe</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Child-lock feature, tip-over protection, and zero ozone emission ensure safe operation around children and pets.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section with Animation -->
+    <section id="how-it-works" class="py-20 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">How PureAir Pro Works</h2>
+                <p class="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300">Our revolutionary multi-stage filtration system captures everything from large dust particles to microscopic pollutants.</p>
+            </div>
+            
+            <div class="device-animation-container mb-20">
+                <div id="purifier-animation"></div>
+            </div>
+            
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-xl font-bold text-primary-500">1</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Pre-Filter</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Captures large particles like dust, hair, and pet dander</p>
+                </div>
+                
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-xl font-bold text-primary-500">2</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">HEPA-13 Filter</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Removes 99.97% of particles as small as 0.1 microns</p>
+                </div>
+                
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-xl font-bold text-primary-500">3</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Activated Carbon</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Eliminates odors, smoke, and harmful VOCs</p>
+                </div>
+                
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-xl font-bold text-primary-500">4</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">UV-C Light</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Neutralizes bacteria, viruses, and other pathogens</p>
+                </div>
+                
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-xl font-bold text-primary-500">5</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Ionizer</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Releases negative ions to refresh and purify air</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section with Chart -->
+    <section id="comparison" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Performance Comparison</h2>
+                <p class="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300">See how PureAir Pro outperforms traditional air purifiers in removing common indoor pollutants.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Pollutant Removal Efficiency (%)</h3>
+                        <canvas id="comparison-chart" height="300"></canvas>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md p-6 mb-6">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Performance Highlights</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-6 w-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-gray-700 dark:text-gray-300"><span class="font-semibold">99.97%</span> removal of PM2.5 particles, compared to 85-90% in most standard purifiers</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-6 w-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-gray-700 dark:text-gray-300"><span class="font-semibold">95%</span> elimination of VOCs and harmful gases, while standard purifiers only manage 60-70%</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-6 w-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-gray-700 dark:text-gray-300"><span class="font-semibold">99.9%</span> reduction in airborne bacteria and viruses thanks to our UV-C technology</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-6 w-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-gray-700 dark:text-gray-300"><span class="font-semibold">50% lower</span> energy consumption compared to competitors with similar coverage area</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Coverage & Specifications</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Room Coverage:</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Up to 800 sq. ft.</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">CADR Rating:</span>
+                                <span class="font-medium text-gray-900 dark:text-white">450 m³/hour</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Filter Lifespan:</span>
+                                <span class="font-medium text-gray-900 dark:text-white">12-15 months</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Power Consumption:</span>
+                                <span class="font-medium text-gray-900 dark:text-white">5-45W</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Noise Level:</span>
+                                <span class="font-medium text-gray-900 dark:text-white">24-52dB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">What Our Customers Say</h2>
+                <p class="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300">Don't just take our word for it. Hear from people who've experienced the benefits of PureAir Pro firsthand.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-gray-50 dark:bg-gray-800 rounded-xl p-8 shadow-md">
+                    <div class="flex items-center mb-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                <span class="text-xl font-bold text-primary-500">JM</span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Jennifer M.</h4>
+                            <p class="text-gray-600 dark:text-gray-400">Allergy Sufferer</p>
+                        </div>
+                    </div>
+                    <div class="mb-4 flex">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">"I've struggled with allergies for years. Within 48 hours of using PureAir Pro, I noticed a dramatic difference in my symptoms. I'm sleeping better and waking up without congestion for the first time in decades!"</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 italic">Using PureAir Pro for 3 months</p>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card bg-gray-50 dark:bg-gray-800 rounded-xl p-8 shadow-md">
+                    <div class="flex items-center mb-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                <span class="text-xl font-bold text-primary-500">DT</span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">David T.</h4>
+                            <p class="text-gray-600 dark:text-gray-400">Parent of Asthmatic Child</p>
+                        </div>
+                    </div>
+                    <div class="mb-4 flex">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">"Our son's asthma attacks have decreased significantly since we put PureAir Pro in his bedroom. The app is fantastic for monitoring air quality, and the filter change indicators are super helpful. Worth every penny for my child's health."</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 italic">Using PureAir Pro for 6 months</p>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card bg-gray-50 dark:bg-gray-800 rounded-xl p-8 shadow-md">
+                    <div class="flex items-center mb-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                <span class="text-xl font-bold text-primary-500">SL</span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Sarah L.</h4>
+                            <p class="text-gray-600 dark:text-gray-400">Interior Designer</p>
+                        </div>
+                    </div>
+                    <div class="mb-4 flex">
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">"Not only does it work amazingly well, but the sleek design fits perfectly with modern interiors. I've recommended it to all my clients who are sensitive to indoor pollutants or have young children."</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 italic">Using PureAir Pro for 1 year</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <button class="px-6 py-3 bg-white dark:bg-gray-800 text-primary-500 rounded-lg border-2 border-primary-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium">
+                    Read More Customer Stories
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Air Quality Insights</h2>
+                <p class="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300">Stay informed about the latest air quality research, tips, and industry trends.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Blog Post 1 -->
+                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <span class="bg-primary-100 dark:bg-primary-900/30 text-primary-500 px-3 py-1 rounded-full text-sm font-medium">Health</span>
+                            <span class="ml-auto text-sm text-gray-500 dark:text-gray-400">June 15, 2023</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">The Hidden Dangers of Indoor Air Pollution</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Learn about the common pollutants found in homes and offices, and their potential health impacts on you and your family.</p>
+                        <a href="#" class="text-primary-500 hover:text-primary-600 font-medium inline-flex items-center">
+                            Read Article
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 2 -->
+                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <span class="bg-primary-100 dark:bg-primary-900/30 text-primary-500 px-3 py-1 rounded-full text-sm font-medium">Technology</span>
+                            <span class="ml-auto text-sm text-gray-500 dark:text-gray-400">May 28, 2023</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">How HEPA Filtration Technology Has Evolved</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Explore the fascinating history of HEPA filters, from their invention during the Manhattan Project to today's advanced systems.</p>
+                        <a href="#" class="text-primary-500 hover:text-primary-600 font-medium inline-flex items-center">
+                            Read Article
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 3 -->
+                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <span class="bg-primary-100 dark:bg-primary-900/30 text-primary-500 px-3 py-1 rounded-full text-sm font-medium">Tips</span>
+                            <span class="ml-auto text-sm text-gray-500 dark:text-gray-400">May 10, 2023</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">7 Ways to Improve Indoor Air Quality Naturally</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Discover simple, effective strategies to enhance your home's air quality, from houseplants to proper ventilation techniques.</p>
+                        <a href="#" class="text-primary-500 hover:text-primary-600 font-medium inline-flex items-center">
+                            Read Article
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <button class="px-6 py-3 bg-white dark:bg-gray-800 text-primary-500 rounded-lg border-2 border-primary-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium">
+                    View All Articles
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="py-20 bg-gradient-to-br from-primary-500 to-purple-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Breathe Cleaner Air?</h2>
+            <p class="max-w-2xl mx-auto text-lg mb-10 text-white/80">Experience the PureAir Pro difference and transform your indoor environment. Your lungs will thank you.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="px-8 py-4 bg-white text-primary-500 rounded-lg hover:bg-gray-100 transition-colors font-medium text-lg">
+                    Shop Now
+                </button>
+                <button class="px-8 py-4 bg-transparent text-white rounded-lg border-2 border-white hover:bg-white/10 transition-colors font-medium text-lg">
+                    Request a Demo
+                </button>
+            </div>
+            
+            <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-8">
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="ml-2">30-Day Money Back Guarantee</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="ml-2">Free Shipping</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="ml-2">5-Year Warranty</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-900 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">PureAir Pro</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Revolutionizing indoor air quality with cutting-edge filtration technology.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-primary-500 transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-primary-500 transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-primary-500 transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-primary-500 transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.7 3H4.3A1.3 1.3 0 003 4.3v15.4A1.3 1.3 0 004.3 21h15.4a1.3 1.3 0 001.3-1.3V4.3A1.3 1.3 0 0019.7 3zM8.339 18.338H5.667v-8.59h2.672v8.59zM7.004 8.574a1.548 1.548 0 11-.002-3.096 1.548 1.548 0 01.002 3.096zm11.335 9.764H15.67v-4.177c0-.996-.017-2.278-1.387-2.278-1.389 0-1.601 1.086-1.601 2.206v4.249h-2.667v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.779 3.203 4.092v4.711z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Products</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">PureAir Home</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">PureAir Pro</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">PureAir Max</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Replacement Filters</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Accessories</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Company</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Our Story</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Press</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">FAQs</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Shipping & Returns</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Warranty</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">User Manual</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors">Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 dark:text-gray-400 text-sm text-center md:text-left">&copy; 2023 PureAir Pro. All rights reserved.</p>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 text-sm">Privacy Policy</a>
+                        <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 text-sm">Terms of Service</a>
+                        <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 text-sm">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // Offset for fixed header
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+        
+        // Particles animation
+        function createParticlesAnimation() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            function resizeCanvas() {
+                const heroSection = canvas.parentElement;
+                canvas.width = heroSection.offsetWidth;
+                canvas.height = heroSection.offsetHeight;
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            
+            // Generate particles
+            const particles = [];
+            const particleCount = 100;
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 5 + 1,
+                    speedX: Math.random() * 0.5 - 0.25,
+                    speedY: Math.random() * 0.5 - 0.25,
+                    opacity: Math.random() * 0.5 + 0.1
+                });
+            }
+            
+            // Animation loop
+            function animate() {
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Update and draw particles
+                particles.forEach(particle => {
+                    // Update position
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    // Reset if out of bounds
+                    if (particle.x < 0 || particle.x > canvas.width) {
+                        particle.x = Math.random() * canvas.width;
+                    }
+                    if (particle.y < 0 || particle.y > canvas.height) {
+                        particle.y = Math.random() * canvas.height;
+                    }
+                    
+                    // Draw particle
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    
+                    // Set color based on dark/light mode
+                    const particleColor = isDarkMode ? 
+                        `rgba(93, 92, 222, ${particle.opacity})` : 
+                        `rgba(93, 92, 222, ${particle.opacity})`;
+                    
+                    ctx.fillStyle = particleColor;
+                    ctx.fill();
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+        
+        // Create air purifier animation
+        function createPurifierAnimation() {
+            const container = document.getElementById('purifier-animation');
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            
+            // Colors
+            const purifierColor = isDarkMode ? '#2d3748' : '#f7fafc';
+            const accentColor = '#5D5CDE';
+            const textColor = isDarkMode ? '#f7fafc' : '#2d3748';
+            
+            // SVG container
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svg.setAttribute('viewBox', '0 0 400 300');
+            
+            // Create device
+            const device = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            device.setAttribute('x', '140');
+            device.setAttribute('y', '70');
+            device.setAttribute('width', '120');
+            device.setAttribute('height', '180');
+            device.setAttribute('rx', '10');
+            device.setAttribute('fill', purifierColor);
+            device.setAttribute('stroke', accentColor);
+            device.setAttribute('stroke-width', '2');
+            device.classList.add('purifier-device');
+            
+            // Control panel
+            const panel = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            panel.setAttribute('x', '155');
+            panel.setAttribute('y', '85');
+            panel.setAttribute('width', '90');
+            panel.setAttribute('height', '40');
+            panel.setAttribute('rx', '5');
+            panel.setAttribute('fill', isDarkMode ? '#4a5568' : '#e2e8f0');
+            
+            // Air intake
+            const intakeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            for (let i = 0; i < 5; i++) {
+                const intake = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                intake.setAttribute('x', '155');
+                intake.setAttribute('y', (140 + i * 15).toString());
+                intake.setAttribute('width', '90');
+                intake.setAttribute('height', '8');
+                intake.setAttribute('rx', '2');
+                intake.setAttribute('fill', isDarkMode ? '#4a5568' : '#e2e8f0');
+                intakeGroup.appendChild(intake);
+            }
+            
+            // Particles and animation
+            const particlesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            
+            // Dirty air particles (left side)
+            const dirtyParticles = [];
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                const size = Math.random() * 6 + 2;
+                particle.setAttribute('cx', (100 + Math.random() * 30).toString());
+                particle.setAttribute('cy', (120 + Math.random() * 100).toString());
+                particle.setAttribute('r', size.toString());
+                particle.setAttribute('fill', `rgba(${isDarkMode ? '200, 30, 30' : '200, 30, 30'}, ${Math.random() * 0.5 + 0.3})`);
+                particle.classList.add('pulse-circle');
+                
+                dirtyParticles.push({
+                    element: particle,
+                    speedX: Math.random() * 1 + 0.5,
+                    speedY: Math.random() * 0.4 - 0.2,
+                    x: parseFloat(particle.getAttribute('cx')),
+                    y: parseFloat(particle.getAttribute('cy'))
+                });
+                
+                particlesGroup.appendChild(particle);
+            }
+            
+            // Clean air particles (right side)
+            const cleanParticles = [];
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                const size = Math.random() * 4 + 1;
+                particle.setAttribute('cx', (280 + Math.random() * 30).toString());
+                particle.setAttribute('cy', (120 + Math.random() * 100).toString());
+                particle.setAttribute('r', size.toString());
+                particle.setAttribute('fill', `rgba(93, 92, 222, ${Math.random() * 0.5 + 0.3})`);
+                particle.classList.add('pulse-circle');
+                
+                cleanParticles.push({
+                    element: particle,
+                    speedX: Math.random() * 1 + 0.5,
+                    speedY: Math.random() * 0.4 - 0.2,
+                    x: parseFloat(particle.getAttribute('cx')),
+                    y: parseFloat(particle.getAttribute('cy'))
+                });
+                
+                particlesGroup.appendChild(particle);
+            }
+            
+            // Add labels
+            const dirtyLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            dirtyLabel.setAttribute('x', '75');
+            dirtyLabel.setAttribute('y', '50');
+            dirtyLabel.setAttribute('text-anchor', 'middle');
+            dirtyLabel.setAttribute('fill', textColor);
+            dirtyLabel.setAttribute('font-size', '14');
+            dirtyLabel.textContent = 'Polluted Air';
+            
+            const cleanLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            cleanLabel.setAttribute('x', '325');
+            cleanLabel.setAttribute('y', '50');
+            cleanLabel.setAttribute('text-anchor', 'middle');
+            cleanLabel.setAttribute('fill', textColor);
+            cleanLabel.setAttribute('font-size', '14');
+            cleanLabel.textContent = 'Clean Air';
+            
+            // Add arrows
+            const dirtyArrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            dirtyArrow.setAttribute('d', 'M115,170 L135,170');
+            dirtyArrow.setAttribute('stroke', isDarkMode ? '#e53e3e' : '#e53e3e');
+            dirtyArrow.setAttribute('stroke-width', '2');
+            dirtyArrow.setAttribute('marker-end', 'url(#arrowhead)');
+            
+            const cleanArrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            cleanArrow.setAttribute('d', 'M265,170 L285,170');
+            cleanArrow.setAttribute('stroke', accentColor);
+            cleanArrow.setAttribute('stroke-width', '2');
+            cleanArrow.setAttribute('marker-end', 'url(#arrowhead)');
+            
+            // Add arrowhead marker
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            marker.setAttribute('id', 'arrowhead');
+            marker.setAttribute('markerWidth', '10');
+            marker.setAttribute('markerHeight', '7');
+            marker.setAttribute('refX', '10');
+            marker.setAttribute('refY', '3.5');
+            marker.setAttribute('orient', 'auto');
+            
+            const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            arrowPath.setAttribute('points', '0 0, 10 3.5, 0 7');
+            arrowPath.setAttribute('fill', accentColor);
+            
+            marker.appendChild(arrowPath);
+            defs.appendChild(marker);
+            
+            // Append all elements
+            svg.appendChild(defs);
+            svg.appendChild(device);
+            svg.appendChild(panel);
+            svg.appendChild(intakeGroup);
+            svg.appendChild(particlesGroup);
+            svg.appendChild(dirtyLabel);
+            svg.appendChild(cleanLabel);
+            svg.appendChild(dirtyArrow);
+            svg.appendChild(cleanArrow);
+            
+            container.appendChild(svg);
+            
+            // Animation loop for particles
+            function animateParticles() {
+                // Animate dirty particles
+                dirtyParticles.forEach(particle => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    // Reset if reached device
+                    if (particle.x > 140) {
+                        particle.x = 100 + Math.random() * 30;
+                        particle.y = 120 + Math.random() * 100;
+                    }
+                    
+                    // Update DOM position
+                    particle.element.setAttribute('cx', particle.x.toString());
+                    particle.element.setAttribute('cy', particle.y.toString());
+                });
+                
+                // Animate clean particles
+                cleanParticles.forEach(particle => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    // Reset if too far
+                    if (particle.x > 350) {
+                        particle.x = 280;
+                        particle.y = 120 + Math.random() * 100;
+                    }
+                    
+                    // Update DOM position
+                    particle.element.setAttribute('cx', particle.x.toString());
+                    particle.element.setAttribute('cy', particle.y.toString());
+                });
+                
+                requestAnimationFrame(animateParticles);
+            }
+            
+            animateParticles();
+        }
+        
+        // Create comparison chart
+        function createComparisonChart() {
+            const ctx = document.getElementById('comparison-chart').getContext('2d');
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            
+            // Chart data
+            const data = {
+                labels: ['PM2.5', 'VOCs', 'Allergens', 'Bacteria', 'Viruses', 'Odors'],
+                datasets: [
+                    {
+                        label: 'PureAir Pro',
+                        data: [99, 95, 98, 99.9, 99.9, 93],
+                        backgroundColor: '#5D5CDE',
+                        borderColor: '#5D5CDE',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Standard Purifiers',
+                        data: [85, 65, 75, 60, 50, 70],
+                        backgroundColor: isDarkMode ? 'rgba(160, 174, 192, 0.5)' : 'rgba(226, 232, 240, 0.8)',
+                        borderColor: isDarkMode ? 'rgba(160, 174, 192, 0.8)' : 'rgba(203, 213, 224, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            };
+            
+            // Chart configuration
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: isDarkMode ? '#f7fafc' : '#2d3748'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: isDarkMode ? '#e2e8f0' : '#4a5568'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: isDarkMode ? '#e2e8f0' : '#4a5568',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            
+            new Chart(ctx, config);
+        }
+        
+        // Initialize all animations and charts once DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticlesAnimation();
+            createPurifierAnimation();
+            createComparisonChart();
+            
+            // Listen for dark mode changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                // Recreate the animations and charts when dark mode changes
+                const purifierAnimation = document.getElementById('purifier-animation');
+                if (purifierAnimation) {
+                    purifierAnimation.innerHTML = '';
+                    createPurifierAnimation();
+                }
+                
+                // Recreate chart
+                createComparisonChart();
+            });
+        });
+    </script>
+</body>
+</html>

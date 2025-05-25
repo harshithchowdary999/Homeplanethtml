@@ -1,0 +1,2275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renewable Energy Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#3BC3A4',
+                        accent: '#FF9F1C',
+                        light: {
+                            background: '#FFFFFF',
+                            text: '#1F2937',
+                            card: '#F9FAFB',
+                        },
+                        dark: {
+                            background: '#181818',
+                            text: '#F3F4F6',
+                            card: '#262626',
+                        }
+                    },
+                }
+            }
+        };
+
+        // Handle dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Progress bar animation */
+        .progress-animation {
+            animation: progressFill 1.5s ease-out forwards;
+        }
+        
+        @keyframes progressFill {
+            from { width: 0; }
+            to { width: var(--progress-width); }
+        }
+        
+        .comparison-bar {
+            transition: width 0.8s ease-in-out;
+        }
+
+        /* Case study card hover effect */
+        .case-study-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .case-study-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Custom tab style */
+        .tab-active {
+            border-bottom: 3px solid;
+            border-color: #5D5CDE;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Dark mode styles */
+        .dark .card-bg {
+            background-color: #262626;
+        }
+        
+        .dark .text-primary-content {
+            color: #F3F4F6;
+        }
+        
+        .dark .border-light {
+            border-color: #374151;
+        }
+    </style>
+</head>
+<body class="bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text transition-colors duration-200">
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-50 bg-white dark:bg-dark-background shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-leaf text-primary text-2xl mr-2"></i>
+                        <span class="font-bold text-xl text-primary">EcoEnergy Solutions</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex md:items-center md:space-x-6">
+                    <a href="#energy-sources" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Energy Sources</a>
+                    <a href="#providers" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Providers</a>
+                    <a href="#comparison" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Compare</a>
+                    <a href="#case-studies" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Case Studies</a>
+                    <a href="#services" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Services</a>
+                    <a href="#news" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary px-3 py-2 rounded-md text-sm font-medium">News</a>
+                </div>
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-dark-background shadow-md">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#energy-sources" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary">Energy Sources</a>
+                <a href="#providers" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary">Providers</a>
+                <a href="#comparison" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary">Compare</a>
+                <a href="#case-studies" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary">Case Studies</a>
+                <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary">Services</a>
+                <a href="#news" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary">News</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative py-20 bg-gradient-to-br from-primary/80 to-secondary/80 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:items-center md:justify-between">
+                <div class="md:w-1/2 slide-in">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">Sustainable Energy for a Brighter Future</h1>
+                    <p class="text-lg md:text-xl mb-8">Discover comprehensive renewable energy solutions that power our world while protecting our planet.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#services" class="bg-white text-primary font-bold py-3 px-6 rounded-full hover:bg-gray-100 transition-colors duration-200">Get Started</a>
+                        <a href="#energy-sources" class="bg-transparent border-2 border-white text-white font-bold py-3 px-6 rounded-full hover:bg-white/10 transition-colors duration-200">Learn More</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 mt-10 md:mt-0 slide-in" style="animation-delay: 0.2s;">
+                    <div class="relative h-64 md:h-96 bg-white/10 rounded-lg overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-sun text-yellow-300 text-6xl animate-spin" style="animation-duration: 20s;"></i>
+                            <i class="fas fa-wind text-blue-300 text-4xl absolute top-1/4 right-1/4"></i>
+                            <i class="fas fa-water text-blue-400 text-4xl absolute bottom-1/4 left-1/4"></i>
+                            <i class="fas fa-fire text-orange-400 text-4xl absolute bottom-1/4 right-1/4"></i>
+                            <i class="fas fa-seedling text-green-400 text-4xl absolute top-1/4 left-1/4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Energy Sources Section -->
+    <section id="energy-sources" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Renewable Energy Sources</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Explore sustainable energy options and learn how they can be implemented to reduce your carbon footprint.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Solar Energy Card -->
+                <div class="energy-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl bg-white dark:bg-dark-card border border-gray-200 dark:border-gray-700">
+                    <div class="h-48 bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
+                        <i class="fas fa-sun text-yellow-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Solar Energy</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Harness the power of the sun with photovoltaic panels and solar thermal systems.</p>
+                        <button class="energy-details-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-energy="solar">Learn More</button>
+                    </div>
+                </div>
+                
+                <!-- Wind Energy Card -->
+                <div class="energy-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl bg-white dark:bg-dark-card border border-gray-200 dark:border-gray-700">
+                    <div class="h-48 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <i class="fas fa-wind text-blue-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Wind Energy</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Capture wind power with modern turbines for clean electricity generation.</p>
+                        <button class="energy-details-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-energy="wind">Learn More</button>
+                    </div>
+                </div>
+                
+                <!-- Hydro Energy Card -->
+                <div class="energy-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl bg-white dark:bg-dark-card border border-gray-200 dark:border-gray-700">
+                    <div class="h-48 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <i class="fas fa-water text-blue-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Hydroelectric Energy</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Generate electricity from flowing water with dams and run-of-river systems.</p>
+                        <button class="energy-details-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-energy="hydro">Learn More</button>
+                    </div>
+                </div>
+                
+                <!-- Geothermal Energy Card -->
+                <div class="energy-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl bg-white dark:bg-dark-card border border-gray-200 dark:border-gray-700">
+                    <div class="h-48 bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                        <i class="fas fa-fire text-red-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Geothermal Energy</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Utilize Earth's internal heat for consistent, renewable power generation.</p>
+                        <button class="energy-details-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-energy="geothermal">Learn More</button>
+                    </div>
+                </div>
+                
+                <!-- Biomass Energy Card -->
+                <div class="energy-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl bg-white dark:bg-dark-card border border-gray-200 dark:border-gray-700">
+                    <div class="h-48 bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <i class="fas fa-seedling text-green-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Biomass Energy</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Convert organic materials into heat, electricity, and biofuels.</p>
+                        <button class="energy-details-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-energy="biomass">Learn More</button>
+                    </div>
+                </div>
+                
+                <!-- Ocean Energy Card -->
+                <div class="energy-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl bg-white dark:bg-dark-card border border-gray-200 dark:border-gray-700">
+                    <div class="h-48 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <i class="fas fa-water text-blue-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Ocean Energy</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Harness energy from tides, waves, and ocean temperature differences.</p>
+                        <button class="energy-details-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-energy="ocean">Learn More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Energy Details Modal -->
+        <div id="energy-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+            <div class="bg-white dark:bg-dark-card rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 id="energy-modal-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
+                        <button id="close-energy-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    <div id="energy-modal-content" class="prose dark:prose-invert max-w-none"></div>
+                    
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg mb-2">Benefits</h4>
+                            <ul id="energy-benefits" class="list-disc pl-5 text-gray-600 dark:text-gray-300"></ul>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg mb-2">Implementation</h4>
+                            <ul id="energy-implementation" class="list-disc pl-5 text-gray-600 dark:text-gray-300"></ul>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg mb-2">Challenges</h4>
+                            <ul id="energy-challenges" class="list-disc pl-5 text-gray-600 dark:text-gray-300"></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-end">
+                        <button id="find-providers-btn" class="bg-primary text-white py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors mr-2">Find Providers</button>
+                        <button class="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-2 px-6 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onclick="document.getElementById('energy-modal').classList.add('hidden')">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company Directory Section -->
+    <section id="providers" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Top Renewable Energy Providers</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Connect with leading companies specializing in sustainable energy solutions.</p>
+            </div>
+            
+            <!-- Filter Controls -->
+            <div class="mb-8 flex flex-wrap gap-4 justify-center">
+                <div>
+                    <label for="specialization-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Specialization</label>
+                    <select id="specialization-filter" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="all">All Specializations</option>
+                        <option value="solar">Solar Energy</option>
+                        <option value="wind">Wind Energy</option>
+                        <option value="hydro">Hydro Energy</option>
+                        <option value="geothermal">Geothermal Energy</option>
+                        <option value="biomass">Biomass Energy</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="experience-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Experience</label>
+                    <select id="experience-filter" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="all">Any Experience</option>
+                        <option value="5+">5+ Years</option>
+                        <option value="10+">10+ Years</option>
+                        <option value="20+">20+ Years</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="pricing-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pricing</label>
+                    <select id="pricing-filter" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="all">All Price Ranges</option>
+                        <option value="budget">Budget</option>
+                        <option value="mid-range">Mid-range</option>
+                        <option value="premium">Premium</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="search-providers" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search</label>
+                    <input type="text" id="search-providers" placeholder="Search providers..." class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full">
+                </div>
+            </div>
+            
+            <!-- Company Cards Grid -->
+            <div id="providers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Cards will be generated by JavaScript -->
+            </div>
+            
+            <div id="no-providers-message" class="hidden text-center py-8">
+                <p class="text-gray-600 dark:text-gray-300 text-lg">No providers match your filters. Please try different criteria.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Tool Section -->
+    <section id="comparison" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Energy Solutions Comparison</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Compare different renewable energy options based on cost, efficiency, and environmental impact.</p>
+            </div>
+            
+            <!-- Comparison Selection -->
+            <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="solution-1" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Solution</label>
+                        <select id="solution-1" class="comparison-select bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="">Select energy type</option>
+                            <option value="solar">Solar Energy</option>
+                            <option value="wind">Wind Energy</option>
+                            <option value="hydro">Hydroelectric Energy</option>
+                            <option value="geothermal">Geothermal Energy</option>
+                            <option value="biomass">Biomass Energy</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="solution-2" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Second Solution</label>
+                        <select id="solution-2" class="comparison-select bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="">Select energy type</option>
+                            <option value="solar">Solar Energy</option>
+                            <option value="wind">Wind Energy</option>
+                            <option value="hydro">Hydroelectric Energy</option>
+                            <option value="geothermal">Geothermal Energy</option>
+                            <option value="biomass">Biomass Energy</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="solution-3" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Third Solution (Optional)</label>
+                        <select id="solution-3" class="comparison-select bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="">Select energy type</option>
+                            <option value="solar">Solar Energy</option>
+                            <option value="wind">Wind Energy</option>
+                            <option value="hydro">Hydroelectric Energy</option>
+                            <option value="geothermal">Geothermal Energy</option>
+                            <option value="biomass">Biomass Energy</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button id="compare-btn" class="bg-primary text-white py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors">Compare Solutions</button>
+                </div>
+            </div>
+            
+            <!-- Comparison Results -->
+            <div id="comparison-results" class="hidden">
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Comparison Results</h3>
+                    
+                    <!-- Tabs -->
+                    <div class="flex flex-wrap border-b border-gray-200 dark:border-gray-700 mb-6">
+                        <button class="comparison-tab tab-active py-2 px-4 text-primary font-medium" data-tab="cost">Cost</button>
+                        <button class="comparison-tab py-2 px-4 text-gray-500 dark:text-gray-400 font-medium" data-tab="efficiency">Efficiency</button>
+                        <button class="comparison-tab py-2 px-4 text-gray-500 dark:text-gray-400 font-medium" data-tab="environmental">Environmental Impact</button>
+                        <button class="comparison-tab py-2 px-4 text-gray-500 dark:text-gray-400 font-medium" data-tab="lifespan">Lifespan</button>
+                        <button class="comparison-tab py-2 px-4 text-gray-500 dark:text-gray-400 font-medium" data-tab="maintenance">Maintenance</button>
+                    </div>
+                    
+                    <!-- Tab Content -->
+                    <div id="cost-content" class="tab-content active">
+                        <div class="mb-8">
+                            <h4 class="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Initial Installation Cost</h4>
+                            <div id="cost-installation-comparison" class="space-y-4"></div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h4 class="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Operational Cost (per year)</h4>
+                            <div id="cost-operation-comparison" class="space-y-4"></div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Return on Investment</h4>
+                            <div id="cost-roi-comparison" class="space-y-4"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="efficiency-content" class="tab-content">
+                        <div class="mb-8">
+                            <h4 class="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Energy Conversion Efficiency</h4>
+                            <div id="efficiency-conversion-comparison" class="space-y-4"></div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Energy Output Reliability</h4>
+                            <div id="efficiency-reliability-comparison" class="space-y-4"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="environmental-content" class="tab-content">
+                        <div class="mb-8">
+                            <h4 class="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Carbon Footprint</h4>
+                            <div id="environmental-carbon-comparison" class="space-y-4"></div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Land & Resource Impact</h4>
+                            <div id="environmental-resource-comparison" class="space-y-4"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="lifespan-content" class="tab-content">
+                        <div>
+                            <h4 class="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Average System Lifespan</h4>
+                            <div id="lifespan-comparison" class="space-y-4"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="maintenance-content" class="tab-content">
+                        <div>
+                            <h4 class="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Maintenance Requirements</h4>
+                            <div id="maintenance-comparison" class="space-y-4"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Visual Comparison</h3>
+                    <div class="aspect-w-16 aspect-h-9">
+                        <canvas id="comparison-chart" class="w-full"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section id="case-studies" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Success Stories</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Real-world examples of successful renewable energy implementations.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Case Study 1 -->
+                <div class="case-study-card bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-48 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <i class="fas fa-building text-blue-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Commercial</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Solar</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Mountain View Corporate Campus</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Tech company reduced energy costs by 75% with rooftop solar installation.</p>
+                        <button class="case-study-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-case="case1">Read Case Study</button>
+                    </div>
+                </div>
+                
+                <!-- Case Study 2 -->
+                <div class="case-study-card bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-48 bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <i class="fas fa-city text-green-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Municipal</span>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Wind</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Portland Green City Initiative</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">City achieved 50% renewable energy with offshore wind farm project.</p>
+                        <button class="case-study-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-case="case2">Read Case Study</button>
+                    </div>
+                </div>
+                
+                <!-- Case Study 3 -->
+                <div class="case-study-card bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-48 bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
+                        <i class="fas fa-home text-yellow-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Residential</span>
+                            <span class="bg-red-100 text-red-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Geothermal</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Sunrise Eco-Community</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Housing development uses geothermal for 100% heating and cooling needs.</p>
+                        <button class="case-study-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-case="case3">Read Case Study</button>
+                    </div>
+                </div>
+                
+                <!-- Case Study 4 -->
+                <div class="case-study-card bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-48 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <i class="fas fa-industry text-blue-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Industrial</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Hydro</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Alpine Manufacturing Plant</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Manufacturing facility powers operations with on-site micro-hydro system.</p>
+                        <button class="case-study-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-case="case4">Read Case Study</button>
+                    </div>
+                </div>
+                
+                <!-- Case Study 5 -->
+                <div class="case-study-card bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-48 bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <i class="fas fa-tractor text-green-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Agricultural</span>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Biomass</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Heartland Farms Cooperative</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Agricultural waste converted to energy, powering operations and neighboring communities.</p>
+                        <button class="case-study-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-case="case5">Read Case Study</button>
+                    </div>
+                </div>
+                
+                <!-- Case Study 6 -->
+                <div class="case-study-card bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-48 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <i class="fas fa-school text-blue-500 text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Educational</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium ml-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Hybrid</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Westlake University Campus</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Campus achieved carbon neutrality with mix of solar, wind, and geothermal solutions.</p>
+                        <button class="case-study-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-case="case6">Read Case Study</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Case Study Modal -->
+        <div id="case-study-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+            <div class="bg-white dark:bg-dark-card rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 id="case-study-modal-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
+                        <button id="close-case-study-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div id="case-study-modal-tags" class="flex flex-wrap gap-2 mb-4"></div>
+                        <div id="case-study-modal-content" class="prose dark:prose-invert max-w-none"></div>
+                    </div>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg mb-2">Key Results</h4>
+                            <ul id="case-study-results" class="list-disc pl-5 text-gray-600 dark:text-gray-300"></ul>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg mb-2">Implementation Details</h4>
+                            <ul id="case-study-implementation" class="list-disc pl-5 text-gray-600 dark:text-gray-300"></ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-end">
+                        <button id="find-similar-providers-btn" class="bg-primary text-white py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors mr-2">Find Similar Providers</button>
+                        <button class="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-2 px-6 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" onclick="document.getElementById('case-study-modal').classList.add('hidden')">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Request Services Section -->
+    <section id="services" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Request Renewable Energy Services</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Get expert guidance and connect with top providers for your sustainable energy needs.</p>
+            </div>
+            
+            <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Service Option 1 -->
+                    <div class="text-center p-6 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary dark:hover:border-primary transition-colors">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-4 bg-primary/10 rounded-full">
+                            <i class="fas fa-comments text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Get a Consultation</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Speak with renewable energy experts who can assess your needs and recommend the best solutions.</p>
+                        <button class="service-request-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-service="consultation">Request Consultation</button>
+                    </div>
+                    
+                    <!-- Service Option 2 -->
+                    <div class="text-center p-6 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary dark:hover:border-primary transition-colors">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-4 bg-primary/10 rounded-full">
+                            <i class="fas fa-file-invoice-dollar text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Request a Quote</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Get detailed pricing and ROI estimates for installing renewable energy systems at your property.</p>
+                        <button class="service-request-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-service="quote">Request Quote</button>
+                    </div>
+                    
+                    <!-- Service Option 3 -->
+                    <div class="text-center p-6 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary dark:hover:border-primary transition-colors">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-4 bg-primary/10 rounded-full">
+                            <i class="fas fa-tools text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Find Installers</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Connect with certified installation professionals in your area for your renewable energy project.</p>
+                        <button class="service-request-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors" data-service="installers">Find Installers</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Service Request Modal -->
+        <div id="service-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+            <div class="bg-white dark:bg-dark-card rounded-lg shadow-xl max-w-2xl w-full mx-4">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 id="service-modal-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
+                        <button id="close-service-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="service-form-container">
+                        <form id="service-request-form" class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+                                <input type="text" id="name" name="name" required class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                                <input type="email" id="email" name="email" required class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                            
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                            
+                            <div>
+                                <label for="energy-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Energy Type</label>
+                                <select id="energy-type" name="energy-type" required class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                                    <option value="">Select energy type</option>
+                                    <option value="solar">Solar Energy</option>
+                                    <option value="wind">Wind Energy</option>
+                                    <option value="hydro">Hydroelectric Energy</option>
+                                    <option value="geothermal">Geothermal Energy</option>
+                                    <option value="biomass">Biomass Energy</option>
+                                    <option value="multiple">Multiple/Hybrid Solutions</option>
+                                    <option value="not-sure">Not Sure (Need Guidance)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="property-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Property Type</label>
+                                <select id="property-type" name="property-type" required class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                                    <option value="">Select property type</option>
+                                    <option value="residential">Residential</option>
+                                    <option value="commercial">Commercial</option>
+                                    <option value="industrial">Industrial</option>
+                                    <option value="agricultural">Agricultural</option>
+                                    <option value="municipal">Municipal/Government</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
+                                <textarea id="message" name="message" rows="4" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md px-3 py-2 text-base w-full focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                            </div>
+                            
+                            <div class="flex justify-end mt-6">
+                                <button type="button" id="cancel-service-request" class="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-2 px-6 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors mr-2">Cancel</button>
+                                <button type="submit" class="bg-primary text-white py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors">Submit Request</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div id="service-success" class="hidden text-center py-8">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-6 bg-green-100 rounded-full">
+                            <i class="fas fa-check text-green-500 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Request Submitted Successfully!</h4>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">Thank you for your interest in renewable energy solutions. An expert will contact you shortly.</p>
+                        <button id="close-success" class="bg-primary text-white py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest News Section -->
+    <section id="news" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Latest in Renewable Energy</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">Stay updated with the newest advancements and news in the world of sustainable energy.</p>
+            </div>
+            
+            <!-- News Loading State -->
+            <div id="news-loading" class="text-center py-8">
+                <div class="inline-flex items-center justify-center">
+                    <i class="fas fa-circle-notch fa-spin text-primary text-4xl"></i>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mt-4">Loading latest renewable energy news...</p>
+            </div>
+            
+            <!-- News Articles -->
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 hidden">
+                <!-- News articles will be loaded here -->
+            </div>
+            
+            <div id="news-error" class="hidden text-center py-8">
+                <p class="text-red-600 dark:text-red-400 text-lg">Unable to load news. Please try again later.</p>
+                <button id="reload-news" class="mt-4 bg-primary text-white py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors">Retry</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">EcoEnergy Solutions</h3>
+                    <p class="text-gray-300 mb-4">Your comprehensive resource for renewable energy information and services.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#energy-sources" class="text-gray-300 hover:text-white transition-colors">Energy Sources</a></li>
+                        <li><a href="#providers" class="text-gray-300 hover:text-white transition-colors">Find Providers</a></li>
+                        <li><a href="#comparison" class="text-gray-300 hover:text-white transition-colors">Compare Solutions</a></li>
+                        <li><a href="#case-studies" class="text-gray-300 hover:text-white transition-colors">Success Stories</a></li>
+                        <li><a href="#services" class="text-gray-300 hover:text-white transition-colors">Request Services</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Renewable Energy Guide</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Tax Incentives</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Energy Efficiency Tips</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">FAQs</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Newsletter</h3>
+                    <p class="text-gray-300 mb-4">Subscribe to receive updates on renewable energy trends and innovations.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="bg-gray-700 dark:bg-gray-800 px-4 py-2 rounded-l text-base focus:outline-none focus:ring-2 focus:ring-primary">
+                        <button type="submit" class="bg-primary text-white px-4 py-2 rounded-r hover:bg-primary/90 transition-colors">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 EcoEnergy Solutions. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Energy source data
+        const energyData = {
+            solar: {
+                title: "Solar Energy",
+                content: "Solar energy harnesses the power of the sun to generate electricity through photovoltaic panels or to produce heat through solar thermal systems. It's one of the fastest-growing renewable energy sources globally, with applications ranging from residential rooftop installations to utility-scale solar farms.\n\nPhotovoltaic (PV) systems convert sunlight directly into electricity using semiconductor materials that exhibit the photovoltaic effect. When photons from sunlight hit the semiconductor material, they transfer energy to electrons, allowing them to flow and generate electricity.\n\nSolar thermal systems, on the other hand, capture heat from the sun to warm water or other fluids. This thermal energy can be used directly for heating or to generate electricity through steam turbines.",
+                benefits: [
+                    "Clean and renewable with zero emissions during operation",
+                    "Declining costs make it increasingly affordable",
+                    "Low maintenance requirements once installed",
+                    "Can be installed at various scales, from homes to large facilities",
+                    "Peak generation often coincides with peak demand"
+                ],
+                implementation: [
+                    "Roof or ground-mounted photovoltaic panels",
+                    "Building-integrated photovoltaic materials",
+                    "Solar thermal collectors for water heating",
+                    "Utility-scale solar farms for mass electricity generation",
+                    "Solar plus storage systems for improved reliability"
+                ],
+                challenges: [
+                    "Intermittency issues requiring storage solutions",
+                    "Requires sufficient sunlight, limiting effectiveness in some locations",
+                    "Significant upfront investment costs",
+                    "Land requirements for large-scale installations",
+                    "Manufacturing process has some environmental impact"
+                ]
+            },
+            wind: {
+                title: "Wind Energy",
+                content: "Wind energy captures the kinetic energy of moving air and converts it into electricity using wind turbines. As wind flows over the specially shaped blades of a turbine, it causes them to rotate. This rotation drives a generator that produces electrical power.\n\nWind power can be harnessed through both onshore and offshore installations. Onshore wind farms are typically built in open areas with consistent wind patterns, while offshore installations take advantage of stronger and more reliable winds over bodies of water, though they're more complex and expensive to build.\n\nModern wind turbines can have blade spans exceeding 100 meters and towers reaching heights of 150 meters or more to capture faster, more consistent winds at higher altitudes. Wind farms can consist of a few turbines or hundreds, depending on power needs and available space.",
+                benefits: [
+                    "Abundant, renewable, and produces no pollution during operation",
+                    "One of the most cost-effective renewable energy sources",
+                    "Creates jobs in manufacturing, installation, and maintenance",
+                    "Compatible with agricultural and other land uses",
+                    "Offshore wind provides higher and more consistent output"
+                ],
+                implementation: [
+                    "Onshore wind farms in areas with favorable wind conditions",
+                    "Offshore installations for higher energy yields",
+                    "Distributed small-scale turbines for remote or residential use",
+                    "Community wind projects for local energy generation",
+                    "Hybrid systems combined with solar or other energy sources"
+                ],
+                challenges: [
+                    "Intermittent generation requiring grid integration strategies",
+                    "Visual impact and noise concerns from local communities",
+                    "Potential wildlife impacts, particularly for birds and bats",
+                    "Requires specific geographical conditions for optimal operation",
+                    "High initial capital investment, especially for offshore"
+                ]
+            },
+            hydro: {
+                title: "Hydroelectric Energy",
+                content: "Hydroelectric energy harnesses the power of flowing water to generate electricity. It's one of the oldest and most established forms of renewable energy, providing about 16% of global electricity generation.\n\nConventional hydroelectric power plants use a dam to store water in a reservoir. When released, the water flows through turbines, spinning them to generate electricity. The amount of power produced depends on the volume of water flow and the height from which it falls (known as 'head').\n\nRun-of-river systems are another approach that channels a portion of river flow through turbines without significant water storage. These systems have less environmental impact but also less control over power output. Pumped storage hydropower acts like a battery, pumping water to a higher elevation during low demand and releasing it through turbines during high demand.",
+                benefits: [
+                    "Highly reliable and can respond quickly to peak demand",
+                    "Very low operational costs once constructed",
+                    "Extremely long facility lifespan (50-100+ years)",
+                    "Reservoirs can provide flood control and water supply benefits",
+                    "No direct waste or pollution during operation"
+                ],
+                implementation: [
+                    "Large-scale dam projects for significant power generation",
+                    "Run-of-river systems with minimal environmental disruption",
+                    "Pumped storage for energy storage capabilities",
+                    "Small-scale micro-hydro for local power needs",
+                    "In-stream turbines that don't require dams"
+                ],
+                challenges: [
+                    "High construction costs and long development time",
+                    "Significant environmental impacts on river ecosystems",
+                    "Potential displacement of communities in reservoir areas",
+                    "Vulnerability to drought conditions",
+                    "Limited suitable sites in many regions"
+                ]
+            },
+            geothermal: {
+                title: "Geothermal Energy",
+                content: "Geothermal energy taps into the natural heat stored within the Earth's crust to generate electricity or provide direct heating and cooling. This heat originates from both the original formation of the planet and the ongoing radioactive decay of minerals deep within the Earth.\n\nFor electricity generation, hot water or steam from deep underground is brought to the surface through wells, where it powers turbines connected to generators. The three main types of geothermal power plants are dry steam, flash steam, and binary cycle, each designed for different resource temperatures and characteristics.\n\nDirect use applications harness geothermal heat for district heating systems, greenhouse warming, industrial processes, and spa facilities. Geothermal heat pumps use the relatively constant temperature just a few feet below ground to help heat and cool buildings with high efficiency, and can be installed almost anywhere.",
+                benefits: [
+                    "Provides constant, reliable baseload power 24/7",
+                    "Extremely low emissions compared to fossil fuels",
+                    "Small land footprint relative to power output",
+                    "Very low operating costs after initial installation",
+                    "Usable for both electricity generation and direct heating/cooling"
+                ],
+                implementation: [
+                    "Conventional geothermal power plants in areas with accessible high heat",
+                    "Enhanced Geothermal Systems (EGS) to create reservoirs in dry hot rock",
+                    "Direct use systems for heating buildings and greenhouses",
+                    "Geothermal heat pumps for residential and commercial HVAC",
+                    "Combined heat and power applications for maximum efficiency"
+                ],
+                challenges: [
+                    "High upfront exploration and drilling costs",
+                    "Geographically limited for high-temperature resources",
+                    "Potential for release of greenhouse gases trapped underground",
+                    "Risk of induced seismic activity in some cases",
+                    "Gradual depletion of heat at some sites without proper management"
+                ]
+            },
+            biomass: {
+                title: "Biomass Energy",
+                content: "Biomass energy converts organic materials—such as plant matter, agricultural residues, wood waste, and even municipal solid waste—into usable forms of energy including heat, electricity, and fuel. Unlike other renewables, biomass can be stored and used on demand, making it a versatile energy source.\n\nDirect combustion is the most common method, burning biomass to produce steam for electricity generation or industrial processes. More advanced technologies include gasification (converting biomass into synthesis gas), pyrolysis (thermochemical decomposition in oxygen-limited environments), and anaerobic digestion (breaking down organic matter with microorganisms to produce biogas).\n\nBiofuels like ethanol and biodiesel represent another important application, serving as renewable alternatives to petroleum-based transportation fuels. These can be produced from dedicated energy crops, agricultural residues, or even algae.",
+                benefits: [
+                    "Can utilize waste materials that would otherwise be discarded",
+                    "Dispatchable power that can be produced on demand",
+                    "Carbon cycle advantages when managed sustainably",
+                    "Creates rural economic development and agricultural opportunities",
+                    "Can replace fossil fuels in many applications, including transportation"
+                ],
+                implementation: [
+                    "Biomass power plants using direct combustion technology",
+                    "Co-firing with coal in existing power stations",
+                    "Biogas production from landfills, wastewater, and farm waste",
+                    "Biofuel refineries producing ethanol and biodiesel",
+                    "Small-scale biomass heating systems for buildings and communities"
+                ],
+                challenges: [
+                    "Sustainability concerns about land use and resource management",
+                    "Lower energy density compared to fossil fuels",
+                    "Emissions of particulates and other pollutants during combustion",
+                    "Competition with food production for some feedstocks",
+                    "Collection and transportation logistics and costs"
+                ]
+            },
+            ocean: {
+                title: "Ocean Energy",
+                content: "Ocean energy encompasses several technologies that harness the power of the world's oceans to generate electricity. With oceans covering more than 70% of Earth's surface, they represent an enormous and largely untapped renewable energy resource.\n\nTidal energy captures the kinetic energy of ocean tides, typically using underwater turbines placed in areas with strong tidal currents. Tidal barrages—essentially dams across tidal inlets—can also generate power from the height difference between high and low tides.\n\nWave energy converters capture the energy of ocean surface waves using various mechanisms, such as oscillating water columns, point absorbers, or attenuators that move with the waves to drive electrical generators.\n\nOcean thermal energy conversion (OTEC) exploits the temperature difference between warm surface waters and cold deep waters to drive a heat engine. OTEC is most effective in tropical regions where this temperature difference is greatest.",
+                benefits: [
+                    "Highly predictable and reliable, especially tidal energy",
+                    "Enormous untapped potential worldwide",
+                    "Zero fuel costs and minimal greenhouse gas emissions",
+                    "Tidal energy can be precisely forecast years in advance",
+                    "Less visual impact than many other renewable technologies"
+                ],
+                implementation: [
+                    "Tidal stream arrays in channels with strong tidal flows",
+                    "Tidal barrages or lagoons across suitable estuaries",
+                    "Wave energy converters in coastal areas with consistent wave activity",
+                    "OTEC plants in tropical regions with sufficient temperature differentials",
+                    "Integration with coastal protection or other marine infrastructure"
+                ],
+                challenges: [
+                    "Harsh marine environment leading to durability issues",
+                    "High development and installation costs",
+                    "Potential impacts on marine ecosystems and navigation",
+                    "Limited commercial deployment to date",
+                    "Transmission challenges for offshore installations"
+                ]
+            }
+        };
+
+        // Company directory data
+        const companyData = [
+            {
+                name: "SolarTech Innovations",
+                specialization: "solar",
+                experience: "15+ years",
+                experienceValue: "10+",
+                description: "Leading provider of residential and commercial solar panel installations with proprietary tracking technology.",
+                projects: "Over 5,000 installations across 12 states, including the SunnyVale Community Solar Farm (10MW).",
+                pricing: "mid-range",
+                contact: {
+                    phone: "(555) 123-4567",
+                    email: "info@solartechinnovations.com",
+                    website: "www.solartechinnovations.com"
+                }
+            },
+            {
+                name: "WindForce Systems",
+                specialization: "wind",
+                experience: "22+ years",
+                experienceValue: "20+",
+                description: "Specializing in both onshore and offshore wind farm development, from site assessment to installation and maintenance.",
+                projects: "Developed over 30 wind farms with combined capacity of 1.2GW, including the Highland Ridge Wind Project (200MW).",
+                pricing: "premium",
+                contact: {
+                    phone: "(555) 234-5678",
+                    email: "contact@windforcesystems.com",
+                    website: "www.windforcesystems.com"
+                }
+            },
+            {
+                name: "HydroFlow Energy",
+                specialization: "hydro",
+                experience: "28+ years",
+                experienceValue: "20+",
+                description: "Specialized in small to medium-scale hydroelectric solutions, including run-of-river and micro-hydro systems.",
+                projects: "Installed over 200 micro-hydro systems and developed 15 run-of-river projects up to 50MW capacity.",
+                pricing: "premium",
+                contact: {
+                    phone: "(555) 345-6789",
+                    email: "info@hydroflowenergy.com",
+                    website: "www.hydroflowenergy.com"
+                }
+            },
+            {
+                name: "EarthHeat Geothermal",
+                specialization: "geothermal",
+                experience: "12+ years",
+                experienceValue: "10+",
+                description: "Full-service geothermal solutions provider for both electricity generation and direct heating/cooling applications.",
+                projects: "Developed 8 geothermal power plants and installed over 1,000 residential and commercial geothermal heat pump systems.",
+                pricing: "premium",
+                contact: {
+                    phone: "(555) 456-7890",
+                    email: "contact@earthheatgeo.com",
+                    website: "www.earthheatgeo.com"
+                }
+            },
+            {
+                name: "BioEnergy Partners",
+                specialization: "biomass",
+                experience: "18+ years",
+                experienceValue: "10+",
+                description: "Leaders in biomass conversion technologies, including waste-to-energy solutions and biogas production systems.",
+                projects: "Built 12 biomass power plants and 25 biogas facilities, processing over 2 million tons of organic waste annually.",
+                pricing: "mid-range",
+                contact: {
+                    phone: "(555) 567-8901",
+                    email: "info@bioenergypartners.com",
+                    website: "www.bioenergypartners.com"
+                }
+            },
+            {
+                name: "SunPower Residential",
+                specialization: "solar",
+                experience: "8+ years",
+                experienceValue: "5+",
+                description: "Focused exclusively on high-efficiency residential solar installations with strong customer service emphasis.",
+                projects: "Over 3,500 home installations with typical system sizes from 5-15kW, specializing in challenging roof configurations.",
+                pricing: "budget",
+                contact: {
+                    phone: "(555) 678-9012",
+                    email: "sales@sunpowerresidential.com",
+                    website: "www.sunpowerresidential.com"
+                }
+            },
+            {
+                name: "GreenGrid Solutions",
+                specialization: "solar",
+                experience: "6+ years",
+                experienceValue: "5+",
+                description: "Grid-tied solar specialists with expertise in utility interconnection and solar-plus-storage systems.",
+                projects: "Completed 20+ commercial installations (100kW-2MW) and developed 5 community solar gardens totaling 10MW.",
+                pricing: "mid-range",
+                contact: {
+                    phone: "(555) 789-0123",
+                    email: "info@greengridsolutions.com",
+                    website: "www.greengridsolutions.com"
+                }
+            },
+            {
+                name: "AquaGen Hydro",
+                specialization: "hydro",
+                experience: "20+ years",
+                experienceValue: "20+",
+                description: "Innovative hydroelectric solutions with proprietary turbine technology for low-head and low-flow applications.",
+                projects: "Developed over 100 small-scale hydro installations globally, including remote off-grid systems in developing regions.",
+                pricing: "mid-range",
+                contact: {
+                    phone: "(555) 890-1234",
+                    email: "contact@aquagenhydro.com",
+                    website: "www.aquagenhydro.com"
+                }
+            },
+            {
+                name: "OffshoreWind Developers",
+                specialization: "wind",
+                experience: "14+ years",
+                experienceValue: "10+",
+                description: "Specialized in all aspects of offshore wind farm development, from site selection through installation and operation.",
+                projects: "Developed 4 major offshore wind farms with combined capacity of 1.8GW, including leading-edge floating platform technology.",
+                pricing: "premium",
+                contact: {
+                    phone: "(555) 901-2345",
+                    email: "info@offshorewind.com",
+                    website: "www.offshorewind.com"
+                }
+            },
+            {
+                name: "ThermalEarth Systems",
+                specialization: "geothermal",
+                experience: "9+ years",
+                experienceValue: "5+",
+                description: "Residential and light commercial geothermal heat pump specialists, from site assessment to installation.",
+                projects: "Installed over 750 geothermal heat pump systems for homes, schools, and commercial buildings up to 100,000 sq ft.",
+                pricing: "budget",
+                contact: {
+                    phone: "(555) 012-3456",
+                    email: "sales@thermalearth.com",
+                    website: "www.thermalearth.com"
+                }
+            },
+            {
+                name: "BioFuel Processors",
+                specialization: "biomass",
+                experience: "11+ years",
+                experienceValue: "10+",
+                description: "Specializing in biofuel production from agricultural waste and purpose-grown energy crops.",
+                projects: "Operates 3 biofuel refineries with total capacity of 50 million gallons annually, primarily ethanol and biodiesel.",
+                pricing: "budget",
+                contact: {
+                    phone: "(555) 123-4567",
+                    email: "info@biofuelprocessors.com",
+                    website: "www.biofuelprocessors.com"
+                }
+            },
+            {
+                name: "SolarWind Hybrid Systems",
+                specialization: "solar",
+                experience: "7+ years",
+                experienceValue: "5+",
+                description: "Innovative provider of hybrid renewable systems combining solar, wind, and storage for maximum reliability.",
+                projects: "Installed over 50 off-grid and grid-tied hybrid systems, including 5 island microgrids and 10 remote industrial applications.",
+                pricing: "premium",
+                contact: {
+                    phone: "(555) 234-5678",
+                    email: "contact@solarwindhybrid.com",
+                    website: "www.solarwindhybrid.com"
+                }
+            }
+        ];
+
+        // Case studies data
+        const caseStudiesData = {
+            case1: {
+                title: "Mountain View Corporate Campus",
+                tags: ["Commercial", "Solar"],
+                content: "The Mountain View Corporate Campus faced rising energy costs and sustainability targets. In 2019, they implemented a comprehensive rooftop solar installation across their six buildings, covering 85% of available roof space with high-efficiency panels.\n\nThe 1.2MW system was designed to maximize production while maintaining accessibility for roof maintenance. The installation included a state-of-the-art monitoring system that allowed facilities management to track performance in real-time and identify any issues immediately.\n\nDespite the significant upfront investment of $2.4 million, federal tax incentives reduced the effective cost by 26%. The company opted for a hybrid financing approach, directly purchasing 60% of the system while using a power purchase agreement (PPA) for the remainder.",
+                results: [
+                    "75% reduction in grid electricity consumption",
+                    "Annual savings of $310,000 on utility bills",
+                    "Return on investment achieved in 5.2 years",
+                    "Carbon emissions reduction of 1,200 tons annually",
+                    "Enhanced corporate sustainability profile helping to attract talent"
+                ],
+                implementation: [
+                    "3,600 high-efficiency photovoltaic panels installed",
+                    "Smart inverter system with panel-level optimization",
+                    "Integrated battery storage system (250kWh capacity)",
+                    "Advanced monitoring and analytics platform",
+                    "Comprehensive staff training program"
+                ]
+            },
+            case2: {
+                title: "Portland Green City Initiative",
+                tags: ["Municipal", "Wind"],
+                content: "The city of Portland launched an ambitious renewable energy initiative in 2017 with the goal of powering 50% of municipal operations with clean energy by 2025. After extensive feasibility studies, they developed an offshore wind farm 15 miles from the coast.\n\nThe project faced initial opposition from some community groups concerned about visual impact and potential effects on marine life. The city addressed these concerns through transparent community engagement, including public forums, detailed environmental impact assessments, and a commitment to ongoing monitoring of marine ecosystems.\n\nFinancing came through a combination of municipal green bonds, federal grants, and a public-private partnership with a renewable energy developer. The first phase of 12 turbines went online in 2020, with a second phase of 8 additional turbines completed in 2022.",
+                results: [
+                    "50% of municipal energy needs now met with renewable sources",
+                    "Annual cost savings of $4.2 million on municipal energy bills",
+                    "Creation of 120 permanent jobs in operations and maintenance",
+                    "Reduction of 95,000 tons of CO2 emissions annually",
+                    "Establishment of Portland as a leader in municipal sustainability"
+                ],
+                implementation: [
+                    "20 offshore wind turbines with 5MW capacity each (100MW total)",
+                    "Undersea transmission infrastructure with 98.5% efficiency",
+                    "Advanced bird and bat monitoring and protection systems",
+                    "Marine life conservation program alongside the energy project",
+                    "Community benefit fund receiving 2% of project revenue"
+                ]
+            },
+            case3: {
+                title: "Sunrise Eco-Community",
+                tags: ["Residential", "Geothermal"],
+                content: "The Sunrise Eco-Community is a 120-home residential development designed from the ground up to maximize sustainability. Central to their approach was implementing a community-wide geothermal heating and cooling system that serves all homes and common facilities.\n\nRather than individual systems for each home, the developers created a district geothermal network with a centralized ground loop field beneath the community park area. This approach reduced installation costs by 30% compared to individual systems and maximized the efficiency of the overall system.\n\nThe closed-loop system consists of 200 vertical boreholes reaching depths of 300 feet, connected to four centralized pump houses that distribute the thermal energy throughout the community. Each home has an individual heat pump unit that connects to the community loop.",
+                results: [
+                    "100% of heating and cooling needs met through geothermal energy",
+                    "Average household utility costs 68% lower than comparable homes",
+                    "Zero carbon emissions from heating and cooling operations",
+                    "System projected to operate for 50+ years with minimal maintenance",
+                    "Community has become a showcase for sustainable development"
+                ],
+                implementation: [
+                    "200-borehole geothermal field under community green space",
+                    "District energy loop connecting all 120 homes",
+                    "Individual water-to-air heat pumps in each residence",
+                    "Integrated smart home controls for optimal energy use",
+                    "Supplemental solar thermal system for community pool and hot water"
+                ]
+            },
+            case4: {
+                title: "Alpine Manufacturing Plant",
+                tags: ["Industrial", "Hydro"],
+                content: "The Alpine Manufacturing Plant, located alongside a rapidly flowing river with significant elevation change, sought to reduce its substantial energy costs and carbon footprint. After evaluating several renewable options, they determined that an on-site micro-hydro system could provide a significant portion of their energy needs.\n\nThe factory worked with environmental agencies to design a run-of-river system that diverts a portion of the water flow through turbines before returning it to the river, minimizing ecological impact. A fish ladder and comprehensive monitoring system ensure protection of the local ecosystem.\n\nThe system utilizes three Kaplan turbines that can operate efficiently even as water flow varies seasonally. Advanced control systems adjust output based on the factory's consumption patterns and available water flow, with any excess power feeding back to the grid.",
+                results: [
+                    "65% of factory's electricity needs now generated on-site",
+                    "Annual energy cost reduction of $850,000",
+                    "ROI achieved in just 3.8 years, exceeding initial projections",
+                    "Carbon footprint reduced by 4,500 tons CO2 equivalent annually",
+                    "Enhanced reputation leading to new contracts with sustainability-focused clients"
+                ],
+                implementation: [
+                    "3-turbine micro-hydro system with 1.2MW total capacity",
+                    "Environmentally sensitive water diversion system",
+                    "Comprehensive river ecosystem monitoring program",
+                    "Integration with factory's energy management system",
+                    "Visitor education center showcasing renewable energy"
+                ]
+            },
+            case5: {
+                title: "Heartland Farms Cooperative",
+                tags: ["Agricultural", "Biomass"],
+                content: "Heartland Farms Cooperative, consisting of 24 farms spanning 15,000 acres, was facing challenges with agricultural waste disposal and rising energy costs. In 2018, they implemented a centralized biomass energy system that converts farm waste into biogas and ultimately electricity.\n\nThe project began with a comprehensive waste stream analysis to determine the mix of materials available, including crop residues, animal manure, and food processing waste. Based on these findings, they designed an anaerobic digestion system with a specific bacteria mix optimized for their particular waste composition.\n\nThe central facility processes approximately 120 tons of organic waste daily, producing biogas that powers a 2.5MW generator. Excess heat from the generator is captured and used for greenhouse heating and crop drying. The digestion process also produces nutrient-rich digestate that is used as fertilizer, creating a truly circular agricultural system.",
+                results: [
+                    "Generation of enough electricity to power all 24 farms plus 350 nearby homes",
+                    "Annual energy cost savings of $1.2 million across the cooperative",
+                    "Elimination of waste disposal costs totaling $300,000 annually",
+                    "Production of 15,000 tons of organic fertilizer yearly, reducing chemical fertilizer use",
+                    "Creation of 15 new full-time jobs managing the biomass operation"
+                ],
+                implementation: [
+                    "Centralized anaerobic digestion facility processing 120 tons/day",
+                    "2.5MW biogas generator with heat recovery system",
+                    "Digestate processing and distribution system for fertilizer use",
+                    "7-mile private biogas pipeline connecting remote waste sources",
+                    "Integrated monitoring system tracking inputs, outputs and efficiency"
+                ]
+            },
+            case6: {
+                title: "Westlake University Campus",
+                tags: ["Educational", "Hybrid"],
+                content: "Westlake University, a campus of 15,000 students, committed to achieving carbon neutrality by 2025. Rather than relying on a single renewable technology, they implemented a comprehensive hybrid approach tailored to their specific location and energy needs.\n\nThe project began with extensive energy efficiency retrofits that reduced overall consumption by 35%. This made it feasible to meet the remaining demand with on-site renewable generation. The campus benefits from diverse geography, allowing for multiple renewable approaches.\n\nThe centerpiece is a 5MW solar array installed on rooftops and as canopies over parking lots, preserving land use. This is supplemented by five 100kW wind turbines located on a hillside property owned by the university. For heating and cooling of academic buildings, they installed a closed-loop geothermal system that reduced HVAC energy use by 60%.",
+                results: [
+                    "100% carbon neutrality achieved two years ahead of schedule",
+                    "Annual energy cost savings exceeding $3.5 million",
+                    "Creation of hands-on research and educational opportunities",
+                    "System serves as a living laboratory for engineering and environmental science students",
+                    "Recognition as one of the top 10 sustainable campuses nationally"
+                ],
+                implementation: [
+                    "5MW distributed solar PV system across 25 buildings",
+                    "5 wind turbines (100kW each) on university property",
+                    "Campus-wide geothermal heating and cooling system",
+                    "2MWh battery storage system for load balancing",
+                    "Advanced energy management system optimizing multiple sources"
+                ]
+            }
+        };
+
+        // Energy comparison data
+        const comparisonData = {
+            solar: {
+                name: "Solar Energy",
+                color: "rgba(255, 220, 0, 0.7)",
+                colorDark: "rgba(255, 220, 0, 0.7)",
+                costInstallation: {
+                    value: 70,
+                    text: "Moderate to high initial cost ($2,500-$3,500 per kW installed). Costs continue to decline annually."
+                },
+                costOperation: {
+                    value: 20,
+                    text: "Very low operational costs (about $15-25 per kW annually) with minimal maintenance required."
+                },
+                costROI: {
+                    value: 60,
+                    text: "Typical ROI in 5-10 years depending on location, incentives, and electricity rates."
+                },
+                efficiencyConversion: {
+                    value: 50,
+                    text: "Modern PV panels range from 15-22% efficiency, with premium models reaching 22-24%."
+                },
+                efficiencyReliability: {
+                    value: 55,
+                    text: "Depends on sunlight availability; predictable daily patterns but varies seasonally and with weather."
+                },
+                environmentalCarbon: {
+                    value: 90,
+                    text: "Very low carbon footprint during operation. Manufacturing has some impact, but improving with technology."
+                },
+                environmentalResource: {
+                    value: 70,
+                    text: "Requires significant land area for utility-scale installations, but can be integrated into existing structures."
+                },
+                lifespan: {
+                    value: 75,
+                    text: "Modern solar panels typically last 25-30 years, with gradual efficiency loss over time."
+                },
+                maintenance: {
+                    value: 85,
+                    text: "Minimal maintenance required - occasional cleaning and inverter replacement after 10-15 years."
+                }
+            },
+            wind: {
+                name: "Wind Energy",
+                color: "rgba(135, 206, 235, 0.7)",
+                colorDark: "rgba(135, 206, 235, 0.7)",
+                costInstallation: {
+                    value: 65,
+                    text: "Moderate to high initial cost ($1,500-$2,500 per kW installed for utility-scale projects)."
+                },
+                costOperation: {
+                    value: 25,
+                    text: "Low operational costs (about $40-50 per kW annually) with periodic maintenance required."
+                },
+                costROI: {
+                    value: 65,
+                    text: "Typical ROI in 5-8 years for well-sited commercial projects, longer for smaller installations."
+                },
+                efficiencyConversion: {
+                    value: 80,
+                    text: "Modern turbines can convert up to 45% of the wind energy passing through them into electricity."
+                },
+                efficiencyReliability: {
+                    value: 50,
+                    text: "Depends on wind conditions; more variable than some other sources but predictable at good sites."
+                },
+                environmentalCarbon: {
+                    value: 85,
+                    text: "Very low carbon footprint during operation, with manufacturing impacts offset within 3-6 months of operation."
+                },
+                environmentalResource: {
+                    value: 60,
+                    text: "Large physical footprint, but land between turbines can be used for agriculture and other purposes."
+                },
+                lifespan: {
+                    value: 70,
+                    text: "Turbines typically designed for 20-25 years of operation before major refurbishment."
+                },
+                maintenance: {
+                    value: 60,
+                    text: "Moderate maintenance required, including regular inspections and occasional component replacement."
+                }
+            },
+            hydro: {
+                name: "Hydroelectric Energy",
+                color: "rgba(64, 130, 230, 0.7)",
+                colorDark: "rgba(64, 130, 230, 0.7)",
+                costInstallation: {
+                    value: 30,
+                    text: "Very high initial cost ($2,000-$7,500 per kW installed depending on the type of project)."
+                },
+                costOperation: {
+                    value: 10,
+                    text: "Extremely low operational costs (about $10-20 per kW annually) once constructed."
+                },
+                costROI: {
+                    value: 75,
+                    text: "Slow initial ROI (10-20 years) but excellent long-term economics due to very long facility lifespan."
+                },
+                efficiencyConversion: {
+                    value: 90,
+                    text: "Modern hydroelectric turbines achieve 85-95% efficiency, among the highest of all energy sources."
+                },
+                efficiencyReliability: {
+                    value: 95,
+                    text: "Extremely reliable baseload power, with reservoir systems able to adjust output as needed."
+                },
+                environmentalCarbon: {
+                    value: 80,
+                    text: "Very low operational carbon emissions, though reservoir creation can cause initial methane releases."
+                },
+                environmentalResource: {
+                    value: 30,
+                    text: "Significant environmental impact through alteration of river ecosystems and often large land use for reservoirs."
+                },
+                lifespan: {
+                    value: 95,
+                    text: "Exceptionally long lifespan, with many facilities operating for 50-100+ years with proper maintenance."
+                },
+                maintenance: {
+                    value: 75,
+                    text: "Low regular maintenance, though major components may need replacement after several decades."
+                }
+            },
+            geothermal: {
+                name: "Geothermal Energy",
+                color: "rgba(255, 99, 71, 0.7)",
+                colorDark: "rgba(255, 99, 71, 0.7)",
+                costInstallation: {
+                    value: 25,
+                    text: "Very high initial cost ($3,500-$5,000 per kW installed) with significant exploration expenses."
+                },
+                costOperation: {
+                    value: 15,
+                    text: "Very low operational costs (about $30-40 per kW annually) with minimal fuel expenses."
+                },
+                costROI: {
+                    value: 55,
+                    text: "ROI typically 8-15 years depending on resource quality, with excellent long-term economics afterward."
+                },
+                efficiencyConversion: {
+                    value: 60,
+                    text: "Binary cycle plants achieve 10-15% efficiency, while direct use applications can reach 70-90% efficiency."
+                },
+                efficiencyReliability: {
+                    value: 90,
+                    text: "Excellent reliability with 24/7 baseload generation capability and minimal downtime."
+                },
+                environmentalCarbon: {
+                    value: 75,
+                    text: "Very low carbon emissions, though some geothermal fluids contain greenhouse gases that must be managed."
+                },
+                environmentalResource: {
+                    value: 80,
+                    text: "Small surface footprint relative to output, with minimal land use impact compared to other renewables."
+                },
+                lifespan: {
+                    value: 80,
+                    text: "Plants typically designed for 30-50 years, with proper reservoir management ensuring long-term sustainability."
+                },
+                maintenance: {
+                    value: 65,
+                    text: "Moderate maintenance requirements, with particular attention to fluid handling systems and well integrity."
+                }
+            },
+            biomass: {
+                name: "Biomass Energy",
+                color: "rgba(124, 252, 0, 0.7)",
+                colorDark: "rgba(124, 252, 0, 0.7)",
+                costInstallation: {
+                    value: 50,
+                    text: "Moderate initial cost ($3,000-$4,000 per kW installed) for dedicated biomass power plants."
+                },
+                costOperation: {
+                    value: 60,
+                    text: "Higher operational costs ($50-100 per kW annually) due to ongoing fuel collection and processing."
+                },
+                costROI: {
+                    value: 50,
+                    text: "ROI typically 7-12 years, though can be better when utilizing waste streams that would otherwise have disposal costs."
+                },
+                efficiencyConversion: {
+                    value: 40,
+                    text: "Combustion systems typically 20-25% efficient for electricity, CHP systems can reach 60-80% total efficiency."
+                },
+                efficiencyReliability: {
+                    value: 80,
+                    text: "Highly reliable and dispatchable, providing consistent power as long as fuel supply is maintained."
+                },
+                environmentalCarbon: {
+                    value: 50,
+                    text: "Carbon neutral in principle when sustainably managed, but combustion produces air pollutants requiring control."
+                },
+                environmentalResource: {
+                    value: 40,
+                    text: "Can require significant land area for energy crops, though waste-to-energy systems avoid this impact."
+                },
+                lifespan: {
+                    value: 65,
+                    text: "Plants typically designed for 20-25 years, with regular equipment replacement and refurbishment."
+                },
+                maintenance: {
+                    value: 40,
+                    text: "Higher maintenance requirements due to fuel handling systems and more complex combustion equipment."
+                }
+            }
+        };
+    
+        // News data
+        const newsData = [
+            {
+                title: "Next-Generation Solar Panels Achieve Record Efficiency",
+                date: "June 12, 2023",
+                category: "Technology",
+                summary: "Researchers have developed a new type of tandem solar cell that achieves 32.5% efficiency, shattering previous records and approaching the theoretical maximum efficiency for silicon-based photovoltaics.",
+                image: "fas fa-sun",
+                color: "yellow"
+            },
+            {
+                title: "Offshore Wind Farm Capacity Surpasses 50GW Globally",
+                date: "May 28, 2023",
+                category: "Industry",
+                summary: "Global offshore wind capacity has surpassed 50GW, with new installations in 2022 adding a record 8.8GW despite supply chain challenges. Analysts project continued rapid growth over the next decade.",
+                image: "fas fa-wind",
+                color: "blue"
+            },
+            {
+                title: "Advanced Grid Storage Solutions Reach Commercial Scale",
+                date: "June 5, 2023",
+                category: "Innovation",
+                summary: "Multiple long-duration energy storage technologies, including flow batteries and gravity-based systems, have moved beyond pilot stage to full commercial deployment, helping solve renewable intermittency issues.",
+                image: "fas fa-battery-three-quarters",
+                color: "green"
+            },
+            {
+                title: "Renewable Energy Jobs Exceed 12 Million Worldwide",
+                date: "May 15, 2023",
+                category: "Economics",
+                summary: "A new international report shows the renewable energy sector now employs over 12 million people globally, with solar PV remaining the largest employer followed by biofuels and hydropower.",
+                image: "fas fa-user-hard-hat",
+                color: "pink"
+            },
+            {
+                title: "Geothermal Technology Breakthrough Enables Wider Deployment",
+                date: "June 2, 2023",
+                category: "Technology",
+                summary: "New drilling techniques and enhanced geothermal system technologies have successfully demonstrated heat extraction from previously unusable resources, potentially opening vast new areas for geothermal development.",
+                image: "fas fa-fire",
+                color: "red"
+            },
+            {
+                title: "Major Corporate Alliance Commits to 100% Renewable Energy",
+                date: "May 30, 2023",
+                category: "Business",
+                summary: "A consortium of 50 multinational corporations has announced a joint commitment to power all operations with 100% renewable energy by 2030, representing over $2 trillion in annual revenue.",
+                image: "fas fa-building",
+                color: "purple"
+            }
+        ];
+
+        // DOM manipulation once content is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu when clicking a link
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+            
+            // Energy source detail buttons
+            const energyDetailButtons = document.querySelectorAll('.energy-details-btn');
+            const energyModal = document.getElementById('energy-modal');
+            const closeEnergyModal = document.getElementById('close-energy-modal');
+            const energyModalTitle = document.getElementById('energy-modal-title');
+            const energyModalContent = document.getElementById('energy-modal-content');
+            const energyBenefits = document.getElementById('energy-benefits');
+            const energyImplementation = document.getElementById('energy-implementation');
+            const energyChallenges = document.getElementById('energy-challenges');
+            const findProvidersBtn = document.getElementById('find-providers-btn');
+            
+            energyDetailButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const energyType = button.getAttribute('data-energy');
+                    const data = energyData[energyType];
+                    
+                    // Populate modal content
+                    energyModalTitle.textContent = data.title;
+                    energyModalContent.innerHTML = marked.parse(data.content);
+                    
+                    // Clear and populate lists
+                    energyBenefits.innerHTML = '';
+                    data.benefits.forEach(benefit => {
+                        const li = document.createElement('li');
+                        li.textContent = benefit;
+                        energyBenefits.appendChild(li);
+                    });
+                    
+                    energyImplementation.innerHTML = '';
+                    data.implementation.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        energyImplementation.appendChild(li);
+                    });
+                    
+                    energyChallenges.innerHTML = '';
+                    data.challenges.forEach(challenge => {
+                        const li = document.createElement('li');
+                        li.textContent = challenge;
+                        energyChallenges.appendChild(li);
+                    });
+                    
+                    // Show modal
+                    energyModal.classList.remove('hidden');
+                    
+                    // Set up find providers button to filter providers for this energy type
+                    findProvidersBtn.onclick = () => {
+                        energyModal.classList.add('hidden');
+                        document.getElementById('specialization-filter').value = energyType;
+                        document.getElementById('providers').scrollIntoView({ behavior: 'smooth' });
+                        filterProviders();
+                    };
+                });
+            });
+            
+            closeEnergyModal.addEventListener('click', () => {
+                energyModal.classList.add('hidden');
+            });
+            
+            // Initialize company directory
+            const providersGrid = document.getElementById('providers-grid');
+            const noProvidersMessage = document.getElementById('no-providers-message');
+            
+            // Filter controls
+            const specializationFilter = document.getElementById('specialization-filter');
+            const experienceFilter = document.getElementById('experience-filter');
+            const pricingFilter = document.getElementById('pricing-filter');
+            const searchProviders = document.getElementById('search-providers');
+            
+            // Add event listeners to filters
+            specializationFilter.addEventListener('change', filterProviders);
+            experienceFilter.addEventListener('change', filterProviders);
+            pricingFilter.addEventListener('change', filterProviders);
+            searchProviders.addEventListener('input', filterProviders);
+            
+            // Initial provider population
+            displayProviders(companyData);
+            
+            // Function to filter providers based on selected criteria
+            function filterProviders() {
+                const specialization = specializationFilter.value;
+                const experience = experienceFilter.value;
+                const pricing = pricingFilter.value;
+                const searchTerm = searchProviders.value.toLowerCase();
+                
+                const filteredProviders = companyData.filter(company => {
+                    // Filter by specialization
+                    if (specialization !== 'all' && company.specialization !== specialization) {
+                        return false;
+                    }
+                    
+                    // Filter by experience
+                    if (experience !== 'all' && company.experienceValue !== experience) {
+                        return false;
+                    }
+                    
+                    // Filter by pricing
+                    if (pricing !== 'all' && company.pricing !== pricing) {
+                        return false;
+                    }
+                    
+                    // Filter by search term
+                    if (searchTerm && !(
+                        company.name.toLowerCase().includes(searchTerm) ||
+                        company.description.toLowerCase().includes(searchTerm) ||
+                        company.projects.toLowerCase().includes(searchTerm)
+                    )) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+                
+                displayProviders(filteredProviders);
+            }
+            
+            // Function to display providers
+            function displayProviders(providers) {
+                providersGrid.innerHTML = '';
+                
+                if (providers.length === 0) {
+                    noProvidersMessage.classList.remove('hidden');
+                } else {
+                    noProvidersMessage.classList.add('hidden');
+                    
+                    providers.forEach(company => {
+                        const card = document.createElement('div');
+                        card.className = 'bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl';
+                        
+                        // Determine icon based on specialization
+                        let iconClass = 'fas fa-solar-panel';
+                        let bgColorClass = 'bg-yellow-100 dark:bg-yellow-900/30';
+                        let iconColorClass = 'text-yellow-500';
+                        
+                        if (company.specialization === 'wind') {
+                            iconClass = 'fas fa-wind';
+                            bgColorClass = 'bg-blue-100 dark:bg-blue-900/30';
+                            iconColorClass = 'text-blue-500';
+                        } else if (company.specialization === 'hydro') {
+                            iconClass = 'fas fa-water';
+                            bgColorClass = 'bg-blue-100 dark:bg-blue-900/30';
+                            iconColorClass = 'text-blue-500';
+                        } else if (company.specialization === 'geothermal') {
+                            iconClass = 'fas fa-fire';
+                            bgColorClass = 'bg-red-100 dark:bg-red-900/30';
+                            iconColorClass = 'text-red-500';
+                        } else if (company.specialization === 'biomass') {
+                            iconClass = 'fas fa-seedling';
+                            bgColorClass = 'bg-green-100 dark:bg-green-900/30';
+                            iconColorClass = 'text-green-500';
+                        }
+                        
+                        // Create pricing badges
+                        let pricingBadge = '';
+                        if (company.pricing === 'budget') {
+                            pricingBadge = '<span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Budget-Friendly</span>';
+                        } else if (company.pricing === 'mid-range') {
+                            pricingBadge = '<span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Mid-Range</span>';
+                        } else if (company.pricing === 'premium') {
+                            pricingBadge = '<span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Premium</span>';
+                        }
+                        
+                        // Format specialization for display
+                        let specialization = 'Solar Energy';
+                        if (company.specialization === 'wind') {
+                            specialization = 'Wind Energy';
+                        } else if (company.specialization === 'hydro') {
+                            specialization = 'Hydroelectric Energy';
+                        } else if (company.specialization === 'geothermal') {
+                            specialization = 'Geothermal Energy';
+                        } else if (company.specialization === 'biomass') {
+                            specialization = 'Biomass Energy';
+                        }
+                        
+                        card.innerHTML = `
+                            <div class="h-32 ${bgColorClass} flex items-center justify-center">
+                                <i class="${iconClass} ${iconColorClass} text-5xl"></i>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">${company.name}</h3>
+                                    ${pricingBadge}
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">${specialization} • ${company.experience} Experience</p>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">${company.description}</p>
+                                <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                                    <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">Contact Information</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-1"><i class="fas fa-phone mr-2"></i>${company.contact.phone}</p>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-1"><i class="fas fa-envelope mr-2"></i>${company.contact.email}</p>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm"><i class="fas fa-globe mr-2"></i>${company.contact.website}</p>
+                                </div>
+                                <button class="request-quote-btn w-full bg-primary text-white py-2 px-4 rounded mt-4 hover:bg-primary/90 transition-colors">Request a Quote</button>
+                            </div>
+                        `;
+                        
+                        providersGrid.appendChild(card);
+                    });
+                    
+                    // Add event listeners to request quote buttons
+                    document.querySelectorAll('.request-quote-btn').forEach(button => {
+                        button.addEventListener('click', () => {
+                            openServiceModal('quote');
+                        });
+                    });
+                }
+            }
+            
+            // Comparison Tool
+            const compareBtns = document.querySelectorAll('.comparison-select');
+            const compareBtn = document.getElementById('compare-btn');
+            const comparisonResults = document.getElementById('comparison-results');
+            
+            // Initialize comparison chart
+            let comparisonChart;
+            
+            compareBtn.addEventListener('click', () => {
+                const solution1 = document.getElementById('solution-1').value;
+                const solution2 = document.getElementById('solution-2').value;
+                const solution3 = document.getElementById('solution-3').value;
+                
+                if (solution1 === '' || solution2 === '') {
+                    alert('Please select at least two energy solutions to compare.');
+                    return;
+                }
+                
+                // Show comparison results
+                comparisonResults.classList.remove('hidden');
+                comparisonResults.scrollIntoView({ behavior: 'smooth' });
+                
+                // Get selected solutions data
+                const selectedSolutions = [solution1, solution2].filter(s => s !== '');
+                if (solution3 !== '') {
+                    selectedSolutions.push(solution3);
+                }
+                
+                // Update comparison UI
+                updateComparisonUI(selectedSolutions);
+                
+                // Create/update chart
+                createComparisonChart(selectedSolutions);
+            });
+            
+            // Tab functionality for comparison results
+            const comparisonTabs = document.querySelectorAll('.comparison-tab');
+            
+            comparisonTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    comparisonTabs.forEach(t => t.classList.remove('tab-active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('tab-active');
+                    
+                    // Hide all tab content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show selected tab content
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                });
+            });
+            
+            function updateComparisonUI(solutions) {
+                // Update all comparison sections
+                updateComparisonSection('cost-installation', solutions);
+                updateComparisonSection('cost-operation', solutions);
+                updateComparisonSection('cost-roi', solutions);
+                updateComparisonSection('efficiency-conversion', solutions);
+                updateComparisonSection('efficiency-reliability', solutions);
+                updateComparisonSection('environmental-carbon', solutions);
+                updateComparisonSection('environmental-resource', solutions);
+                updateComparisonSection('lifespan', solutions);
+                updateComparisonSection('maintenance', solutions);
+            }
+            
+            function updateComparisonSection(sectionId, solutions) {
+                const section = document.getElementById(`${sectionId}-comparison`);
+                section.innerHTML = '';
+                
+                solutions.forEach(solution => {
+                    const data = comparisonData[solution];
+                    let metric;
+                    
+                    // Determine which metric to use based on section ID
+                    if (sectionId === 'cost-installation') {
+                        metric = data.costInstallation;
+                    } else if (sectionId === 'cost-operation') {
+                        metric = data.costOperation;
+                    } else if (sectionId === 'cost-roi') {
+                        metric = data.costROI;
+                    } else if (sectionId === 'efficiency-conversion') {
+                        metric = data.efficiencyConversion;
+                    } else if (sectionId === 'efficiency-reliability') {
+                        metric = data.efficiencyReliability;
+                    } else if (sectionId === 'environmental-carbon') {
+                        metric = data.environmentalCarbon;
+                    } else if (sectionId === 'environmental-resource') {
+                        metric = data.environmentalResource;
+                    } else if (sectionId === 'lifespan') {
+                        metric = data.lifespan;
+                    } else if (sectionId === 'maintenance') {
+                        metric = data.maintenance;
+                    }
+                    
+                    // Create comparison bar
+                    const container = document.createElement('div');
+                    container.className = 'mb-2';
+                    
+                    // Determine if this is a cost metric (where lower values are better)
+                    const isCostMetric = sectionId === 'cost-installation' || sectionId === 'cost-operation';
+                    const barColorClass = isCostMetric ? 
+                        (metric.value > 50 ? 'bg-red-500' : 'bg-green-500') : 
+                        (metric.value > 50 ? 'bg-green-500' : 'bg-yellow-500');
+                    
+                    container.innerHTML = `
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">${data.name}</span>
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">${metric.value}/100</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                            <div class="comparison-bar ${barColorClass} h-3 rounded-full" style="width: ${metric.value}%"></div>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${metric.text}</p>
+                    `;
+                    
+                    section.appendChild(container);
+                });
+            }
+            
+            function createComparisonChart(solutions) {
+                // Get canvas context
+                const ctx = document.getElementById('comparison-chart').getContext('2d');
+                
+                // Prepare data
+                const datasets = solutions.map(solution => {
+                    const data = comparisonData[solution];
+                    return {
+                        label: data.name,
+                        data: [
+                            data.costInstallation.value, 
+                            data.costOperation.value,
+                            data.costROI.value,
+                            data.efficiencyConversion.value,
+                            data.efficiencyReliability.value,
+                            data.environmentalCarbon.value,
+                            data.environmentalResource.value,
+                            data.lifespan.value,
+                            data.maintenance.value
+                        ],
+                        backgroundColor: document.documentElement.classList.contains('dark') ? data.colorDark : data.color,
+                        borderColor: document.documentElement.classList.contains('dark') ? data.colorDark : data.color,
+                        borderWidth: 2,
+                        pointBackgroundColor: document.documentElement.classList.contains('dark') ? data.colorDark : data.color,
+                        pointRadius: 4
+                    };
+                });
+                
+                // Destroy previous chart if it exists
+                if (comparisonChart) {
+                    comparisonChart.destroy();
+                }
+                
+                // Create new chart
+                comparisonChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: [
+                            'Installation Cost', 
+                            'Operational Cost', 
+                            'Return on Investment',
+                            'Energy Conversion Efficiency',
+                            'Energy Output Reliability',
+                            'Carbon Footprint Impact',
+                            'Land & Resource Impact',
+                            'System Lifespan',
+                            'Maintenance Requirements'
+                        ],
+                        datasets: datasets
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'
+                                },
+                                grid: {
+                                    color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'
+                                },
+                                pointLabels: {
+                                    color: document.documentElement.classList.contains('dark') ? '#F3F4F6' : '#1F2937',
+                                    font: {
+                                        size: 11
+                                    }
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 100,
+                                ticks: {
+                                    color: document.documentElement.classList.contains('dark') ? '#F3F4F6' : '#1F2937',
+                                    backdropColor: document.documentElement.classList.contains('dark') ? 'rgba(24, 24, 24, 0.7)' : 'rgba(255, 255, 255, 0.7)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    color: document.documentElement.classList.contains('dark') ? '#F3F4F6' : '#1F2937',
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: document.documentElement.classList.contains('dark') ? 'rgba(24, 24, 24, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                                titleColor: document.documentElement.classList.contains('dark') ? '#F3F4F6' : '#1F2937',
+                                bodyColor: document.documentElement.classList.contains('dark') ? '#F3F4F6' : '#1F2937',
+                                borderColor: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
+                                borderWidth: 1
+                            }
+                        }
+                    }
+                });
+                
+                // Update chart when theme changes
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                    if (comparisonChart) {
+                        comparisonChart.destroy();
+                        createComparisonChart(solutions);
+                    }
+                });
+            }
+            
+            // Case Studies functionality
+            const caseStudyBtns = document.querySelectorAll('.case-study-btn');
+            const caseStudyModal = document.getElementById('case-study-modal');
+            const closeCaseStudyModal = document.getElementById('close-case-study-modal');
+            const caseStudyModalTitle = document.getElementById('case-study-modal-title');
+            const caseStudyModalTags = document.getElementById('case-study-modal-tags');
+            const caseStudyModalContent = document.getElementById('case-study-modal-content');
+            const caseStudyResults = document.getElementById('case-study-results');
+            const caseStudyImplementation = document.getElementById('case-study-implementation');
+            const findSimilarProvidersBtn = document.getElementById('find-similar-providers-btn');
+            
+            caseStudyBtns.forEach(button => {
+                button.addEventListener('click', () => {
+                    const caseId = button.getAttribute('data-case');
+                    const data = caseStudiesData[caseId];
+                    
+                    // Populate modal content
+                    caseStudyModalTitle.textContent = data.title;
+                    
+                    // Create tags
+                    caseStudyModalTags.innerHTML = '';
+                    data.tags.forEach(tag => {
+                        let bgClass = 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+                        
+                        if (tag === 'Commercial' || tag === 'Residential') {
+                            bgClass = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+                        } else if (tag === 'Municipal') {
+                            bgClass = 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
+                        } else if (tag === 'Industrial') {
+                            bgClass = 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+                        } else if (tag === 'Agricultural') {
+                            bgClass = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+                        } else if (tag === 'Educational') {
+                            bgClass = 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+                        } else if (tag === 'Solar') {
+                            bgClass = 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
+                        } else if (tag === 'Wind') {
+                            bgClass = 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+                        } else if (tag === 'Hydro') {
+                            bgClass = 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+                        } else if (tag === 'Geothermal') {
+                            bgClass = 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+                        } else if (tag === 'Biomass') {
+                            bgClass = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+                        } else if (tag === 'Hybrid') {
+                            bgClass = 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
+                        }
+                        
+                        const tagSpan = document.createElement('span');
+                        tagSpan.className = `text-xs font-medium px-2.5 py-0.5 rounded ${bgClass}`;
+                        tagSpan.textContent = tag;
+                        caseStudyModalTags.appendChild(tagSpan);
+                    });
+                    
+                    caseStudyModalContent.innerHTML = marked.parse(data.content);
+                    
+                    // Clear and populate lists
+                    caseStudyResults.innerHTML = '';
+                    data.results.forEach(result => {
+                        const li = document.createElement('li');
+                        li.textContent = result;
+                        caseStudyResults.appendChild(li);
+                    });
+                    
+                    caseStudyImplementation.innerHTML = '';
+                    data.implementation.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        caseStudyImplementation.appendChild(li);
+                    });
+                    
+                    // Show modal
+                    caseStudyModal.classList.remove('hidden');
+                    
+                    // Set up find similar providers button
+                    findSimilarProvidersBtn.onclick = () => {
+                        caseStudyModal.classList.add('hidden');
+                        
+                        // Determine specialization from tags
+                        let specialization = 'all';
+                        if (data.tags.includes('Solar')) {
+                            specialization = 'solar';
+                        } else if (data.tags.includes('Wind')) {
+                            specialization = 'wind';
+                        } else if (data.tags.includes('Hydro')) {
+                            specialization = 'hydro';
+                        } else if (data.tags.includes('Geothermal')) {
+                            specialization = 'geothermal';
+                        } else if (data.tags.includes('Biomass')) {
+                            specialization = 'biomass';
+                        }
+                        
+                        document.getElementById('specialization-filter').value = specialization;
+                        document.getElementById('providers').scrollIntoView({ behavior: 'smooth' });
+                        filterProviders();
+                    };
+                });
+            });
+            
+            closeCaseStudyModal.addEventListener('click', () => {
+                caseStudyModal.classList.add('hidden');
+            });
+            
+            // Service request functionality
+            const serviceRequestBtns = document.querySelectorAll('.service-request-btn');
+            const serviceModal = document.getElementById('service-modal');
+            const closeServiceModal = document.getElementById('close-service-modal');
+            const serviceModalTitle = document.getElementById('service-modal-title');
+            const serviceFormContainer = document.getElementById('service-form-container');
+            const serviceSuccess = document.getElementById('service-success');
+            const cancelServiceRequest = document.getElementById('cancel-service-request');
+            const closeSuccess = document.getElementById('close-success');
+            const serviceRequestForm = document.getElementById('service-request-form');
+            
+            serviceRequestBtns.forEach(button => {
+                button.addEventListener('click', () => {
+                    const serviceType = button.getAttribute('data-service');
+                    openServiceModal(serviceType);
+                });
+            });
+            
+            function openServiceModal(serviceType) {
+                // Reset form
+                serviceRequestForm.reset();
+                
+                // Show form, hide success
+                serviceFormContainer.classList.remove('hidden');
+                serviceSuccess.classList.add('hidden');
+                
+                // Set title based on service type
+                if (serviceType === 'consultation') {
+                    serviceModalTitle.textContent = 'Request a Consultation';
+                } else if (serviceType === 'quote') {
+                    serviceModalTitle.textContent = 'Request a Quote';
+                } else if (serviceType === 'installers') {
+                    serviceModalTitle.textContent = 'Find Installers';
+                }
+                
+                // Show modal
+                serviceModal.classList.remove('hidden');
+            }
+            
+            closeServiceModal.addEventListener('click', () => {
+                serviceModal.classList.add('hidden');
+            });
+            
+            cancelServiceRequest.addEventListener('click', () => {
+                serviceModal.classList.add('hidden');
+            });
+            
+            closeSuccess.addEventListener('click', () => {
+                serviceModal.classList.add('hidden');
+            });
+            
+            serviceRequestForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simulate form submission
+                setTimeout(() => {
+                    serviceFormContainer.classList.add('hidden');
+                    serviceSuccess.classList.remove('hidden');
+                }, 1000);
+            });
+            
+            // Load news
+            loadNews();
+            
+            function loadNews() {
+                const newsContainer = document.getElementById('news-container');
+                const newsLoading = document.getElementById('news-loading');
+                const newsError = document.getElementById('news-error');
+                
+                // Show loading state
+                newsLoading.classList.remove('hidden');
+                newsContainer.classList.add('hidden');
+                newsError.classList.add('hidden');
+                
+                // Simulate loading news (would be an API call in a real app)
+                setTimeout(() => {
+                    newsLoading.classList.add('hidden');
+                    
+                    // Determine whether to show news or error (always show news in this demo)
+                    newsContainer.classList.remove('hidden');
+                    
+                    // Populate news
+                    newsContainer.innerHTML = '';
+                    
+                    newsData.forEach(article => {
+                        const bgColorClass = getBgColorClass(article.color);
+                        const textColorClass = getTextColorClass(article.color);
+                        
+                        const card = document.createElement('div');
+                        card.className = 'bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl';
+                        
+                        card.innerHTML = `
+                            <div class="h-40 ${bgColorClass} flex items-center justify-center">
+                                <i class="${article.image} ${textColorClass} text-5xl"></i>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">${article.date}</span>
+                                    <span class="text-xs font-medium text-primary">${article.category}</span>
+                                </div>
+                                <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">${article.title}</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">${article.summary}</p>
+                                <button class="read-more-btn w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors">Read Full Article</button>
+                            </div>
+                        `;
+                        
+                        newsContainer.appendChild(card);
+                    });
+                    
+                    // Add event listeners to read more buttons
+                    document.querySelectorAll('.read-more-btn').forEach(button => {
+                        button.addEventListener('click', () => {
+                            window.Poe.sendUserMessage("@Claude-3.7-Sonnet Please provide a detailed article about recent innovations in renewable energy, focusing on technological breakthroughs, market trends, and future prospects. Include specific examples of recent advancements in solar, wind, hydroelectric, geothermal, and biomass energy solutions.", { openChat: true });
+                        });
+                    });
+                }, 1500);
+            }
+            
+            function getBgColorClass(color) {
+                switch (color) {
+                    case 'yellow':
+                        return 'bg-yellow-100 dark:bg-yellow-900/30';
+                    case 'blue':
+                        return 'bg-blue-100 dark:bg-blue-900/30';
+                    case 'green':
+                        return 'bg-green-100 dark:bg-green-900/30';
+                    case 'red':
+                        return 'bg-red-100 dark:bg-red-900/30';
+                    case 'pink':
+                        return 'bg-pink-100 dark:bg-pink-900/30';
+                    case 'purple':
+                        return 'bg-purple-100 dark:bg-purple-900/30';
+                    default:
+                        return 'bg-gray-100 dark:bg-gray-800';
+                }
+            }
+            
+            function getTextColorClass(color) {
+                switch (color) {
+                    case 'yellow':
+                        return 'text-yellow-500';
+                    case 'blue':
+                        return 'text-blue-500';
+                    case 'green':
+                        return 'text-green-500';
+                    case 'red':
+                        return 'text-red-500';
+                    case 'pink':
+                        return 'text-pink-500';
+                    case 'purple':
+                        return 'text-purple-500';
+                    default:
+                        return 'text-gray-500';
+                }
+            }
+            
+            // Reload news button
+            document.getElementById('reload-news').addEventListener('click', loadNews);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureNex - Advanced Home Security Systems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        primaryDark: '#4847b3',
+                        darkBg: '#181818',
+                        darkCard: '#222222',
+                        accent: '#00E5FF',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .glow {
+            filter: drop-shadow(0 0 8px rgba(93, 92, 222, 0.6));
+            transition: filter 0.3s ease;
+        }
+        
+        .dark .glow {
+            filter: drop-shadow(0 0 8px rgba(93, 92, 222, 0.8));
+        }
+        
+        .glow:hover {
+            filter: drop-shadow(0 0 12px rgba(93, 92, 222, 0.8));
+        }
+        
+        .dark .glow:hover {
+            filter: drop-shadow(0 0 15px rgba(93, 92, 222, 1));
+        }
+        
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .feature-icon {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-icon:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: #5D5CDE;
+            transition: width 0.3s ease;
+        }
+        
+        .feature-icon:hover::after {
+            width: 80%;
+        }
+        
+        .house-animation {
+            position: relative;
+        }
+        
+        .camera {
+            animation: pulse 2s infinite alternate;
+        }
+        
+        .sensor {
+            animation: pulse 3s infinite alternate-reverse;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+        
+        .smart-house {
+            background: linear-gradient(135deg, rgba(93, 92, 222, 0.2), rgba(0, 229, 255, 0.1));
+            border: 1px solid rgba(93, 92, 222, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .smart-house::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(93, 92, 222, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .pricing-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dark .pricing-card:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .dark ::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #5D5CDE;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4847b3;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-darkBg text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- Dark mode detection -->
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white/90 dark:bg-darkBg/90 backdrop-blur-sm z-50 shadow-md">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="flex items-center space-x-2">
+                    <div class="text-primary dark:text-primary text-3xl glow">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-wider">SecureNex</span>
+                </a>
+                
+                <div class="hidden md:flex space-x-8 text-sm font-medium">
+                    <a href="#features" class="hover:text-primary dark:hover:text-primary transition-colors py-2">Features</a>
+                    <a href="#how-it-works" class="hover:text-primary dark:hover:text-primary transition-colors py-2">How It Works</a>
+                    <a href="#pricing" class="hover:text-primary dark:hover:text-primary transition-colors py-2">Pricing</a>
+                    <a href="#testimonials" class="hover:text-primary dark:hover:text-primary transition-colors py-2">Testimonials</a>
+                    <a href="#contact" class="hover:text-primary dark:hover:text-primary transition-colors py-2">Contact</a>
+                </div>
+                
+                <button id="mobileMenuBtn" class="md:hidden text-gray-700 dark:text-gray-200 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                
+                <div class="hidden md:block">
+                    <a href="#contact" class="bg-primary hover:bg-primaryDark text-white px-5 py-2 rounded-full font-medium transition-all shadow-lg hover:shadow-xl">
+                        Get Secured Today
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-3 pb-2">
+                <div class="flex flex-col space-y-3 text-sm font-medium">
+                    <a href="#features" class="hover:text-primary dark:hover:text-primary transition-colors py-2">Features</a>
+                    <a href="#how-it-works" class="hover:text-primary dark:hover:text-primary transition-colors py-2">How It Works</a>
+                    <a href="#pricing" class="hover:text-primary dark:hover:text-primary transition-colors py-2">Pricing</a>
+                    <a href="#testimonials" class="hover:text-primary dark:hover:text-primary transition-colors py-2">Testimonials</a>
+                    <a href="#contact" class="hover:text-primary dark:hover:text-primary transition-colors py-2">Contact</a>
+                    <a href="#contact" class="bg-primary hover:bg-primaryDark text-white px-5 py-2 rounded-full font-medium transition-all text-center shadow-lg">
+                        Get Secured Today
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen pt-24 pb-16 flex items-center relative overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-20">
+            <div class="absolute inset-0 bg-gradient-to-br from-transparent to-primary/10"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(93, 92, 222, 0.3)" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+        
+        <div class="container mx-auto px-4 z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="w-full md:w-1/2 mb-12 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                        <span class="block">Secure Your Home</span>
+                        <span class="text-primary">With Advanced Technology</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-lg">
+                        Experience next-generation security with AI-powered monitoring, biometric access, and 24/7 protection for your smart home.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#contact" class="bg-primary hover:bg-primaryDark text-white px-8 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl text-center glow">
+                            Get Secured Today
+                        </a>
+                        <a href="#features" class="border border-gray-300 dark:border-gray-700 hover:border-primary dark:hover:border-primary px-8 py-3 rounded-full font-medium transition-all text-center">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/2">
+                    <div class="smart-house rounded-2xl p-8 shadow-xl relative">
+                        <!-- SVG House Illustration -->
+                        <svg viewBox="0 0 600 400" class="w-full h-auto">
+                            <!-- House Structure -->
+                            <rect x="150" y="180" width="300" height="180" fill="none" stroke="#5D5CDE" stroke-width="3" class="house" />
+                            <polygon points="150,180 300,80 450,180" fill="none" stroke="#5D5CDE" stroke-width="3" class="roof" />
+                            
+                            <!-- Door -->
+                            <rect x="280" y="280" width="40" height="80" fill="none" stroke="#5D5CDE" stroke-width="2" />
+                            <circle cx="310" cy="320" r="5" fill="#00E5FF" class="glow pulse-animation" />
+                            
+                            <!-- Windows -->
+                            <rect x="200" y="230" width="40" height="40" fill="none" stroke="#5D5CDE" stroke-width="2" />
+                            <rect x="360" y="230" width="40" height="40" fill="none" stroke="#5D5CDE" stroke-width="2" />
+                            
+                            <!-- Biometric Lock -->
+                            <circle cx="310" cy="320" r="15" fill="none" stroke="#00E5FF" stroke-width="2" class="sensor">
+                                <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite" />
+                            </circle>
+                            <text x="310" y="370" text-anchor="middle" fill="#00E5FF" font-size="12">Biometric Lock</text>
+                            
+                            <!-- Cameras -->
+                            <circle cx="150" cy="180" r="10" fill="none" stroke="#5D5CDE" stroke-width="2" class="camera">
+                                <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" />
+                            </circle>
+                            <path d="M140,180 L130,190" stroke="#5D5CDE" stroke-width="2" />
+                            <text x="120" y="205" text-anchor="middle" fill="#5D5CDE" font-size="12">Camera</text>
+                            
+                            <circle cx="450" cy="180" r="10" fill="none" stroke="#5D5CDE" stroke-width="2" class="camera">
+                                <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" begin="0.7s" repeatCount="indefinite" />
+                            </circle>
+                            <path d="M460,180 L470,190" stroke="#5D5CDE" stroke-width="2" />
+                            <text x="480" y="205" text-anchor="middle" fill="#5D5CDE" font-size="12">Camera</text>
+                            
+                            <!-- Motion Sensors -->
+                            <circle cx="300" cy="120" r="8" fill="none" stroke="#00E5FF" stroke-width="2" class="sensor">
+                                <animate attributeName="r" values="8;12;8" dur="4s" repeatCount="indefinite" />
+                            </circle>
+                            <text x="300" y="100" text-anchor="middle" fill="#00E5FF" font-size="12">Motion Sensor</text>
+                            
+                            <!-- AI Monitoring -->
+                            <rect x="200" y="180" width="200" height="30" fill="none" stroke="#5D5CDE" stroke-width="1" rx="5" />
+                            <text x="300" y="200" text-anchor="middle" fill="#5D5CDE" font-size="14">AI Monitoring System</text>
+                            
+                            <!-- Signal Waves -->
+                            <path d="M300,50 Q350,50 350,100 T400,150" fill="none" stroke="#00E5FF" stroke-width="1" stroke-dasharray="5,5">
+                                <animate attributeName="stroke-dashoffset" values="0;20" dur="2s" repeatCount="indefinite" />
+                            </path>
+                            <path d="M300,50 Q250,50 250,100 T200,150" fill="none" stroke="#00E5FF" stroke-width="1" stroke-dasharray="5,5">
+                                <animate attributeName="stroke-dashoffset" values="0;20" dur="2s" repeatCount="indefinite" />
+                            </path>
+                            
+                            <!-- Cloud Connection -->
+                            <circle cx="300" cy="40" r="20" fill="none" stroke="#5D5CDE" stroke-width="2" />
+                            <text x="300" y="45" text-anchor="middle" fill="#5D5CDE" font-size="14">AI</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="text-primary font-semibold tracking-wider uppercase text-sm">Advanced Protection</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">Next-Gen Security Features</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+            </div>
+            
+            <div class="security-grid">
+                <!-- Feature 1 -->
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-5 feature-icon">
+                        <i class="fas fa-video text-2xl text-primary glow"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">4K AI Camera System</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Ultra HD cameras with facial recognition, night vision, and smart alerts when unusual activity is detected.
+                    </p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-5 feature-icon">
+                        <i class="fas fa-fingerprint text-2xl text-primary glow"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Biometric Access Control</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Fingerprint, facial recognition, and voice authentication for secure and convenient entry.
+                    </p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-5 feature-icon">
+                        <i class="fas fa-robot text-2xl text-primary glow"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">AI-Powered Monitoring</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Advanced machine learning algorithms distinguish between normal activity and security threats.
+                    </p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-5 feature-icon">
+                        <i class="fas fa-network-wired text-2xl text-primary glow"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Smart Home Integration</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Seamlessly connect with existing smart home systems for comprehensive protection.
+                    </p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-5 feature-icon">
+                        <i class="fas fa-mobile-alt text-2xl text-primary glow"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Mobile Control & Alerts</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Monitor your home from anywhere with real-time notifications and remote system control.
+                    </p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-5 feature-icon">
+                        <i class="fas fa-shield-alt text-2xl text-primary glow"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Tamper-Proof Design</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Military-grade encryption and physical tamper detection to prevent security breaches.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="text-primary font-semibold tracking-wider uppercase text-sm">Simple Process</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">How SecureNex Works</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-primary/10 dark:bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-float">
+                        <span class="text-3xl font-bold text-primary">1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Consultation & Design</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        We assess your property and design a custom security solution tailored to your specific needs.
+                    </p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-primary/10 dark:bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-float" style="animation-delay: 0.3s">
+                        <span class="text-3xl font-bold text-primary">2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Professional Installation</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Our certified technicians install your security system with minimal disruption to your home.
+                    </p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-primary/10 dark:bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-float" style="animation-delay: 0.6s">
+                        <span class="text-3xl font-bold text-primary">3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">24/7 Monitoring & Support</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Enjoy round-the-clock protection with our monitoring center and dedicated technical support.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center">
+                <a href="#contact" class="bg-primary hover:bg-primaryDark text-white px-8 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl inline-block glow">
+                    Schedule a Consultation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="text-primary font-semibold tracking-wider uppercase text-sm">Security Plans</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">Choose Your Protection Level</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+                <p class="mt-6 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    Select the security package that fits your needs and budget. All plans include professional installation and 24/7 customer support.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Basic Plan -->
+                <div class="pricing-card bg-white dark:bg-darkCard rounded-2xl shadow-md overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-800">
+                        <h3 class="text-2xl font-bold">Essential</h3>
+                        <div class="flex items-end mt-4">
+                            <span class="text-4xl font-bold">$29</span>
+                            <span class="text-gray-500 dark:text-gray-400 ml-2">/month</span>
+                        </div>
+                        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+                            Perfect for apartments and small homes
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>HD Security Cameras (2)</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Smart Door Lock</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Motion Sensors</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Mobile App Access</span>
+                            </li>
+                            <li class="flex items-center text-gray-400">
+                                <i class="fas fa-times text-red-400 mr-2"></i>
+                                <span>AI Monitoring</span>
+                            </li>
+                            <li class="flex items-center text-gray-400">
+                                <i class="fas fa-times text-red-400 mr-2"></i>
+                                <span>Biometric Access</span>
+                            </li>
+                        </ul>
+                        <a href="#contact" class="block text-center bg-white hover:bg-gray-50 dark:bg-darkCard dark:hover:bg-gray-800 text-primary border border-primary mt-6 px-4 py-3 rounded-lg font-medium transition-colors">
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Advanced Plan -->
+                <div class="pricing-card bg-white dark:bg-darkCard rounded-2xl shadow-md overflow-hidden relative z-10 transform md:scale-105">
+                    <div class="absolute top-0 right-0">
+                        <div class="bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                            POPULAR
+                        </div>
+                    </div>
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-800 bg-primary/5 dark:bg-primary/10">
+                        <h3 class="text-2xl font-bold">Advanced</h3>
+                        <div class="flex items-end mt-4">
+                            <span class="text-4xl font-bold">$59</span>
+                            <span class="text-gray-500 dark:text-gray-400 ml-2">/month</span>
+                        </div>
+                        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+                            Ideal for medium to large homes
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>4K Security Cameras (4)</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Biometric Door Lock</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Advanced Motion Detection</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Mobile App with Remote Control</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Basic AI Monitoring</span>
+                            </li>
+                            <li class="flex items-center text-gray-400">
+                                <i class="fas fa-times text-red-400 mr-2"></i>
+                                <span>Environmental Monitoring</span>
+                            </li>
+                        </ul>
+                        <a href="#contact" class="block text-center bg-primary hover:bg-primaryDark text-white mt-6 px-4 py-3 rounded-lg font-medium transition-colors shadow-md">
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Premium Plan -->
+                <div class="pricing-card bg-white dark:bg-darkCard rounded-2xl shadow-md overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-800">
+                        <h3 class="text-2xl font-bold">Ultimate</h3>
+                        <div class="flex items-end mt-4">
+                            <span class="text-4xl font-bold">$99</span>
+                            <span class="text-gray-500 dark:text-gray-400 ml-2">/month</span>
+                        </div>
+                        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+                            Complete protection for luxury homes
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>4K Security Cameras (8+)</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Multi-Factor Biometric Security</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Perimeter Protection System</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Advanced Mobile Controls & Analytics</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Full AI Monitoring Suite</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Environmental & Fire Protection</span>
+                            </li>
+                        </ul>
+                        <a href="#contact" class="block text-center bg-white hover:bg-gray-50 dark:bg-darkCard dark:hover:bg-gray-800 text-primary border border-primary mt-6 px-4 py-3 rounded-lg font-medium transition-colors">
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="text-primary font-semibold tracking-wider uppercase text-sm">Happy Clients</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">What Our Customers Say</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600 dark:text-gray-400 text-sm">5.0</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic">
+                        "The AI-powered camera system spotted someone trying to break in and alerted us immediately. The response time was incredible. Best investment for our family's safety."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
+                            JD
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold">James Davidson</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Homeowner in Boston</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600 dark:text-gray-400 text-sm">5.0</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic">
+                        "The fingerprint and facial recognition access is seamless and so convenient. No more fumbling for keys while holding groceries. Absolutely worth every penny."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
+                            SM
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold">Sarah Miller</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Tech Executive</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600 dark:text-gray-400 text-sm">4.5</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 italic">
+                        "The mobile app gives me peace of mind when traveling. I can check on my home anytime, and the smart notifications only alert me for actual concerns."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
+                            RJ
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold">Robert Johnson</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Business Owner</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16">
+                    <span class="text-primary font-semibold tracking-wider uppercase text-sm">Get In Touch</span>
+                    <h2 class="text-3xl md:text-4xl font-bold mt-2">Secure Your Home Today</h2>
+                    <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+                    <p class="mt-6 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        Schedule a free consultation with our security experts to create a customized protection plan for your home.
+                    </p>
+                </div>
+                
+                <div class="bg-white dark:bg-darkCard rounded-2xl shadow-lg overflow-hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <div class="p-6 md:p-8 bg-primary text-white">
+                            <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                            
+                            <div class="space-y-6">
+                                <div class="flex items-start">
+                                    <div class="text-accent mt-1 mr-4">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium mb-1">Our Headquarters</h4>
+                                        <p class="text-white/80">
+                                            1234 Security Avenue<br>
+                                            Tech District, CA 90210
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="text-accent mt-1 mr-4">
+                                        <i class="fas fa-phone-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium mb-1">Phone Support</h4>
+                                        <p class="text-white/80">
+                                            (800) 123-4567<br>
+                                            Available 24/7
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="text-accent mt-1 mr-4">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium mb-1">Email Us</h4>
+                                        <p class="text-white/80">
+                                            info@securenex.com<br>
+                                            support@securenex.com
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-10">
+                                <h4 class="font-medium mb-4">Connect With Us</h4>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                        <i class="fab fa-facebook-f text-white"></i>
+                                    </a>
+                                    <a href="#" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                        <i class="fab fa-twitter text-white"></i>
+                                    </a>
+                                    <a href="#" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                        <i class="fab fa-instagram text-white"></i>
+                                    </a>
+                                    <a href="#" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                        <i class="fab fa-linkedin-in text-white"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-6">Send us a message</h3>
+                            
+                            <form id="contactForm" class="space-y-4">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+                                    <input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                                </div>
+                                
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                                    <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                                </div>
+                                
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                                </div>
+                                
+                                <div>
+                                    <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Message</label>
+                                    <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required></textarea>
+                                </div>
+                                
+                                <div class="pt-2">
+                                    <button type="submit" id="submitBtn" class="w-full bg-primary hover:bg-primaryDark text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md glow">
+                                        Get Secured Today
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div id="formSuccess" class="hidden mt-4 p-4 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle mr-2"></i>
+                                    <p>Thank you! Your message has been sent. We'll be in touch soon.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-8 border-b border-gray-800">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="text-primary text-3xl glow">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <span class="text-xl font-bold tracking-wider">SecureNex</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">
+                        Protecting what matters most with next-generation security technology.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#how-it-works" class="text-gray-400 hover:text-white transition-colors">How It Works</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="#testimonials" class="text-gray-400 hover:text-white transition-colors">Testimonials</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Products</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Smart Cameras</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Biometric Access</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Motion Sensors</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">AI Monitoring</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Mobile Controls</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Contact Us</h3>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-primary"></i>
+                            <span>1234 Security Avenue, Tech District, CA 90210</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-3 text-primary"></i>
+                            <span>(800) 123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-primary"></i>
+                            <span>info@securenex.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2023 SecureNex. All rights reserved. | <a href="#" class="hover:text-gray-400 transition-colors">Privacy Policy</a> | <a href="#" class="hover:text-gray-400 transition-colors">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Close mobile menu if open
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        const formSuccess = document.getElementById('formSuccess');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate form submission
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                contactForm.reset();
+                contactForm.classList.add('hidden');
+                formSuccess.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Get Secured Today';
+            }, 1500);
+        });
+        
+        // Add scroll animation for elements
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-icon, .pricing-card');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight * 0.9) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+        
+        // Initialize animations
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.feature-icon, .pricing-card').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            
+            animateOnScroll();
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furniture Repair Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A49B8',
+                        'primary-light': '#8180E7'
+                    },
+                    transitionProperty: {
+                        'height': 'height',
+                        'spacing': 'margin, padding',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .card-animation {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-animation:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .dark .card-animation:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        .star-rating {
+            color: #D1D5DB;
+        }
+        .star-filled {
+            color: #FBBF24;
+        }
+        .dark .star-rating {
+            color: #4B5563;
+        }
+        .dark .star-filled {
+            color: #F59E0B;
+        }
+        .service-tag {
+            transition: all 0.2s ease;
+        }
+        .service-tag:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+    <!-- Dark mode detection -->
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
+    <!-- Header Section -->
+    <header class="bg-white dark:bg-gray-800 shadow">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Furniture Repair Services</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">Find professional furniture restoration and repair services in your area.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <!-- Filters Section -->
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-8 shadow-sm">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                <h2 class="text-xl font-semibold mb-2 md:mb-0">Filters</h2>
+                <button id="resetFilters" class="text-primary dark:text-primary-light hover:underline transition-colors">
+                    Reset Filters
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Repair Type Filter -->
+                <div>
+                    <label for="repairType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Repair Type
+                    </label>
+                    <select id="repairType" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-light focus:border-primary dark:focus:border-primary-light">
+                        <option value="">All Types</option>
+                        <option value="wood">Wood Restoration</option>
+                        <option value="upholstery">Upholstery</option>
+                        <option value="metal">Metal Repair</option>
+                        <option value="leather">Leather Repair</option>
+                        <option value="antique">Antique Restoration</option>
+                    </select>
+                </div>
+
+                <!-- Location Filter -->
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Location
+                    </label>
+                    <select id="location" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-light focus:border-primary dark:focus:border-primary-light">
+                        <option value="">All Locations</option>
+                        <option value="downtown">Downtown</option>
+                        <option value="uptown">Uptown</option>
+                        <option value="midtown">Midtown</option>
+                        <option value="west">West Side</option>
+                        <option value="east">East Side</option>
+                    </select>
+                </div>
+
+                <!-- Budget Filter -->
+                <div>
+                    <label for="budget" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Budget Range
+                    </label>
+                    <select id="budget" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-light focus:border-primary dark:focus:border-primary-light">
+                        <option value="">Any Budget</option>
+                        <option value="budget">Budget ($)</option>
+                        <option value="moderate">Moderate ($$)</option>
+                        <option value="premium">Premium ($$$)</option>
+                    </select>
+                </div>
+
+                <!-- Rating Filter -->
+                <div>
+                    <label for="rating" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Minimum Rating
+                    </label>
+                    <select id="rating" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-light focus:border-primary dark:focus:border-primary-light">
+                        <option value="">Any Rating</option>
+                        <option value="3">3+ Stars</option>
+                        <option value="4">4+ Stars</option>
+                        <option value="5">5 Stars</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Count -->
+        <div class="mb-4 flex justify-between items-center">
+            <p id="resultsCount" class="text-gray-600 dark:text-gray-400">Showing <span id="visibleCount">8</span> of <span id="totalCount">8</span> repair services</p>
+            <div class="flex">
+                <button id="gridView" class="bg-primary text-white p-2 rounded-l-md hover:bg-primary-dark transition-colors">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button id="listView" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 p-2 rounded-r-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Service Providers Listing -->
+        <div id="serviceListings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Provider cards will be populated here -->
+        </div>
+
+        <!-- No Results Message -->
+        <div id="noResults" class="hidden text-center py-16">
+            <i class="fas fa-search text-5xl text-gray-300 dark:text-gray-600 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300">No matching repair services found</h3>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">Try adjusting your filters to see more options</p>
+            <button id="clearFilters" class="mt-4 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
+                Clear All Filters
+            </button>
+        </div>
+    </main>
+
+    <!-- Quote Request Modal -->
+    <div id="quoteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto p-6 shadow-xl">
+            <div class="flex justify-between items-start">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white" id="modalTitle">Request a Quote</h2>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            
+            <p class="mt-2 text-gray-600 dark:text-gray-300" id="modalProvider"></p>
+            
+            <form id="quoteForm" class="mt-4">
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Your Name
+                    </label>
+                    <input type="text" id="name" name="name" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-light focus:border-primary dark:focus:border-primary-light" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Email Address
+                    </label>
+                    <input type="email" id="email" name="email" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-light focus:border-primary dark:focus:border-primary-light" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Phone Number
+                    </label>
+                    <input type="tel" id="phone" name="phone" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-light focus:border-primary dark:focus:border-primary-light" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Describe Your Repair Needs
+                    </label>
+                    <textarea id="description" name="description" rows="4" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-light focus:border-primary dark:focus:border-primary-light" required></textarea>
+                </div>
+                
+                <div class="mt-6">
+                    <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                        Submit Quote Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Message -->
+    <div id="confirmationToast" class="fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 dark:bg-green-900 dark:border-green-600 text-green-700 dark:text-green-100 p-4 rounded shadow-md transform translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-green-500 dark:text-green-400"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium">
+                    Quote request sent successfully! We'll contact you soon.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for furniture repair services
+        const repairServices = [
+            {
+                id: 1,
+                name: "Classic Woodworks",
+                specialization: ["wood", "antique"],
+                experience: 25,
+                description: "Expert woodworking and restoration of antique furniture with traditional techniques.",
+                pricing: "premium", // $$$ - Premium
+                rating: 4.9,
+                reviews: 127,
+                location: "downtown",
+                contact: {
+                    phone: "(555) 123-4567",
+                    email: "info@classicwoodworks.com",
+                    address: "123 Main St, Downtown"
+                },
+                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23E0C9A6'/%3E%3Cpath d='M50 50 L150 50 L150 150 L50 150 Z' fill='%23A67C52'/%3E%3Cpath d='M70 70 L130 70 L130 130 L70 130 Z' fill='%23805B3F'/%3E%3C/svg%3E"
+            },
+            {
+                id: 2,
+                name: "Luxury Upholstery",
+                specialization: ["upholstery", "leather"],
+                experience: 18,
+                description: "Specializing in high-end upholstery and leather restoration for luxury furniture.",
+                pricing: "premium", // $$$ - Premium
+                rating: 4.7,
+                reviews: 95,
+                location: "uptown",
+                contact: {
+                    phone: "(555) 234-5678",
+                    email: "contact@luxuryupholstery.com",
+                    address: "456 Elm Ave, Uptown"
+                },
+                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23D9C7B8'/%3E%3Cpath d='M40 60 C40 60, 100 40, 160 60 L160 140 C160 140, 100 160, 40 140 Z' fill='%23B3937A'/%3E%3Cpath d='M60 80 C60 80, 100 70, 140 80 L140 120 C140 120, 100 130, 60 120 Z' fill='%238A6D52'/%3E%3C/svg%3E"
+            },
+            {
+                id: 3,
+                name: "Metal Masters",
+                specialization: ["metal"],
+                experience: 15,
+                description: "Specialized repair and restoration of metal furniture components and full metal pieces.",
+                pricing: "moderate", // $$ - Moderate
+                rating: 4.5,
+                reviews: 78,
+                location: "east",
+                contact: {
+                    phone: "(555) 345-6789",
+                    email: "service@metalmasters.com",
+                    address: "789 Steel Rd, East Side"
+                },
+                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23CCCCCC'/%3E%3Ccircle cx='100' cy='100' r='60' fill='%23A0A0A0'/%3E%3Ccircle cx='100' cy='100' r='40' fill='%23808080'/%3E%3Cpath d='M100 40 L100 160 M40 100 L160 100' stroke='%23606060' stroke-width='5'/%3E%3C/svg%3E"
+            },
+            {
+                id: 4,
+                name: "Budget Furniture Fix",
+                specialization: ["wood", "upholstery"],
+                experience: 8,
+                description: "Affordable repair services for everyday furniture with quick turnaround times.",
+                pricing: "budget", // $ - Budget
+                rating: 4.2,
+                reviews: 142,
+                location: "west",
+                contact: {
+                    phone: "(555) 456-7890",
+                    email: "help@budgetfurniturefix.com",
+                    address: "101 Value Way, West Side"
+                },
+                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23F0E6D2'/%3E%3Crect x='50' y='70' width='100' height='60' fill='%23D9BF9A'/%3E%3Crect x='60' y='80' width='80' height='40' fill='%23BF9F76'/%3E%3Cline x1='50' y1='130' x2='70' y2='150' stroke='%23A67C52' stroke-width='5'/%3E%3Cline x1='150' y1='130' x2='130' y2='150' stroke='%23A67C52' stroke-width='5'/%3E%3C/svg%3E"
+            },
+            {
+                id: 5,
+                name: "Antique Revival",
+                specialization: ["antique", "wood"],
+                experience: 30,
+                description: "Museum-quality restoration of antique and vintage furniture with historical accuracy.",
+                pricing: "premium", // $$$ - Premium
+                rating: 5.0,
+                reviews: 64,
+                location: "midtown",
+                contact: {
+                    phone: "(555) 567-8901",
+                    email: "restore@antiquerevival.com",
+                    address: "222 Heritage Ln, Midtown"
+                },
+                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23F5EFE0'/%3E%3Cpath d='M50 70 L150 70 L150 140 L50 140 Z' fill='%23D9BF9A'/%3E%3Cpath d='M50 140 L70 160 L130 160 L150 140' fill='%23A67C52'/%3E%3Cpath d='M50 70 L70 50 L130 50 L150 70' fill='%23A67C52'/%3E%3Cpath d='M90 90 L110 90 L110 120 L90 120 Z' fill='%23805B3F'/%3E%3C/svg%3E"
+            },
+            {
+                id: 6,
+                name: "Leather Luxe",
+                specialization: ["leather"],
+                experience: 22,
+                description: "Premium leather repair and restoration for couches, chairs, and other leather furniture.",
+                pricing: "premium", // $$$ - Premium
+                rating: 4.8,
+                reviews: 89,
+                location: "uptown",
+                contact: {
+                    phone: "(555) 678-9012",
+                    email: "care@leatherluxe.com",
+                    address: "333 Smooth Dr, Uptown"
+                },
+                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23B35A1F'/%3E%3Cpath d='M50 50 L150 50 L150 150 L50 150 Z' fill='%239F4C1A'/%3E%3Cpath d='M70 70 L130 70 L130 130 L70 130 Z' fill='%238C3F12'/%3E%3Cpath d='M40 40 L160 40 M40 160 L160 160' stroke='%23713812' stroke-width='5' stroke-dasharray='5,5'/%3E%3C/svg%3E"
+            },
+            {
+                id: 7,
+                name: "Quick Fix Furniture",
+                specialization: ["wood", "upholstery", "metal"],
+                experience: 10,
+                description: "Fast, reliable repairs for all furniture types with same-day service available.",
+                pricing: "moderate", // $$ - Moderate
+                rating: 4.3,
+                reviews: 211,
+                location: "downtown",
+                contact: {
+                    phone: "(555) 789-0123",
+                    email: "quick@quickfixfurniture.com",
+                    address: "444 Speed St, Downtown"
+                },
+                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23E8DCC7'/%3E%3Ccircle cx='100' cy='100' r='50' fill='%23C2B6A0'/%3E%3Cpath d='M75 75 L125 125 M75 125 L125 75' stroke='%23A69F88' stroke-width='8'/%3E%3Cpath d='M50 50 L150 50 L150 150 L50 150 Z' fill='none' stroke='%23A69F88' stroke-width='5'/%3E%3C/svg%3E"
+            },
+            {
+                id: 8,
+                name: "Family Furniture Doctors",
+                specialization: ["wood", "upholstery", "antique"],
+                experience: 35,
+                description: "Family-owned business specializing in heirloom furniture restoration and general repairs.",
+                pricing: "moderate", // $$ - Moderate
+                rating: 4.6,
+                reviews: 175,
+                location: "midtown",
+                contact: {
+                    phone: "(555) 890-1234",
+                    email: "family@furnituredoctors.com",
+                    address: "555 Tradition Ave, Midtown"
+                },
+                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23F0E6D2'/%3E%3Cpath d='M60 80 L140 80 L140 140 L60 140 Z' fill='%23D9BF9A'/%3E%3Cpath d='M70 70 L130 70 L130 80 L70 80 Z' fill='%23A67C52'/%3E%3Cpath d='M60 140 L70 160 L130 160 L140 140 Z' fill='%23A67C52'/%3E%3Cpath d='M80 100 L120 100 L120 120 L80 120 Z' fill='%23805B3F'/%3E%3C/svg%3E"
+            }
+        ];
+
+        // Function to render rating stars
+        function renderStars(rating) {
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(rating)) {
+                    starsHtml += `<i class="fas fa-star star-filled"></i>`;
+                } else if (i - 0.5 <= rating) {
+                    starsHtml += `<i class="fas fa-star-half-alt star-filled"></i>`;
+                } else {
+                    starsHtml += `<i class="far fa-star star-rating"></i>`;
+                }
+            }
+            return starsHtml;
+        }
+
+        // Function to format pricing
+        function formatPricing(pricing) {
+            switch(pricing) {
+                case 'budget':
+                    return '<span class="text-green-600 dark:text-green-400">$</span><span class="text-gray-300 dark:text-gray-600">$$</span>';
+                case 'moderate':
+                    return '<span class="text-yellow-600 dark:text-yellow-400">$$</span><span class="text-gray-300 dark:text-gray-600">$</span>';
+                case 'premium':
+                    return '<span class="text-red-600 dark:text-red-400">$$$</span>';
+                default:
+                    return '<span class="text-gray-500">Varies</span>';
+            }
+        }
+
+        // Function to render specialization tags
+        function renderSpecializationTags(specializations) {
+            const colors = {
+                'wood': 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100',
+                'metal': 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100',
+                'upholstery': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100',
+                'leather': 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100',
+                'antique': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100'
+            };
+            
+            return specializations.map(spec => {
+                const colorClass = colors[spec] || 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100';
+                return `
+                    <span class="service-tag ${colorClass} text-xs inline-block px-2 py-1 rounded-full font-medium mr-1 mb-1">
+                        ${spec.charAt(0).toUpperCase() + spec.slice(1)}
+                    </span>
+                `;
+            }).join('');
+        }
+
+        // Function to render service provider cards in grid view
+        function renderGridCards(services) {
+            return services.map(service => `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden card-animation" data-id="${service.id}">
+                    <div class="h-48 overflow-hidden">
+                        <img src="${service.imageUrl}" alt="${service.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">${service.name}</h3>
+                            <div class="text-right">
+                                ${formatPricing(service.pricing)}
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center mt-1">
+                            <div class="flex text-sm">
+                                ${renderStars(service.rating)}
+                            </div>
+                            <span class="ml-1 text-sm text-gray-600 dark:text-gray-400">(${service.reviews})</span>
+                        </div>
+                        
+                        <div class="mt-2">
+                            ${renderSpecializationTags(service.specialization)}
+                        </div>
+                        
+                        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">${service.experience} years experience</p>
+                        
+                        <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">${service.description}</p>
+                        
+                        <div class="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                            <p><i class="fas fa-map-marker-alt mr-1"></i> ${service.contact.address}</p>
+                            <p class="mt-1"><i class="fas fa-phone mr-1"></i> ${service.contact.phone}</p>
+                        </div>
+                        
+                        <button class="request-quote-btn mt-4 w-full bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                            Request a Quote
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Function to render service provider cards in list view
+        function renderListCards(services) {
+            return services.map(service => `
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4 bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden card-animation" data-id="${service.id}">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="md:w-1/4 h-48 md:h-auto overflow-hidden">
+                            <img src="${service.imageUrl}" alt="${service.name}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4 md:w-3/4">
+                            <div class="flex flex-col md:flex-row justify-between">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">${service.name}</h3>
+                                    <div class="flex items-center mt-1">
+                                        <div class="flex text-sm">
+                                            ${renderStars(service.rating)}
+                                        </div>
+                                        <span class="ml-1 text-sm text-gray-600 dark:text-gray-400">(${service.reviews})</span>
+                                        <span class="ml-3">${formatPricing(service.pricing)}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2 md:mt-0">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">${service.experience} years experience</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-2">
+                                ${renderSpecializationTags(service.specialization)}
+                            </div>
+                            
+                            <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">${service.description}</p>
+                            
+                            <div class="mt-3 flex flex-wrap text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> ${service.contact.address}</p>
+                                <p class="mr-4"><i class="fas fa-phone mr-1"></i> ${service.contact.phone}</p>
+                                <p><i class="fas fa-envelope mr-1"></i> ${service.contact.email}</p>
+                            </div>
+                            
+                            <button class="request-quote-btn mt-4 bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                Request a Quote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Function to apply filters
+        function applyFilters() {
+            const repairType = document.getElementById('repairType').value;
+            const location = document.getElementById('location').value;
+            const budget = document.getElementById('budget').value;
+            const rating = parseInt(document.getElementById('rating').value) || 0;
+            
+            const filteredServices = repairServices.filter(service => {
+                if (repairType && !service.specialization.includes(repairType)) return false;
+                if (location && service.location !== location) return false;
+                if (budget && service.pricing !== budget) return false;
+                if (rating && service.rating < rating) return false;
+                return true;
+            });
+            
+            const serviceListings = document.getElementById('serviceListings');
+            const noResults = document.getElementById('noResults');
+            
+            if (filteredServices.length === 0) {
+                serviceListings.innerHTML = '';
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                if (document.getElementById('gridView').classList.contains('bg-primary')) {
+                    serviceListings.innerHTML = renderGridCards(filteredServices);
+                } else {
+                    serviceListings.innerHTML = renderListCards(filteredServices);
+                }
+                addEventListeners();
+            }
+            
+            // Update counts
+            document.getElementById('visibleCount').textContent = filteredServices.length;
+            document.getElementById('totalCount').textContent = repairServices.length;
+        }
+
+        // Function to open the quote modal
+        function openQuoteModal(serviceId) {
+            const service = repairServices.find(s => s.id === serviceId);
+            
+            if (service) {
+                document.getElementById('modalTitle').textContent = `Request a Quote`;
+                document.getElementById('modalProvider').textContent = `Service Provider: ${service.name}`;
+                document.getElementById('quoteForm').dataset.serviceId = serviceId;
+                document.getElementById('quoteModal').classList.remove('hidden');
+            }
+        }
+
+        // Function to close the quote modal
+        function closeQuoteModal() {
+            document.getElementById('quoteModal').classList.add('hidden');
+            document.getElementById('quoteForm').reset();
+        }
+
+        // Function to show confirmation toast
+        function showConfirmationToast() {
+            const toast = document.getElementById('confirmationToast');
+            toast.classList.remove('translate-x-full');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+            }, 5000);
+        }
+
+        // Add event listeners to buttons and forms
+        function addEventListeners() {
+            // Request quote buttons
+            document.querySelectorAll('.request-quote-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const serviceId = parseInt(button.closest('[data-id]').dataset.id);
+                    openQuoteModal(serviceId);
+                });
+            });
+        }
+
+        // Initialize the page
+        function init() {
+            // Render initial service listings
+            const serviceListings = document.getElementById('serviceListings');
+            serviceListings.innerHTML = renderGridCards(repairServices);
+            addEventListeners();
+            
+            // Filter change listeners
+            document.getElementById('repairType').addEventListener('change', applyFilters);
+            document.getElementById('location').addEventListener('change', applyFilters);
+            document.getElementById('budget').addEventListener('change', applyFilters);
+            document.getElementById('rating').addEventListener('change', applyFilters);
+            
+            // Reset filters button
+            document.getElementById('resetFilters').addEventListener('click', () => {
+                document.getElementById('repairType').value = '';
+                document.getElementById('location').value = '';
+                document.getElementById('budget').value = '';
+                document.getElementById('rating').value = '';
+                applyFilters();
+            });
+            
+            // Clear filters button (shown when no results)
+            document.getElementById('clearFilters').addEventListener('click', () => {
+                document.getElementById('repairType').value = '';
+                document.getElementById('location').value = '';
+                document.getElementById('budget').value = '';
+                document.getElementById('rating').value = '';
+                applyFilters();
+            });
+            
+            // View toggle buttons
+            document.getElementById('gridView').addEventListener('click', () => {
+                document.getElementById('gridView').classList.add('bg-primary', 'text-white');
+                document.getElementById('gridView').classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                
+                document.getElementById('listView').classList.remove('bg-primary', 'text-white');
+                document.getElementById('listView').classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                
+                serviceListings.innerHTML = renderGridCards(repairServices.filter(service => {
+                    const repairType = document.getElementById('repairType').value;
+                    const location = document.getElementById('location').value;
+                    const budget = document.getElementById('budget').value;
+                    const rating = parseInt(document.getElementById('rating').value) || 0;
+                    
+                    if (repairType && !service.specialization.includes(repairType)) return false;
+                    if (location && service.location !== location) return false;
+                    if (budget && service.pricing !== budget) return false;
+                    if (rating && service.rating < rating) return false;
+                    return true;
+                }));
+                addEventListeners();
+            });
+            
+            document.getElementById('listView').addEventListener('click', () => {
+                document.getElementById('listView').classList.add('bg-primary', 'text-white');
+                document.getElementById('listView').classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                
+                document.getElementById('gridView').classList.remove('bg-primary', 'text-white');
+                document.getElementById('gridView').classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                
+                serviceListings.innerHTML = renderListCards(repairServices.filter(service => {
+                    const repairType = document.getElementById('repairType').value;
+                    const location = document.getElementById('location').value;
+                    const budget = document.getElementById('budget').value;
+                    const rating = parseInt(document.getElementById('rating').value) || 0;
+                    
+                    if (repairType && !service.specialization.includes(repairType)) return false;
+                    if (location && service.location !== location) return false;
+                    if (budget && service.pricing !== budget) return false;
+                    if (rating && service.rating < rating) return false;
+                    return true;
+                }));
+                addEventListeners();
+            });
+            
+            // Modal close button
+            document.getElementById('closeModal').addEventListener('click', closeQuoteModal);
+            
+            // Close modal when clicking outside
+            document.getElementById('quoteModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('quoteModal')) {
+                    closeQuoteModal();
+                }
+            });
+            
+            // Quote form submission
+            document.getElementById('quoteForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const serviceId = parseInt(e.target.dataset.serviceId);
+                const service = repairServices.find(s => s.id === serviceId);
+                
+                // In a real application, you would send this data to a server
+                console.log('Quote request submitted for:', service.name);
+                console.log('Name:', document.getElementById('name').value);
+                console.log('Email:', document.getElementById('email').value);
+                console.log('Phone:', document.getElementById('phone').value);
+                console.log('Description:', document.getElementById('description').value);
+                
+                closeQuoteModal();
+                showConfirmationToast();
+            });
+        }
+
+        // Initialize the application when the DOM is ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

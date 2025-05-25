@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Furniture Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#F3F4F6',
+                        dark: '#181818',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    transitionDuration: {
+                        '400': '400ms',
+                    }
+                }
+            }
+        }
+
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <style>
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .dark .card:hover {
+            box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.05), 0 10px 10px -5px rgba(255, 255, 255, 0.02);
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .furniture-image {
+            transition: transform 0.4s ease;
+        }
+        .card:hover .furniture-image {
+            transform: scale(1.05);
+        }
+        .filter-btn.active {
+            background-color: #5D5CDE;
+            color: white;
+        }
+        .dark .filter-btn.active {
+            background-color: #5D5CDE;
+            color: white;
+        }
+    </style>
+</head>
+<body class="font-sans bg-white dark:bg-dark text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <header class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-center mb-4">Modern Furniture Collection</h1>
+            <p class="text-center text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+                Discover our handcrafted furniture pieces designed for modern living. Each item combines aesthetic appeal with functional design.
+            </p>
+            
+            <div class="filters flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
+                <button class="filter-btn active px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-all duration-300" data-category="all">
+                    All Items
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-all duration-300" data-category="sofa">
+                    Sofas
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-all duration-300" data-category="chair">
+                    Chairs
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-all duration-300" data-category="table">
+                    Tables
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-all duration-300" data-category="bed">
+                    Beds
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white transition-all duration-300" data-category="storage">
+                    Storage
+                </button>
+            </div>
+            
+            <div class="sort-container flex justify-center mb-6">
+                <div class="relative inline-block w-64">
+                    <select id="sort-select" class="block appearance-none w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-base">
+                        <option value="default">Default Sorting</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name-asc">Name: A-Z</option>
+                        <option value="name-desc">Name: Z-A</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div id="loading" class="text-center py-20">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            <p class="mt-4 text-lg">Loading collection...</p>
+        </div>
+        
+        <div id="furniture-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
+            <!-- Furniture items will be dynamically inserted here -->
+        </div>
+        
+        <div id="no-results" class="text-center py-20 hidden">
+            <p class="text-xl">No furniture items match your filter.</p>
+        </div>
+    </div>
+
+    <!-- Modal for Request -->
+    <div id="request-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4 transform transition-all fade-in">
+            <h2 id="modal-title" class="text-2xl font-bold mb-4">Request Form</h2>
+            <p id="modal-item-name" class="mb-4 text-gray-600 dark:text-gray-400"></p>
+            
+            <form id="request-form" class="space-y-4">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Name</label>
+                    <input type="text" id="name" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                    <input type="email" id="email" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+                    <input type="tel" id="phone" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <div>
+                    <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Additional Information</label>
+                    <textarea id="message" rows="3" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                </div>
+                <div class="flex gap-4 justify-end pt-4">
+                    <button type="button" id="close-modal" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90">
+                        Submit Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Furniture items data
+        const furnitureItems = [
+            {
+                id: 1,
+                name: "Copenhagen Sofa",
+                category: "sofa",
+                price: 1299,
+                description: "A minimalist 3-seater sofa with clean lines and comfortable cushions. Perfect for modern living rooms.",
+                color: "#7C9EB2",
+                accentColor: "#5D678E"
+                
+            },
+            {
+                id: 2,
+                name: "Milano Dining Chair",
+                category: "chair",
+                price: 249,
+                description: "Ergonomically designed dining chair with curved backrest and solid oak legs. Comes in various upholstery options.",
+                color: "#C97C5D",
+                accentColor: "#B25D43"
+            },
+            {
+                id: 3,
+                name: "Nordic Coffee Table",
+                category: "table",
+                price: 499,
+                description: "Round coffee table with marble top and slim metal legs. A statement piece for your living area.",
+                color: "#D6CFC7",
+                accentColor: "#8E8B85"
+            },
+            {
+                id: 4,
+                name: "Vienna Armchair",
+                category: "chair",
+                price: 649,
+                description: "Lounge armchair with high back and footrest. Ideal for reading corners and relaxation spaces.",
+                color: "#5D8A90",
+                accentColor: "#496D73"
+            },
+            {
+                id: 5,
+                name: "Madrid Dining Table",
+                category: "table",
+                price: 899,
+                description: "Expandable dining table that seats 6-8 people. Features a solid wood top with sleek geometric base.",
+                color: "#997B66",
+                accentColor: "#7A6352"
+            },
+            {
+                id: 6,
+                name: "Stockholm King Bed",
+                category: "bed",
+                price: 1499,
+                description: "Platform bed with integrated nightstands and LED lighting. Modern Scandinavian design.",
+                color: "#8F8E9B",
+                accentColor: "#6D6C75"
+            },
+            {
+                id: 7,
+                name: "Berlin Bookshelf",
+                category: "storage",
+                price: 799,
+                description: "Modular bookshelf system with adjustable shelves and cabinet options. Can be wall-mounted or freestanding.",
+                color: "#A9B7C0",
+                accentColor: "#86929A"
+            },
+            {
+                id: 8,
+                name: "Paris Accent Chair",
+                category: "chair",
+                price: 549,
+                description: "Statement chair with curved shell and velvet upholstery. Available in multiple bold colors.",
+                color: "#B5A9BD",
+                accentColor: "#8E849A"
+            },
+            {
+                id: 9,
+                name: "Oslo Sideboard",
+                category: "storage",
+                price: 1099,
+                description: "Contemporary sideboard with push-open drawers and doors. Features a mix of wood and colored panels.",
+                color: "#8EA686",
+                accentColor: "#6D7F67"
+            },
+            {
+                id: 10,
+                name: "Amsterdam Corner Sofa",
+                category: "sofa",
+                price: 2199,
+                description: "Modular corner sofa with chaise lounge. Highly customizable with various fabric options.",
+                color: "#B39C83",
+                accentColor: "#8F7C68"
+            },
+            {
+                id: 11,
+                name: "Tokyo Side Table",
+                category: "table",
+                price: 329,
+                description: "Compact side table with integrated wireless charging and storage drawer. Perfect next to a sofa or bed.",
+                color: "#C0C2CE",
+                accentColor: "#9A9BA5"
+            },
+            {
+                id: 12,
+                name: "Barcelona Queen Bed",
+                category: "bed",
+                price: 1299,
+                description: "Upholstered platform bed with tufted headboard. Combines comfort with elegant design.",
+                color: "#A2889C",
+                accentColor: "#816D7B"
+            }
+        ];
+
+        // Generate a furniture image using SVG
+        function generateFurnitureImage(item) {
+            const { category, color, accentColor } = item;
+            let svgContent = '';
+            
+            switch(category) {
+                case 'sofa':
+                    svgContent = `
+                        <rect x="10" y="70" width="180" height="20" fill="${accentColor}" rx="5" />
+                        <rect x="10" y="40" width="180" height="30" fill="${color}" rx="5" />
+                        <rect x="10" y="20" width="180" height="20" fill="${accentColor}" rx="8" />
+                        <rect x="10" y="90" width="20" height="10" fill="${accentColor}" rx="2" />
+                        <rect x="170" y="90" width="20" height="10" fill="${accentColor}" rx="2" />
+                        <rect x="40" y="10" width="120" height="10" fill="${color}" rx="5" />
+                    `;
+                    break;
+                case 'chair':
+                    svgContent = `
+                        <rect x="60" y="20" width="80" height="40" fill="${color}" rx="10" />
+                        <rect x="60" y="60" width="80" height="20" fill="${accentColor}" rx="5" />
+                        <rect x="70" y="80" width="10" height="20" fill="${accentColor}" />
+                        <rect x="120" y="80" width="10" height="20" fill="${accentColor}" />
+                        <rect x="50" y="20" width="10" height="60" fill="${accentColor}" rx="5" />
+                        <rect x="140" y="20" width="10" height="60" fill="${accentColor}" rx="5" />
+                    `;
+                    break;
+                case 'table':
+                    svgContent = `
+                        <rect x="30" y="50" width="140" height="10" fill="${color}" rx="2" />
+                        <rect x="40" y="60" width="120" height="5" fill="${accentColor}" rx="2" />
+                        <rect x="60" y="65" width="10" height="35" fill="${accentColor}" />
+                        <rect x="130" y="65" width="10" height="35" fill="${accentColor}" />
+                        <circle cx="100" cy="40" r="30" fill="${color}" />
+                        <circle cx="100" cy="40" r="20" fill="${accentColor}" opacity="0.5" />
+                    `;
+                    break;
+                case 'bed':
+                    svgContent = `
+                        <rect x="20" y="70" width="160" height="30" fill="${color}" rx="5" />
+                        <rect x="25" y="65" width="150" height="5" fill="${accentColor}" />
+                        <rect x="25" y="100" width="150" height="5" fill="${accentColor}" />
+                        <rect x="20" y="20" width="160" height="40" fill="${accentColor}" rx="8" />
+                        <rect x="30" y="30" width="140" height="20" fill="${color}" rx="5" />
+                    `;
+                    break;
+                case 'storage':
+                    svgContent = `
+                        <rect x="40" y="20" width="120" height="80" fill="${color}" rx="2" />
+                        <rect x="50" y="30" width="40" height="25" fill="${accentColor}" rx="1" />
+                        <rect x="50" y="65" width="40" height="25" fill="${accentColor}" rx="1" />
+                        <rect x="110" y="30" width="40" height="60" fill="${accentColor}" rx="1" />
+                        <rect x="45" y="38" width="5" height="5" fill="#FFFFFF" rx="2.5" />
+                        <rect x="45" y="73" width="5" height="5" fill="#FFFFFF" rx="2.5" />
+                        <rect x="105" y="55" width="5" height="5" fill="#FFFFFF" rx="2.5" />
+                    `;
+                    break;
+                default:
+                    svgContent = `
+                        <rect x="40" y="40" width="120" height="50" fill="${color}" rx="5" />
+                        <rect x="60" y="30" width="80" height="10" fill="${accentColor}" rx="5" />
+                        <rect x="60" y="90" width="80" height="10" fill="${accentColor}" rx="5" />
+                    `;
+            }
+            
+            return `<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                ${svgContent}
+            </svg>`;
+        }
+
+        // DOM elements
+        const furnitureGrid = document.getElementById('furniture-grid');
+        const loadingElem = document.getElementById('loading');
+        const noResultsElem = document.getElementById('no-results');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const sortSelect = document.getElementById('sort-select');
+        const modal = document.getElementById('request-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalItemName = document.getElementById('modal-item-name');
+        const closeModalBtn = document.getElementById('close-modal');
+        const requestForm = document.getElementById('request-form');
+        
+        // Current filter and sort state
+        let currentFilter = 'all';
+        let currentSort = 'default';
+        
+        // Format price with currency
+        function formatPrice(price) {
+            return '$' + price.toLocaleString('en-US');
+        }
+        
+        // Render furniture items
+        function renderFurnitureItems() {
+            let filteredItems = furnitureItems;
+            
+            // Apply filter
+            if (currentFilter !== 'all') {
+                filteredItems = furnitureItems.filter(item => item.category === currentFilter);
+            }
+            
+            // Apply sort
+            switch(currentSort) {
+                case 'price-low':
+                    filteredItems.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredItems.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name-asc':
+                    filteredItems.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'name-desc':
+                    filteredItems.sort((a, b) => b.name.localeCompare(a.name));
+                    break;
+                default:
+                    // Default sorting by ID
+                    filteredItems.sort((a, b) => a.id - b.id);
+            }
+            
+            // Check if we have results
+            if (filteredItems.length === 0) {
+                furnitureGrid.classList.add('hidden');
+                noResultsElem.classList.remove('hidden');
+                return;
+            }
+            
+            noResultsElem.classList.add('hidden');
+            furnitureGrid.classList.remove('hidden');
+            
+            // Clear existing items
+            furnitureGrid.innerHTML = '';
+            
+            // Add items with delay for animation
+            filteredItems.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md fade-in';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                const furnitureImage = generateFurnitureImage(item);
+                
+                card.innerHTML = `
+                    <div class="h-48 bg-gray-100 dark:bg-gray-700 p-4 flex items-center justify-center overflow-hidden">
+                        <div class="furniture-image w-full h-full flex items-center justify-center">
+                            ${furnitureImage}
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">${item.name}</h3>
+                            <span class="bg-primary bg-opacity-10 text-primary px-2 py-1 rounded-full text-sm font-medium">
+                                ${formatPrice(item.price)}
+                            </span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">${item.description}</p>
+                        <div class="flex space-x-2">
+                            <button class="repair-btn flex-1 bg-white dark:bg-gray-700 border border-primary text-primary dark:text-primary px-3 py-2 rounded-md hover:bg-primary hover:text-white transition-colors duration-300" data-id="${item.id}" data-name="${item.name}" data-type="repair">
+                                Request Repair
+                            </button>
+                            <button class="demo-btn flex-1 bg-primary text-white px-3 py-2 rounded-md hover:bg-opacity-90 transition-colors duration-300" data-id="${item.id}" data-name="${item.name}" data-type="demo">
+                                Book Demo
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                furnitureGrid.appendChild(card);
+            });
+            
+            // Add event listeners to new buttons
+            document.querySelectorAll('.repair-btn, .demo-btn').forEach(btn => {
+                btn.addEventListener('click', openRequestModal);
+            });
+        }
+        
+        // Filter button click handler
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active class
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update filter and render
+                currentFilter = button.getAttribute('data-category');
+                renderFurnitureItems();
+            });
+        });
+        
+        // Sort select change handler
+        sortSelect.addEventListener('change', () => {
+            currentSort = sortSelect.value;
+            renderFurnitureItems();
+        });
+        
+        // Open request modal
+        function openRequestModal(e) {
+            const btn = e.currentTarget;
+            const itemId = btn.getAttribute('data-id');
+            const itemName = btn.getAttribute('data-name');
+            const requestType = btn.getAttribute('data-type');
+            
+            modalTitle.textContent = requestType === 'repair' ? 'Request Repair' : 'Book Demo';
+            modalItemName.textContent = `for ${itemName}`;
+            
+            // Store item info for form submission
+            requestForm.dataset.itemId = itemId;
+            requestForm.dataset.itemName = itemName;
+            requestForm.dataset.requestType = requestType;
+            
+            modal.classList.remove('hidden');
+        }
+        
+        // Close modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+        
+        // Form submission
+        requestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const message = document.getElementById('message').value;
+            
+            const itemId = requestForm.dataset.itemId;
+            const itemName = requestForm.dataset.itemName;
+            const requestType = requestForm.dataset.requestType;
+            
+            // Here you would typically send this data to a server
+            console.log('Request submitted:', {
+                name,
+                email,
+                phone,
+                message,
+                itemId,
+                itemName,
+                requestType
+            });
+            
+            // Show confirmation
+            requestForm.innerHTML = `
+                <div class="text-center py-6">
+                    <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-2">Request Submitted!</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">We'll contact you soon regarding your ${requestType} request for ${itemName}.</p>
+                    <button type="button" id="close-confirmation" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90">
+                        Close
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('close-confirmation').addEventListener('click', () => {
+                modal.classList.add('hidden');
+                
+                // Reset form after hidden
+                setTimeout(() => {
+                    requestForm.innerHTML = `
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Additional Information</label>
+                            <textarea id="message" rows="3" class="w-full px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                        </div>
+                        <div class="flex gap-4 justify-end pt-4">
+                            <button type="button" id="close-modal" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90">
+                                Submit Request
+                            </button>
+                        </div>
+                    `;
+                    
+                    // Re-add event listener to new close button
+                    document.getElementById('close-modal').addEventListener('click', () => {
+                        modal.classList.add('hidden');
+                    });
+                }, 300);
+            });
+        });
+        
+        // Simulate loading and render items
+        setTimeout(() => {
+            loadingElem.classList.add('hidden');
+            renderFurnitureItems();
+        }, 1000);
+    </script>
+</body>
+</html>

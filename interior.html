@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interior Designer Directory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#F3F4F6',
+                        darkBg: '#181818',
+                        darkSecondary: '#2D2D2D'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-in-out'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <style>
+        .portfolio-image {
+            height: 150px;
+        }
+        
+        .designer-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .designer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .consultation-button {
+            transition: transform 0.2s;
+        }
+        
+        .consultation-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .rating-stars {
+            color: #F59E0B;
+        }
+        
+        .dark .rating-stars {
+            color: #FBBF24;
+        }
+        
+        .filter-pill {
+            transition: all 0.2s;
+        }
+        
+        .filter-pill:hover:not(.active) {
+            background-color: #E5E7EB;
+        }
+        
+        .dark .filter-pill:hover:not(.active) {
+            background-color: #374151;
+        }
+        
+        .filter-pill.active {
+            background-color: #5D5CDE;
+            color: white;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .dark ::-webkit-scrollbar-track {
+            background: #2D2D2D;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #5D5CDE;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4F4FC2;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-darkBg text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
+    <!-- Header Section -->
+    <header class="bg-white dark:bg-darkBg shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center">
+                    <i class="fas fa-paint-roller text-primary text-2xl mr-2"></i>
+                    <h1 class="text-2xl font-bold">Interior Designer Directory</h1>
+                </div>
+                
+                <div class="flex items-center">
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-darkSecondary mr-2">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    
+                    <button id="filter-toggle" class="flex items-center bg-primary text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-filter mr-2"></i>
+                        <span>Filters</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filter Section -->
+            <div id="filter-panel" class="mt-4 p-4 bg-gray-50 dark:bg-darkSecondary rounded-lg shadow-inner hidden animate-fade-in">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Style Filter -->
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Design Style</label>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="filter-pill style-filter px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm" data-style="all">All</button>
+                            <button class="filter-pill style-filter px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm" data-style="modern">Modern</button>
+                            <button class="filter-pill style-filter px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm" data-style="traditional">Traditional</button>
+                            <button class="filter-pill style-filter px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm" data-style="minimalist">Minimalist</button>
+                            <button class="filter-pill style-filter px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm" data-style="industrial">Industrial</button>
+                            <button class="filter-pill style-filter px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm" data-style="scandinavian">Scandinavian</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Location Filter -->
+                    <div>
+                        <label for="location-filter" class="block text-sm font-medium mb-2">Location</label>
+                        <select id="location-filter" class="w-full text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
+                            <option value="all">All Locations</option>
+                            <option value="new-york">New York</option>
+                            <option value="los-angeles">Los Angeles</option>
+                            <option value="chicago">Chicago</option>
+                            <option value="miami">Miami</option>
+                            <option value="san-francisco">San Francisco</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Budget Filter -->
+                    <div>
+                        <label for="budget-filter" class="block text-sm font-medium mb-2">Budget Range</label>
+                        <select id="budget-filter" class="w-full text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
+                            <option value="all">All Budgets</option>
+                            <option value="budget">Budget ($)</option>
+                            <option value="mid-range">Mid-Range ($$)</option>
+                            <option value="high-end">High-End ($$$)</option>
+                            <option value="luxury">Luxury ($$$$)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Rating Filter -->
+                    <div>
+                        <label for="rating-filter" class="block text-sm font-medium mb-2">Minimum Rating</label>
+                        <select id="rating-filter" class="w-full text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
+                            <option value="0">Any Rating</option>
+                            <option value="3">3+ Stars</option>
+                            <option value="4">4+ Stars</option>
+                            <option value="4.5">4.5+ Stars</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex justify-end">
+                    <button id="reset-filters" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg mr-2 hover:bg-gray-300 dark:hover:bg-gray-600">
+                        Reset Filters
+                    </button>
+                    <button id="apply-filters" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <h2 id="results-count" class="text-xl font-semibold mb-4">Showing 9 designers</h2>
+
+        <!-- Designer Grid -->
+        <div id="designers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Designers will be populated here -->
+        </div>
+        
+        <!-- No Results Message -->
+        <div id="no-results" class="hidden text-center py-12 animate-fade-in">
+            <i class="fas fa-search text-5xl text-gray-400 mb-4"></i>
+            <h3 class="text-2xl font-semibold mb-2">No designers found</h3>
+            <p class="text-gray-500 dark:text-gray-400">Try adjusting your filters to see more results.</p>
+        </div>
+    </main>
+    
+    <!-- Designer Detail Modal -->
+    <div id="designer-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="relative bg-white dark:bg-darkBg rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto m-4 animate-slide-up">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div id="modal-content" class="p-6">
+                <!-- Modal content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data for interior designers
+        const designers = [
+            {
+                id: 1,
+                name: "Alexandra Designs",
+                expertise: ["Modern", "Minimalist"],
+                experience: 12,
+                location: "New York",
+                budget: "high-end",
+                rating: 4.8,
+                reviewCount: 76,
+                description: "Award-winning design firm specializing in modern and minimalist interior spaces for both residential and commercial projects.",
+                portfolioImages: [
+                    {
+                        color: "#C4B5FD", // Purple background
+                        icon: "fas fa-couch"
+                    },
+                    {
+                        color: "#BFDBFE", // Blue background
+                        icon: "fas fa-bed"
+                    },
+                    {
+                        color: "#FDE68A", // Yellow background
+                        icon: "fas fa-bath"
+                    }
+                ],
+                reviews: [
+                    {
+                        author: "Michael T.",
+                        rating: 5,
+                        text: "Alexandra transformed our home into a beautiful, functional space. Her attention to detail is impeccable."
+                    },
+                    {
+                        author: "Sarah L.",
+                        rating: 4.5,
+                        text: "Excellent design sense and very responsive to our needs. The project was completed on time and within budget."
+                    }
+                ],
+                contact: {
+                    email: "info@alexandradesigns.com",
+                    phone: "(212) 555-1234",
+                    website: "www.alexandradesigns.com"
+                },
+                pricing: "$$$ (Starting at $10,000)"
+            },
+            {
+                id: 2,
+                name: "Urban Interiors Co.",
+                expertise: ["Industrial", "Modern"],
+                experience: 8,
+                location: "Los Angeles",
+                budget: "mid-range",
+                rating: 4.6,
+                reviewCount: 53,
+                description: "Urban Interiors specializes in industrial and modern designs with a focus on sustainable materials and practices.",
+                portfolioImages: [
+                    {
+                        color: "#A7F3D0", // Green background
+                        icon: "fas fa-chair"
+                    },
+                    {
+                        color: "#FCA5A5", // Red background
+                        icon: "fas fa-toilet"
+                    },
+                    {
+                        color: "#93C5FD", // Blue background
+                        icon: "fas fa-sink"
+                    }
+                ],
+                reviews: [
+                    {
+                        author: "David K.",
+                        rating: 5,
+                        text: "Urban Interiors created an amazing loft space for us. Their industrial design aesthetic is perfect."
+                    },
+                    {
+                        author: "Jennifer P.",
+                        rating: 4,
+                        text: "Good communication throughout the project and creative solutions for our space constraints."
+                    }
+                ],
+                contact: {
+                    email: "hello@urbaninteriors.co",
+                    phone: "(310) 555-5678",
+                    website: "www.urbaninteriors.co"
+                },
+                pricing: "$$ (Starting at $5,000)"
+            },
+            {
+                id: 3,
+                name: "Classic Home Solutions",
+                expertise: ["Traditional", "Transitional"],
+                experience: 15,
+                location: "Chicago",
+                budget: "luxury",
+                rating: 4.9,
+                reviewCount: 91,
+                description: "With over 15 years of experience, we create timeless, elegant interiors with a focus on traditional and transitional styles.",
+                portfolioImages: [
+                    {
+                        color: "#FDE68A", // Yellow background
+                        icon: "fas fa-door-open"
+                    },
+                    {
+                        color: "#DDD6FE", // Purple background
+                        icon: "fas fa-lamp"
+                    },
+                    {
+                        color: "#BAE6FD", // Light blue background
+                        icon: "fas fa-couch"
+                    }
+                ],
+                reviews: [
+                    {
+                        author: "Richard M.",
+                        rating: 5,
+                        text: "Their attention to detail and knowledge of traditional design elements is outstanding. Highly recommend!"
+                    },
+                    {
+                        author: "Elizabeth W.",
+                        rating: 5,
+                        text: "Classic Home Solutions transformed our historic home with respect for its heritage. The results are stunning."
+                    }
+                ],
+                contact: {
+                    email: "contact@classichomesolutions.com",
+                    phone: "(312) 555-9012",
+                    website: "www.classichomesolutions.com"
+                },
+                pricing: "$$$$ (Starting at $25,000)"
+            },
+            {
+                id: 4,
+                name: "Coastal Designs",
+                expertise: ["Coastal", "Traditional"],
+                experience: 10,
+                location: "Miami",
+                budget: "high-end",
+                rating: 4.7,
+                reviewCount: 64,
+                description: "Specializing in bright, airy coastal interiors that bring the beach home. Perfect for vacation properties and seaside residences.",
+                portfolioImages: [
+                    {
+                        color: "#BAE6FD", // Light blue background
+                        icon: "fas fa-water"
+                    },
+                    {
+                        color: "#FDE68A", // Yellow background
+                        icon: "fas fa-chair"
+                    },
+                    {
+                        color: "#A7F3D0", // Green background
+                        icon: "fas fa-couch"
+                    }
+                ],
+                reviews: [
+                    {
+                        author: "Thomas H.",
+                        rating: 4.5,
+                        text: "They captured the perfect coastal vibe without being cliché. Our beach house feels both sophisticated and relaxing."
+                    },
+                    {
+                        author: "Amanda R.",
+                        rating: 5,
+                        text: "Incredible vision and execution. The team was professional and the results exceeded our expectations."
+                    }
+                ],
+                contact: {
+                    email: "hello@coastaldesigns.com",
+                    phone: "(305) 555-3456",
+                    website: "www.coastaldesigns.com"
+                },
+                pricing: "$$$ (Starting at $15,000)"
+            },
+            {
+                id: 5,
+                name: "Minimalist Living",
+                expertise: ["Minimalist", "Scandinavian"],
+                experience: 7,
+                location: "San Francisco",
+                budget: "mid-range",
+                rating: 4.5,
+                reviewCount: 48,
+                description: "Creating clean, functional spaces with a focus on minimalist and Scandinavian design principles. Less is more.",
+                portfolioImages: [
+                    {
+                        color: "#F5F5F5", // Light gray background
+                        icon: "fas fa-square"
+                    },
+                    {
+                        color: "#FECACA", // Light red background
+                        icon: "fas fa-chair"
+                    },
+                    {
+                        color: "#D1D5DB", // Gray background
+                        icon: "fas fa-table"
+                    }
+                ],
+                reviews: [
+                    {
+                        author: "Alex P.",
+                        rating: 4,
+                        text: "Their approach to minimalist design is thoughtful and practical. Our apartment feels so much more spacious now."
+                    },
+                    {
+                        author: "Michelle K.",
+                        rating: 5,
+                        text: "Excellent at creating peaceful, uncluttered spaces. The design has greatly improved our quality of life."
+                    }
+                ],
+                contact: {
+                    email: "hello@minimalistliving.com",
+                    phone: "(415) 555-7890",
+                    website: "www.minimalistliving.com"
+                },
+                pricing: "$$ (Starting at $7,500)"
+            },
+            {
+                id: 6,
+                name: "Fusion Design Studio",
+                expertise: ["Eclectic", "Modern"],
+                experience: 9,
+                location: "Chicago",
+                budget: "high-end",
+                rating: 4.4,
+                reviewCount: 52,
+                description: "Specializing in eclectic interiors that blend different styles, periods, and textures to create unique, personalized spaces.",
+                portfolioImages: [
+                    {
+                        color: "#FDE68A", // Yellow background
+                        icon: "fas fa-palette"
+                    },
+                    {
+                        color: "#A7F3D0", // Green background
+                        icon: "fas fa-couch"
+                    },
+                    {
+                        color: "#DDD6FE", // Purple background
+                        icon: "fas fa-chair"
+                    }
+                ],
+                reviews: [
+                    {
+                        author: "Jessica L.",
+                        rating: 4.5,
+                        text: "Their ability to mix styles while maintaining harmony is incredible. Our home feels unique and perfectly suited to our personality."
+                    },
+                    {
+                        author: "Ryan T.",
+                        rating: 4,
+                        text: "Creative solutions and a keen eye for unexpected combinations. Great experience overall."
+                    }
+                ],
+                contact: {
+                    email: "info@fusiondesignstudio.com",
+                    phone: "(312) 555-2345",
+                    website: "www.fusiondesignstudio.com"
+                },
+                pricing: "$$$ (Starting at $12,000)"
+            },
+            {
+                id: 7,
+                name: "Budget Interiors",
+                expertise: ["Contemporary", "Industrial"],
+                experience: 5,
+                location: "Los Angeles",
+                budget: "budget",
+                rating: 4.2,
+                reviewCount: 38,
+                description: "Making great design accessible. We specialize in creating stylish spaces on a budget without compromising on quality.",
+                portfolioImages: [
+                    {
+                        color: "#BFDBFE", // Blue background
+                        icon: "fas fa-home"
+                    },
+                    {
+                        color: "#FCA5A5", // Red background
+                        icon: "fas fa-chair"
+                    },
+                    {
+                        color: "#D1D5DB", // Gray background
+                        icon: "fas fa-lightbulb"
+                    }
+                ],
+                reviews: [
+                    {
+                        author: "Maria S.",
+                        rating: 4,
+                        text: "They delivered a beautiful design within our modest budget. Very creative with cost-effective solutions."
+                    },
+                    {
+                        author: "Daniel F.",
+                        rating: 4.5,
+                        text: "Excellent value for money. They prove that good design doesn't have to break the bank."
+                    }
+                ],
+                contact: {
+                    email: "hello@budgetinteriors.com",
+                    phone: "(310) 555-8901",
+                    website: "www.budgetinteriors.com"
+                },
+                pricing: "$ (Starting at $2,500)"
+            },
+            {
+                id: 8,
+                name: "Nordic House Designs",
+                expertise: ["Scandinavian", "Minimalist"],
+                experience: 11,
+                location: "New York",
+                budget: "mid-range",
+                rating: 4.7,
+                reviewCount: 67,
+                description: "Bringing the simplicity and functionality of Scandinavian design to your home. Light colors, natural materials, and clean lines.",
+                portfolioImages: [
+                    {
+                        color: "#F5F5F5", // Light gray background
+                        icon: "fas fa-snowflake"
+                    },
+                    {
+                        color: "#BFDBFE", // Blue background
+                        icon: "fas fa-chair"
+                    },
+                    {
+                        color: "#E5E7EB", // Gray background
+                        icon: "fas fa-bed"
+                    }
+                ],
+                reviews: [
+                    {
+                        author: "Lisa N.",
+                        rating: 5,
+                        text: "They perfectly captured the Scandinavian aesthetic we were looking for. Clean, bright, and incredibly functional."
+                    },
+                    {
+                        author: "Mark D.",
+                        rating: 4.5,
+                        text: "Great attention to detail and creative use of space. Our small apartment feels so much bigger now."
+                    }
+                ],
+                contact: {
+                    email: "contact@nordichousedesigns.com",
+                    phone: "(212) 555-6789",
+                    website: "www.nordichousedesigns.com"
+                },
+                pricing: "$$ (Starting at $8,000)"
+            },
+            {
+                id: 9,
+                name: "Luxe Interiors",
+                expertise: ["Luxury", "Traditional"],
+                experience: 20,
+                location: "Miami",
+                budget: "luxury",
+                rating: 4.9,
+                reviewCount: 85,
+                description: "Creating opulent, sophisticated interiors for discerning clients. Specializing in luxury residential and hospitality design.",
+                portfolioImages: [
+                    {
+                        color: "#FDE68A", // Yellow background
+                        icon: "fas fa-crown"
+                    },
+                    {
+                        color: "#C4B5FD", // Purple background
+                        icon: "fas fa-couch"
+                    },
+                    {
+                        color: "#FCA5A5", // Red background
+                        icon: "fas fa-gem"
+                    }
+                ],
+                reviews: [
+                    {
+                        author: "Jonathan R.",
+                        rating: 5,
+                        text: "Unparalleled luxury and attention to detail. Luxe Interiors transformed our home into a showcase property."
+                    },
+                    {
+                        author: "Victoria M.",
+                        rating: 5,
+                        text: "Worth every penny. Their understanding of luxury and refinement is exceptional."
+                    }
+                ],
+                contact: {
+                    email: "concierge@luxeinteriors.com",
+                    phone: "(305) 555-1234",
+                    website: "www.luxeinteriors.com"
+                },
+                pricing: "$$$$ (Starting at $50,000)"
+            }
+        ];
+
+        // DOM Elements
+        const designersGrid = document.getElementById('designers-grid');
+        const resultsCount = document.getElementById('results-count');
+        const noResults = document.getElementById('no-results');
+        const filterToggle = document.getElementById('filter-toggle');
+        const filterPanel = document.getElementById('filter-panel');
+        const themeToggle = document.getElementById('theme-toggle');
+        const styleFilters = document.querySelectorAll('.style-filter');
+        const locationFilter = document.getElementById('location-filter');
+        const budgetFilter = document.getElementById('budget-filter');
+        const ratingFilter = document.getElementById('rating-filter');
+        const applyFiltersBtn = document.getElementById('apply-filters');
+        const resetFiltersBtn = document.getElementById('reset-filters');
+        const designerModal = document.getElementById('designer-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+
+        // Filter state
+        let activeFilters = {
+            style: 'all',
+            location: 'all',
+            budget: 'all',
+            rating: 0
+        };
+
+        // Initialize UI
+        function init() {
+            renderDesigners(designers);
+            setupEventListeners();
+            
+            // Set the first style filter as active by default
+            styleFilters[0].classList.add('active');
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Theme Toggle
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+            });
+            
+            // Filter Toggle
+            filterToggle.addEventListener('click', () => {
+                filterPanel.classList.toggle('hidden');
+            });
+            
+            // Style Filters
+            styleFilters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                    styleFilters.forEach(f => f.classList.remove('active'));
+                    filter.classList.add('active');
+                    activeFilters.style = filter.dataset.style;
+                });
+            });
+            
+            // Apply Filters
+            applyFiltersBtn.addEventListener('click', () => {
+                activeFilters.location = locationFilter.value;
+                activeFilters.budget = budgetFilter.value;
+                activeFilters.rating = parseFloat(ratingFilter.value);
+                
+                filterDesigners();
+                filterPanel.classList.add('hidden');
+            });
+            
+            // Reset Filters
+            resetFiltersBtn.addEventListener('click', () => {
+                // Reset style filters
+                styleFilters.forEach(f => f.classList.remove('active'));
+                styleFilters[0].classList.add('active');
+                
+                // Reset select filters
+                locationFilter.value = 'all';
+                budgetFilter.value = 'all';
+                ratingFilter.value = '0';
+                
+                // Reset filter state
+                activeFilters = {
+                    style: 'all',
+                    location: 'all',
+                    budget: 'all',
+                    rating: 0
+                };
+                
+                filterDesigners();
+            });
+            
+            // Modal Close
+            closeModal.addEventListener('click', () => {
+                designerModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Close modal when clicking outside
+            designerModal.addEventListener('click', (e) => {
+                if (e.target === designerModal) {
+                    designerModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Render the designers grid
+        function renderDesigners(designersToRender) {
+            designersGrid.innerHTML = '';
+            
+            designersToRender.forEach(designer => {
+                const designerCard = document.createElement('div');
+                designerCard.className = 'designer-card bg-white dark:bg-darkSecondary rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300';
+                
+                // Get the first two expertise areas for the badges
+                const expertiseBadges = designer.expertise.slice(0, 2).map(exp => 
+                    `<span class="inline-block bg-primary bg-opacity-10 text-primary px-2 py-1 text-xs rounded-full">${exp}</span>`
+                ).join(' ');
+                
+                // Generate stars based on rating
+                const stars = generateStars(designer.rating);
+                
+                // Get portfolio preview
+                const portfolioPreview = designer.portfolioImages.map((image, index) => `
+                    <div class="portfolio-image flex items-center justify-center rounded-lg overflow-hidden" 
+                         style="background-color: ${image.color};">
+                        <i class="${image.icon} text-white text-4xl"></i>
+                    </div>
+                `).join('');
+                
+                // Get budget indicator
+                let budgetDisplay = '';
+                if (designer.budget === 'budget') budgetDisplay = '<span class="font-semibold">$</span><span class="text-gray-400">$$$</span>';
+                else if (designer.budget === 'mid-range') budgetDisplay = '<span class="font-semibold">$$</span><span class="text-gray-400">$$</span>';
+                else if (designer.budget === 'high-end') budgetDisplay = '<span class="font-semibold">$$$</span><span class="text-gray-400">$</span>';
+                else if (designer.budget === 'luxury') budgetDisplay = '<span class="font-semibold">$$$$</span>';
+                
+                designerCard.innerHTML = `
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="text-xl font-bold">${designer.name}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">${designer.experience} years experience · ${designer.location}</p>
+                            </div>
+                            <div>${budgetDisplay}</div>
+                        </div>
+                        
+                        <div class="mb-3 space-x-1">
+                            ${expertiseBadges}
+                        </div>
+                        
+                        <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm line-clamp-2">${designer.description}</p>
+                        
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            ${portfolioPreview}
+                        </div>
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="rating-stars mr-1">${stars}</div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">(${designer.reviewCount})</span>
+                            </div>
+                            
+                            <button class="view-details text-primary hover:text-opacity-80 text-sm font-medium"
+                                    data-id="${designer.id}">
+                                View Details
+                            </button>
+                        </div>
+                        
+                        <button class="consultation-button w-full bg-primary text-white py-2 rounded-lg font-medium hover:bg-opacity-90 transition-all"
+                                data-id="${designer.id}">
+                            Request Consultation
+                        </button>
+                    </div>
+                `;
+                
+                // Add click event to the view details button
+                const viewDetailsBtn = designerCard.querySelector('.view-details');
+                viewDetailsBtn.addEventListener('click', () => showDesignerModal(designer.id));
+                
+                // Add click event to the consultation button
+                const consultationBtn = designerCard.querySelector('.consultation-button');
+                consultationBtn.addEventListener('click', () => showDesignerModal(designer.id, true));
+                
+                designersGrid.appendChild(designerCard);
+            });
+            
+            // Update results count
+            resultsCount.textContent = `Showing ${designersToRender.length} designer${designersToRender.length !== 1 ? 's' : ''}`;
+            
+            // Show/hide no results message
+            if (designersToRender.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+
+        // Filter designers based on active filters
+        function filterDesigners() {
+            const filtered = designers.filter(designer => {
+                // Filter by style
+                if (activeFilters.style !== 'all' && !designer.expertise.includes(activeFilters.style.charAt(0).toUpperCase() + activeFilters.style.slice(1))) {
+                    return false;
+                }
+                
+                // Filter by location
+                if (activeFilters.location !== 'all') {
+                    const locationMapping = {
+                        'new-york': 'New York',
+                        'los-angeles': 'Los Angeles',
+                        'chicago': 'Chicago',
+                        'miami': 'Miami',
+                        'san-francisco': 'San Francisco'
+                    };
+                    
+                    if (designer.location !== locationMapping[activeFilters.location]) {
+                        return false;
+                    }
+                }
+                
+                // Filter by budget
+                if (activeFilters.budget !== 'all' && designer.budget !== activeFilters.budget) {
+                    return false;
+                }
+                
+                // Filter by rating
+                if (designer.rating < activeFilters.rating) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            renderDesigners(filtered);
+        }
+
+        // Generate star rating display
+        function generateStars(rating) {
+            let starsHtml = '';
+            
+            // Full stars
+            for (let i = 1; i <= Math.floor(rating); i++) {
+                starsHtml += '<i class="fas fa-star"></i>';
+            }
+            
+            // Half star
+            if (rating % 1 >= 0.5) {
+                starsHtml += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            // Empty stars
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 1; i <= emptyStars; i++) {
+                starsHtml += '<i class="far fa-star"></i>';
+            }
+            
+            return starsHtml;
+        }
+
+        // Show designer modal
+        function showDesignerModal(designerId, scrollToForm = false) {
+            const designer = designers.find(d => d.id === designerId);
+            if (!designer) return;
+            
+            // Generate expertise badges
+            const expertiseBadges = designer.expertise.map(exp => 
+                `<span class="inline-block bg-primary bg-opacity-10 text-primary px-2 py-1 text-sm rounded-full mr-2 mb-2">${exp}</span>`
+            ).join('');
+            
+            // Generate stars
+            const stars = generateStars(designer.rating);
+            
+            // Generate portfolio images
+            const portfolioImages = designer.portfolioImages.map((image, index) => `
+                <div class="portfolio-image h-40 flex items-center justify-center rounded-lg overflow-hidden" 
+                     style="background-color: ${image.color};">
+                    <i class="${image.icon} text-white text-5xl"></i>
+                </div>
+            `).join('');
+            
+            // Generate reviews
+            const reviews = designer.reviews.map(review => {
+                const reviewStars = generateStars(review.rating);
+                
+                return `
+                    <div class="mb-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="font-medium">${review.author}</div>
+                            <div class="rating-stars text-sm">${reviewStars}</div>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">${review.text}</p>
+                    </div>
+                `;
+            }).join('');
+            
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Left Column - Main Info -->
+                    <div class="md:col-span-2">
+                        <h2 class="text-2xl font-bold mb-2">${designer.name}</h2>
+                        <p class="text-gray-500 dark:text-gray-400 mb-4">${designer.experience} years experience · ${designer.location}</p>
+                        
+                        <div class="flex flex-wrap mb-4">
+                            ${expertiseBadges}
+                        </div>
+                        
+                        <div class="flex items-center mb-4">
+                            <div class="rating-stars mr-2">${stars}</div>
+                            <span class="text-gray-500 dark:text-gray-400">(${designer.reviewCount} reviews)</span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold mb-2">About</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">${designer.description}</p>
+                        
+                        <h3 class="text-lg font-semibold mb-3">Portfolio</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                            ${portfolioImages}
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold mb-3">Client Reviews</h3>
+                        <div class="space-y-3 mb-6">
+                            ${reviews}
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column - Contact & Pricing -->
+                    <div>
+                        <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg mb-6">
+                            <h3 class="text-lg font-semibold mb-3">Pricing</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">${designer.pricing}</p>
+                            
+                            <h3 class="text-lg font-semibold mb-3">Contact Information</h3>
+                            <div class="space-y-2 mb-4">
+                                <p class="flex items-center">
+                                    <i class="fas fa-envelope text-primary mr-2"></i>
+                                    <a href="mailto:${designer.contact.email}" class="text-primary hover:underline">${designer.contact.email}</a>
+                                </p>
+                                <p class="flex items-center">
+                                    <i class="fas fa-phone text-primary mr-2"></i>
+                                    <a href="tel:${designer.contact.phone}" class="text-primary hover:underline">${designer.contact.phone}</a>
+                                </p>
+                                <p class="flex items-center">
+                                    <i class="fas fa-globe text-primary mr-2"></i>
+                                    <a href="https://${designer.contact.website}" target="_blank" class="text-primary hover:underline">${designer.contact.website}</a>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div id="consultation-form" class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Request a Consultation</h3>
+                            <form>
+                                <div class="mb-4">
+                                    <label for="name" class="block text-sm font-medium mb-1">Full Name</label>
+                                    <input type="text" id="name" class="w-full text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" required>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="email" class="block text-sm font-medium mb-1">Email Address</label>
+                                    <input type="email" id="email" class="w-full text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" required>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="phone" class="block text-sm font-medium mb-1">Phone Number</label>
+                                    <input type="tel" id="phone" class="w-full text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="message" class="block text-sm font-medium mb-1">Project Details</label>
+                                    <textarea id="message" rows="4" class="w-full text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" required></textarea>
+                                </div>
+                                
+                                <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-lg font-medium hover:bg-opacity-90 transition-all">
+                                    Submit Request
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add form submission handler
+            const form = modalContent.querySelector('form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Get form values
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const message = document.getElementById('message').value;
+                
+                // Show success message
+                form.innerHTML = `
+                    <div class="text-center py-6">
+                        <i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">Request Submitted!</h4>
+                        <p class="mb-4">Thank you for your interest. ${designer.name} will contact you shortly to discuss your project.</p>
+                        <button id="close-success" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90">
+                            Close
+                        </button>
+                    </div>
+                `;
+                
+                // Add close button handler
+                document.getElementById('close-success').addEventListener('click', () => {
+                    designerModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                });
+            });
+            
+            // Show modal
+            designerModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Scroll to consultation form if requested
+            if (scrollToForm) {
+                setTimeout(() => {
+                    document.getElementById('consultation-form').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            }
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>

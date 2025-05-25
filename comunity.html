@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friendly Community House</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-light': '#7a79e3',
+                        'primary-dark': '#4a49b1',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .hero-pattern {
+            background-color: #5D5CDE;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.15) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+        
+        .eco-gradient {
+            background: linear-gradient(135deg, #4a49b1 0%, #88d498 100%);
+        }
+        
+        /* To ensure smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Dark mode adjustments */
+        .dark .card {
+            background-color: #2d2d2d;
+            border-color: #3a3a3a;
+        }
+        
+        .dark .form-input {
+            background-color: #2d2d2d;
+            border-color: #3a3a3a;
+            color: #e0e0e0;
+        }
+        
+        .dark .calendar-day:hover {
+            background-color: #3a3a3a;
+        }
+        
+        /* Animation classes */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Calendar styles */
+        .calendar-day {
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-day:hover {
+            background-color: #f3f4f6;
+            transform: scale(1.05);
+        }
+        
+        .calendar-day.has-event {
+            background-color: rgba(93, 92, 222, 0.1);
+            border-bottom: 2px solid #5D5CDE;
+        }
+        
+        /* Forum styles */
+        .forum-post {
+            transition: transform 0.2s ease;
+        }
+        
+        .forum-post:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Sustainability tracker styles */
+        .progress-ring {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
+    <header class="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-primary">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                </svg>
+                <span class="text-xl font-bold text-primary">Friendly Community House</span>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#home" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Home</a>
+                <a href="#forum" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Forum</a>
+                <a href="#events" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Events</a>
+                <a href="#sustainability" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Sustainability</a>
+                <a href="#education" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Education</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden dark:block">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 block dark:hidden">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                    </svg>
+                </button>
+                <button id="mobileMenuButton" class="md:hidden p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="md:hidden hidden bg-white dark:bg-gray-800 shadow-lg pb-4">
+            <div class="container mx-auto px-4 flex flex-col space-y-3 pt-2">
+                <a href="#home" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Home</a>
+                <a href="#forum" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Forum</a>
+                <a href="#events" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Events</a>
+                <a href="#sustainability" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Sustainability</a>
+                <a href="#education" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Education</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="min-h-[90vh] flex flex-col justify-center relative overflow-hidden">
+            <div class="hero-pattern absolute inset-0 opacity-20"></div>
+            <div class="container mx-auto px-4 py-20 relative z-10">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 animate-fade-in">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">Live Together, <span class="text-primary">Thrive Together</span></h1>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">Join our vibrant community of diverse neighbors committed to sustainable living and meaningful connections.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button class="px-6 py-3 bg-primary hover:bg-primary-dark text-white font-semibold rounded-full transition-colors shadow-md hover:shadow-lg">Join Our Community</button>
+                            <button class="px-6 py-3 border-2 border-primary text-primary hover:bg-primary/10 font-semibold rounded-full transition-colors">Schedule a Visit</button>
+                        </div>
+                    </div>
+                    <div id="heroCanvas" class="md:w-1/2 h-[400px] mt-12 md:mt-0 animate-fade-in"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Features Section -->
+        <section id="features" class="py-20 bg-gray-50 dark:bg-gray-800">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-16 text-gray-900 dark:text-white">Our Community Features</h2>
+                
+                <!-- Community Forum Section -->
+                <div id="forum" class="mb-20 animate-on-scroll">
+                    <h3 class="text-2xl font-bold mb-8 text-gray-800 dark:text-white">Community Forum</h3>
+                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
+                        <div class="mb-6">
+                            <div class="flex items-center mb-4">
+                                <input type="text" id="forumSearch" placeholder="Search discussions..." class="form-input w-full px-4 py-2 rounded-full border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary text-base">
+                                <button id="newPostBtn" class="ml-4 px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-full transition-colors text-sm">New Post</button>
+                            </div>
+                            <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+                                <button class="px-3 py-1 bg-primary text-white rounded-full text-sm whitespace-nowrap">All Topics</button>
+                                <button class="px-3 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full text-sm whitespace-nowrap transition-colors">Sustainability</button>
+                                <button class="px-3 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full text-sm whitespace-nowrap transition-colors">Events</button>
+                                <button class="px-3 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full text-sm whitespace-nowrap transition-colors">Resources</button>
+                                <button class="px-3 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full text-sm whitespace-nowrap transition-colors">Announcements</button>
+                                <button class="px-3 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full text-sm whitespace-nowrap transition-colors">Q&A</button>
+                            </div>
+                        </div>
+                        
+                        <div id="forumPosts" class="space-y-4">
+                            <!-- Forum posts will be dynamically generated here -->
+                        </div>
+                        
+                        <div class="mt-6 text-center">
+                            <button class="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Load More Posts</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Event Calendar Section -->
+                <div id="events" class="mb-20 animate-on-scroll">
+                    <h3 class="text-2xl font-bold mb-8 text-gray-800 dark:text-white">Event Calendar</h3>
+                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-2/3">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h4 id="currentMonth" class="text-xl font-semibold">May 2023</h4>
+                                    <div>
+                                        <button id="prevMonth" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                            </svg>
+                                        </button>
+                                        <button id="nextMonth" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-7 gap-2 mb-2">
+                                    <div class="text-center font-medium text-gray-500 dark:text-gray-400">Sun</div>
+                                    <div class="text-center font-medium text-gray-500 dark:text-gray-400">Mon</div>
+                                    <div class="text-center font-medium text-gray-500 dark:text-gray-400">Tue</div>
+                                    <div class="text-center font-medium text-gray-500 dark:text-gray-400">Wed</div>
+                                    <div class="text-center font-medium text-gray-500 dark:text-gray-400">Thu</div>
+                                    <div class="text-center font-medium text-gray-500 dark:text-gray-400">Fri</div>
+                                    <div class="text-center font-medium text-gray-500 dark:text-gray-400">Sat</div>
+                                </div>
+                                <div id="calendarDays" class="grid grid-cols-7 gap-2">
+                                    <!-- Calendar days will be dynamically generated here -->
+                                </div>
+                            </div>
+                            <div class="md:w-1/3">
+                                <h4 class="text-lg font-semibold mb-4">Upcoming Events</h4>
+                                <div id="upcomingEvents" class="space-y-4">
+                                    <!-- Upcoming events will be dynamically generated here -->
+                                </div>
+                                <div class="mt-6">
+                                    <button class="w-full px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-md transition-colors">Add New Event</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sustainability Tracker Section -->
+                <div id="sustainability" class="animate-on-scroll">
+                    <h3 class="text-2xl font-bold mb-8 text-gray-800 dark:text-white">Sustainability Tracker</h3>
+                    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/2">
+                                <h4 class="text-lg font-semibold mb-4">Community Impact</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                        <div class="flex justify-center">
+                                            <svg width="120" height="120" viewBox="0 0 120 120">
+                                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" stroke-width="12" />
+                                                <circle class="progress-ring" cx="60" cy="60" r="54" fill="none" stroke="#5D5CDE" stroke-width="12" stroke-dasharray="339.292" stroke-dashoffset="85" />
+                                                <text x="60" y="60" font-family="Arial" font-size="24" fill="currentColor" dominant-baseline="middle" text-anchor="middle">75%</text>
+                                                <text x="60" y="80" font-family="Arial" font-size="12" fill="currentColor" dominant-baseline="middle" text-anchor="middle">Energy Saved</text>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                        <div class="flex justify-center">
+                                            <svg width="120" height="120" viewBox="0 0 120 120">
+                                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" stroke-width="12" />
+                                                <circle class="progress-ring" cx="60" cy="60" r="54" fill="none" stroke="#5D5CDE" stroke-width="12" stroke-dasharray="339.292" stroke-dashoffset="135.7168" />
+                                                <text x="60" y="60" font-family="Arial" font-size="24" fill="currentColor" dominant-baseline="middle" text-anchor="middle">60%</text>
+                                                <text x="60" y="80" font-family="Arial" font-size="12" fill="currentColor" dominant-baseline="middle" text-anchor="middle">Water Saved</text>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                        <div class="flex justify-center">
+                                            <svg width="120" height="120" viewBox="0 0 120 120">
+                                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" stroke-width="12" />
+                                                <circle class="progress-ring" cx="60" cy="60" r="54" fill="none" stroke="#5D5CDE" stroke-width="12" stroke-dasharray="339.292" stroke-dashoffset="101.7876" />
+                                                <text x="60" y="60" font-family="Arial" font-size="24" fill="currentColor" dominant-baseline="middle" text-anchor="middle">70%</text>
+                                                <text x="60" y="80" font-family="Arial" font-size="12" fill="currentColor" dominant-baseline="middle" text-anchor="middle">Waste Reduced</text>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                        <div class="flex justify-center">
+                                            <svg width="120" height="120" viewBox="0 0 120 120">
+                                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" stroke-width="12" />
+                                                <circle class="progress-ring" cx="60" cy="60" r="54" fill="none" stroke="#5D5CDE" stroke-width="12" stroke-dasharray="339.292" stroke-dashoffset="50.8938" />
+                                                <text x="60" y="60" font-family="Arial" font-size="24" fill="currentColor" dominant-baseline="middle" text-anchor="middle">85%</text>
+                                                <text x="60" y="80" font-family="Arial" font-size="12" fill="currentColor" dominant-baseline="middle" text-anchor="middle">Local Sourcing</text>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2">
+                                <h4 class="text-lg font-semibold mb-4">Monthly Progress</h4>
+                                <div>
+                                    <canvas id="sustainabilityChart" width="400" height="300"></canvas>
+                                </div>
+                                <div class="mt-4">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Our community has saved <span class="font-semibold text-primary">23.5 tons</span> of CO2 emissions this year, equivalent to planting <span class="font-semibold text-primary">1,175 trees</span>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <h4 class="text-lg font-semibold mb-2">Upcoming Sustainability Initiatives</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Community garden expansion (Est. completion: June 15)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Rainwater harvesting system installation (Est. completion: July 20)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Solar panel collective purchase program (Sign up by: August 10)</span>
+                                </li>
+                            </ul>
+                            <button class="mt-4 px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-md transition-colors">Join an Initiative</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Content Section -->
+        <section id="education" class="py-20">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-16 text-gray-900 dark:text-white">Educational Resources</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="animate-on-scroll">
+                        <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
+                            <div class="h-48 eco-gradient flex items-center justify-center p-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-24 h-24 text-white">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 01-1.161.886l-.143.048a1.107 1.107 0 00-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 01-1.652.928l-.679-.906a1.125 1.125 0 00-1.906.172L4.5 15.75l-.612.153M12.75 3.031a9 9 0 00-8.862 12.872M12.75 3.031a9 9 0 016.69 14.036m0 0l-.177-.529A2.25 2.25 0 0017.128 15H16.5l-.324-.324a1.453 1.453 0 00-2.328.377l-.036.073a1.586 1.586 0 01-.982.816l-.99.282c-.55.157-.894.702-.8 1.267l.073.438c.08.474.49.821.97.821.846 0 1.598.542 1.865 1.345l.215.643m5.276-3.67a9.012 9.012 0 01-5.276 3.67m0 0a9 9 0 01-10.275-4.835M15.75 9c0 .896-.393 1.7-1.016 2.25" />
+                                </svg>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-2">Eco-Living Guides</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-4">Practical tips and guides for reducing your environmental footprint while living in a community setting.</p>
+                                <ul class="space-y-2 mb-6">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                        <span>Home Energy Efficiency Guide</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                        <span>Sustainable Kitchen Practices</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                        <span>Zero-Waste Living Handbook</span>
+                                    </li>
+                                </ul>
+                                <button class="w-full px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-md transition-colors">View All Guides</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="animate-on-scroll" style="transition-delay: 100ms;">
+                        <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
+                            <div class="h-48 eco-gradient flex items-center justify-center p-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-24 h-24 text-white">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                                </svg>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-2">Community Building</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-4">Resources for creating strong community bonds, organizing events, and fostering inclusive environments.</p>
+                                <ul class="space-y-2 mb-6">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                        <span>Event Planning Toolkit</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                        <span>Conflict Resolution Guide</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                        <span>Inclusive Community Building</span>
+                                    </li>
+                                </ul>
+                                <button class="w-full px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-md transition-colors">Access Resources</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="animate-on-scroll" style="transition-delay: 200ms;">
+                        <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
+                            <div class="h-48 eco-gradient flex items-center justify-center p-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-24 h-24 text-white">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-2">Shared Resources</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-4">Information on our community's shared tools, spaces, and resources that all members can access.</p>
+                                <ul class="space-y-2 mb-6">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                        <span>Tool Library Inventory</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                        <span>Community Space Guidelines</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                        </svg>
+                                        <span>Garden & Compost Manual</span>
+                                    </li>
+                                </ul>
+                                <button class="w-full px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-md transition-colors">Browse Resources</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="py-20 bg-gray-50 dark:bg-gray-800">
+            <div class="container mx-auto px-4">
+                <div class="max-w-3xl mx-auto text-center animate-on-scroll">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Join Our Sustainable Community Today</h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-10">Be part of a movement that's redefining community living through sustainability, connection, and shared purpose.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 transition-transform hover:scale-[1.03]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-primary mx-auto mb-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                            </svg>
+                            <h3 class="text-lg font-semibold mb-2">Explore Housing</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Discover available units, housing options, and community spaces for your sustainable living journey.</p>
+                            <button class="w-full px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-md transition-colors">View Options</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 transition-transform hover:scale-[1.03]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-primary mx-auto mb-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                            </svg>
+                            <h3 class="text-lg font-semibold mb-2">Connect with Members</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Meet current community members, ask questions, and get a feel for our vibrant community culture.</p>
+                            <button class="w-full px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-md transition-colors">Meet the Community</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 transition-transform hover:scale-[1.03]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-primary mx-auto mb-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+                            </svg>
+                            <h3 class="text-lg font-semibold mb-2">Schedule a Visit</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Book a tour of our community spaces, gardens, and available housing units with a community guide.</p>
+                            <button class="w-full px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-md transition-colors">Book a Tour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-primary">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg>
+                        <span class="text-xl font-bold text-white">Friendly Community House</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Live together, thrive together in our sustainable community focused on connection and eco-conscious living.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184A4.92 4.92 0 0016.835 2a4.926 4.926 0 00-4.928 4.928c0 .39.044.765.126 1.124A13.936 13.936 0 011.64 3.161a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.856 13.856 0 007.49 2.192c8.985 0 13.895-7.444 13.895-13.895 0-.21-.005-.42-.014-.628A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="#forum" class="text-gray-400 hover:text-primary transition-colors">Community Forum</a></li>
+                        <li><a href="#events" class="text-gray-400 hover:text-primary transition-colors">Event Calendar</a></li>
+                        <li><a href="#sustainability" class="text-gray-400 hover:text-primary transition-colors">Sustainability Tracker</a></li>
+                        <li><a href="#education" class="text-gray-400 hover:text-primary transition-colors">Educational Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Community</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Our Vision</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Membership</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Available Housing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                            </svg>
+                            <span class="text-gray-400">123 Green Street, Eco City, EC 12345</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                            </svg>
+                            <span class="text-gray-400">info@friendlycommunityhouse.org</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary mt-0.5 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                            </svg>
+                            <span class="text-gray-400">(555) 123-4567</span>
+                        </li>
+                    </ul>
+                    <div class="mt-6">
+                        <h4 class="text-sm font-semibold mb-2">Subscribe to our newsletter</h4>
+                        <div class="flex">
+                            <input type="email" placeholder="Your email" class="form-input w-full px-4 py-2 rounded-l-md border-0 focus:outline-none focus:ring-2 focus:ring-primary text-gray-800 text-base" />
+                            <button class="px-4 py-2 bg-primary hover:bg-primary-dark text-white font-semibold rounded-r-md transition-colors">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500">
+                <p>&copy; 2023 Friendly Community House. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+        
+        // Mobile menu toggle
+        document.getElementById('mobileMenuButton').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+        
+        // Scroll animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Forum posts generation
+        const forumPosts = [
+            {
+                author: 'GreenThumb',
+                avatar: 'GT',
+                title: 'Garden Work Party This Weekend!',
+                content: 'Hey neighbors! We\'re organizing a garden work party this Saturday from 10am-2pm. We\'ll be planting the summer vegetables and setting up the new irrigation system. Lunch will be provided!',
+                topic: 'Events',
+                likes: 15,
+                comments: 8,
+                time: '2 hours ago'
+            },
+            {
+                author: 'SolarPowered',
+                avatar: 'SP',
+                title: 'Solar Panel Collective Purchase - Interest Check',
+                content: 'I\'m looking into organizing a collective purchase of solar panels to get a bulk discount. If you\'re interested, please comment below or message me directly. The more households we have, the better the discount!',
+                topic: 'Sustainability',
+                likes: 24,
+                comments: 12,
+                time: '1 day ago'
+            },
+            {
+                author: 'CommunityAdmin',
+                avatar: 'CA',
+                title: 'New Resource: Shared Tool Library Catalog',
+                content: 'We\'ve updated the online catalog for our shared tool library. You can now reserve tools in advance and see real-time availability. Check it out and let us know what you think!',
+                topic: 'Resources',
+                likes: 9,
+                comments: 3,
+                time: '3 days ago'
+            }
+        ];
+        
+        const forumPostsContainer = document.getElementById('forumPosts');
+        
+        forumPosts.forEach(post => {
+            const postEl = document.createElement('div');
+            postEl.className = 'forum-post bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm';
+            postEl.innerHTML = `
+                <div class="flex items-start">
+                    <div class="bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center font-bold flex-shrink-0">
+                        ${post.avatar}
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex justify-between">
+                            <div>
+                                <h4 class="font-semibold">${post.author}</h4>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">${post.time}</span>
+                            </div>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded text-xs">${post.topic}</span>
+                        </div>
+                        <h3 class="text-lg font-semibold mt-2">${post.title}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 my-2">${post.content}</p>
+                        <div class="flex mt-4">
+                            <button class="flex items-center text-gray-500 hover:text-primary transition-colors mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                </svg>
+                                ${post.likes}
+                            </button>
+                            <button class="flex items-center text-gray-500 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
+                                </svg>
+                                ${post.comments}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            forumPostsContainer.appendChild(postEl);
+        });
+        
+        // Calendar generation
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        
+        const events = [
+            { date: new Date(currentYear, currentMonth, 5), title: 'Community Dinner', time: '6:00 PM', location: 'Community Hall' },
+            { date: new Date(currentYear, currentMonth, 12), title: 'Sustainability Workshop', time: '2:00 PM', location: 'Learning Center' },
+            { date: new Date(currentYear, currentMonth, 15), title: 'Garden Work Day', time: '10:00 AM', location: 'Community Garden' },
+            { date: new Date(currentYear, currentMonth, 22), title: 'Movie Night', time: '7:30 PM', location: 'Outdoor Plaza' },
+            { date: new Date(currentYear, currentMonth + 1, 3), title: 'Monthly Meeting', time: '7:00 PM', location: 'Community Hall' }
+        ];
+        
+        function updateCalendar() {
+            document.getElementById('currentMonth').textContent = `${months[currentMonth]} ${currentYear}`;
+            
+            const daysContainer = document.getElementById('calendarDays');
+            daysContainer.innerHTML = '';
+            
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Fill in empty cells for days before the first of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'h-16 border border-gray-100 dark:border-gray-800 rounded-md';
+                daysContainer.appendChild(emptyDay);
+            }
+            
+            // Fill in the days of the month
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day h-16 border border-gray-100 dark:border-gray-800 rounded-md p-1 cursor-pointer';
+                
+                // Check if there's an event on this day
+                const hasEvent = events.some(event => 
+                    event.date.getDate() === i && 
+                    event.date.getMonth() === currentMonth && 
+                    event.date.getFullYear() === currentYear
+                );
+                
+                if (hasEvent) {
+                    day.classList.add('has-event');
+                }
+                
+                // Highlight today
+                if (i === currentDate.getDate() && currentMonth === currentDate.getMonth() && currentYear === currentDate.getFullYear()) {
+                    day.classList.add('bg-primary/10', 'font-bold');
+                }
+                
+                day.innerHTML = `
+                    <div class="text-right text-sm">${i}</div>
+                    ${hasEvent ? '<div class="w-2 h-2 bg-primary rounded-full mt-1 mx-auto"></div>' : ''}
+                `;
+                
+                daysContainer.appendChild(day);
+            }
+            
+            updateUpcomingEvents();
+        }
+        
+        function updateUpcomingEvents() {
+            const upcomingEventsContainer = document.getElementById('upcomingEvents');
+            upcomingEventsContainer.innerHTML = '';
+            
+            // Filter events to show only current month and future events
+            const futureEvents = events
+                .filter(event => event.date >= currentDate)
+                .sort((a, b) => a.date - b.date)
+                .slice(0, 3);  // Show only next 3 events
+            
+            if (futureEvents.length === 0) {
+                upcomingEventsContainer.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No upcoming events scheduled.</p>';
+                return;
+            }
+            
+            futureEvents.forEach(event => {
+                const eventEl = document.createElement('div');
+                eventEl.className = 'p-3 bg-gray-50 dark:bg-gray-800 rounded-lg';
+                
+                const formatDate = event.date.toLocaleDateString('en-US', { 
+                    weekday: 'short',
+                    month: 'short', 
+                    day: 'numeric'
+                });
+                
+                eventEl.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h5 class="font-semibold">${event.title}</h5>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">${formatDate} · ${event.time}</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 flex items-center mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                </svg>
+                                ${event.location}
+                            </div>
+                        </div>
+                        <button class="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                
+                upcomingEventsContainer.appendChild(eventEl);
+            });
+        }
+        
+        // Initialize calendar
+        updateCalendar();
+        
+        // Calendar navigation
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateCalendar();
+        });
+        
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateCalendar();
+        });
+        
+        // Sustainability Chart
+        const ctx = document.getElementById('sustainabilityChart').getContext('2d');
+        const sustainabilityChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [
+                    {
+                        label: 'Energy Usage (kWh)',
+                        data: [350, 320, 290, 270, 250, 240],
+                        borderColor: '#5D5CDE',
+                        backgroundColor: 'rgba(93, 92, 222, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Water Usage (Gallons)',
+                        data: [1200, 1150, 1100, 980, 950, 900],
+                        borderColor: '#4a49b1',
+                        backgroundColor: 'rgba(74, 73, 177, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false,
+                            color: 'rgba(200, 200, 200, 0.15)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Hero section interactive animation
+        const heroCanvas = document.getElementById('heroCanvas');
+        
+        function createHeroAnimation() {
+            // Using a random house pattern generator to create community visualization
+            const width = heroCanvas.clientWidth;
+            const height = heroCanvas.clientHeight;
+            const numHouses = 12;
+            const baseColors = ['#5D5CDE', '#4a49b1', '#7a79e3', '#88d498', '#6a8eae'];
+            
+            let svg = `
+            <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="8" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+                <g>
+            `;
+            
+            // Create houses
+            for (let i = 0; i < numHouses; i++) {
+                const x = Math.random() * (width - 100) + 50;
+                const y = Math.random() * (height - 100) + 30;
+                const size = Math.random() * 20 + 40;
+                const color = baseColors[Math.floor(Math.random() * baseColors.length)];
+                
+                // House shape
+                svg += `
+                <g transform="translate(${x}, ${y})" class="house-group">
+                    <rect x="-${size/2}" y="0" width="${size}" height="${size*0.8}" fill="${color}" rx="2" />
+                    <polygon points="-${size/2},0 ${size/2},0 0,-${size*0.5}" fill="${color}" />
+                    <rect x="-${size*0.2}" y="${size*0.5}" width="${size*0.4}" height="${size*0.3}" fill="#ffffff" rx="1" />
+                    <circle cx="0" cy="-${size*0.15}" r="${size*0.07}" fill="#ffffff" />
+                </g>
+                `;
+            }
+            
+            // Create connection lines between houses
+            for (let i = 0; i < numHouses - 1; i++) {
+                for (let j = i + 1; j < numHouses; j++) {
+                    if (Math.random() > 0.7) { // Only connect some houses
+                        const x1 = parseInt(svg.split('translate(')[i+1].split(',')[0]);
+                        const y1 = parseInt(svg.split('translate(')[i+1].split(',')[1]);
+                        const x2 = parseInt(svg.split('translate(')[j+1].split(',')[0]);
+                        const y2 = parseInt(svg.split('translate(')[j+1].split(',')[1]);
+                        
+                        // Connect houses with lines
+                        svg += `
+                        <line x1="${x1}" y1="${y1 + 15}" x2="${x2}" y2="${y2 + 15}" 
+                              stroke="#5D5CDE" stroke-width="1" opacity="0.3" />
+                        `;
+                    }
+                }
+            }
+            
+            // Add some trees and plants
+            for (let i = 0; i < 18; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 15 + 10;
+                
+                svg += `
+                <g transform="translate(${x}, ${y})">
+                    <circle cx="0" cy="0" r="${size}" fill="#88d498" opacity="${Math.random() * 0.4 + 0.2}" />
+                </g>
+                `;
+            }
+            
+            // Close SVG
+            svg += `
+                </g>
+            </svg>
+            `;
+            
+            heroCanvas.innerHTML = svg;
+            
+            // Animate houses
+            const houses = document.querySelectorAll('.house-group');
+            houses.forEach(house => {
+                const randomDelay = Math.random() * 4 + 1;
+                const randomDuration = Math.random() * 4 + 4;
+                house.style.animation = `pulse ${randomDuration}s ease-in-out ${randomDelay}s infinite alternate`;
+            });
+            
+            // Add keyframes dynamically
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulse {
+                    0% { transform: translateY(0) scale(1); }
+                    100% { transform: translateY(-5px) scale(1.05); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Create hero animation on load and resize
+        createHeroAnimation();
+        window.addEventListener('resize', createHeroAnimation);
+        
+        // Initialize any other interactive elements
+        document.getElementById('forumSearch').addEventListener('input', function(e) {
+            // Search functionality would go here
+            console.log('Searching for:', e.target.value);
+        });
+        
+        document.getElementById('newPostBtn').addEventListener('click', function() {
+            // New post functionality would go here
+            console.log('New post button clicked');
+        });
+    </script>
+</body>
+</html>
